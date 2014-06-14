@@ -1,136 +1,125 @@
-<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.0//EN'>
 <!--
-	Tomato GUI
+Tomato GUI
 
-	For use with Tomato Firmware only.
-	No part of this file may be used without permission.
--->
-<html>
-<head>
-<meta http-equiv='content-type' content='text/html;charset=utf-8'>
-<meta name='robots' content='noindex,nofollow'>
-<title>[<% ident(); %>] Tools: System Commands</title>
-<link rel='stylesheet' type='text/css' href='tomato.css'>
-<link rel='stylesheet' type='text/css' href='color.css'>
-<script type='text/javascript' src='tomato.js'></script>
+For use with Tomato Firmware only.
+No part of this file may be used without permission.
+--><title>System Commands</title>
+<content>
+	<style>
+	.sectionshell { margin-top: 10px; }
+	textarea { width: 80%; height: 35px; }
+	table tr td:first-child { width: 150px; }
+	pre#result { background: #fff; border: 1px solid rgb(230,230,230); padding: 10px; margin: 25px 0 5px; }
+	</style>
+	<script type="text/javascript">
+		var cmdresult = '';
+		var cmd = null;
 
-<!-- / / / -->
+		var ref = new TomatoRefresh('/update.cgi', '', 0, 'tools-shell_refresh');
 
-<style type='text/css'>
-textarea {
-	font: 12px monospace;
-	width: 99%;
-	height: 12em;
-}
-</style>
-
-<script type='text/javascript' src='debug.js'></script>
-<script type='text/javascript'>
-
-//	<% nvram(''); %>	// http_id
-
-var cmdresult = '';
-var cmd = null;
+		ref.refresh = function(text)
+		{
+			execute();
+		}
 
 
-var ref = new TomatoRefresh('update.cgi', '', 0, 'tools-shell_refresh');
+		function verifyFields(focused, quiet)
+		{
+			return 1;
+		}
 
-ref.refresh = function(text)
-{
-	execute();
-}
+		function escapeText(s)
+		{
+			function esc(c) {
+				return '&#' + c.charCodeAt(0) + ';';
+			}
+			return s.replace(/[&"'<>]/g, esc).replace(/\n/g, ' <br>').replace(/ /g, '&nbsp;');
+		}
 
+		function spin(x)
+		{
+			E('execb').disabled = x;
+			E('_f_cmd').disabled = x;
+			E('wait').style.visibility = x ? 'visible' : 'hidden';
+			if (!x) cmd = null;
+		}
 
-function verifyFields(focused, quiet)
-{
-	return 1;
-}
+		function updateResult()
+		{
+			E('result').innerHTML = '<tt>' + escapeText(cmdresult) + '</tt>';
+			cmdresult = '';
+			spin(0);
+		}
 
-function escapeText(s)
-{
-	function esc(c) {
-		return '&#' + c.charCodeAt(0) + ';';
-	}
-	return s.replace(/[&"'<>]/g, esc).replace(/\n/g, ' <br>').replace(/ /g, '&nbsp;');
-}
+		function execute()
+		{
+			// Opera 8 sometimes sends 2 clicks
+			if (cmd) return;
+			spin(1);
 
-function spin(x)
-{
-	E('execb').disabled = x;
-	E('_f_cmd').disabled = x;
-	E('wait').style.visibility = x ? 'visible' : 'hidden';
-	if (!x) cmd = null;
-}
+			cmd = new XmlHttp();
+			cmd.onCompleted = function(text, xml) {
+				eval(text);
+				updateResult();
+			}
+			cmd.onError = function(x) {
+				cmdresult = 'ERROR: ' + x;
+				updateResult();
+			}
 
-function updateResult()
-{
-	E('result').innerHTML = '<tt>' + escapeText(cmdresult) + '</tt>';
-	cmdresult = '';
-	spin(0);
-}
+			var s = E('_f_cmd').value;
+			cmd.post('shell.cgi', 'action=execute&command=' + escapeCGI(s.replace(/\r/g, '')));
+			cookie.set('shellcmd', escape(s));
+		}
 
-function execute()
-{
-	// Opera 8 sometimes sends 2 clicks
-	if (cmd) return;
-	spin(1);
+		function init()
+		{
+			var s;
+			if ((s = cookie.get('shellcmd')) != null) E('_f_cmd').value = unescape(s);
 
-	cmd = new XmlHttp();
-	cmd.onCompleted = function(text, xml) {
-		eval(text);
-		updateResult();
-	}
-	cmd.onError = function(x) {
-		cmdresult = 'ERROR: ' + x;
-		updateResult();
-	}
+			if (((s = cookie.get('tools_shell_notes_vis')) != null) && (s == '1')) {
+				toggleVisibility("notes");
+			}
+			
+			$('#refresh').append(genStdRefresh(1,1,"ref.toggle()"));
+		}
 
-	var s = E('_f_cmd').value;
-	cmd.post('shell.cgi', 'action=execute&command=' + escapeCGI(s.replace(/\r/g, '')));
-	cookie.set('shellcmd', escape(s));
-}
+		function toggleVisibility(whichone) {
+			if (E('sesdiv_' + whichone).style.display == '') {
+				E('sesdiv_' + whichone).style.display = 'none';
+				E('sesdiv_' + whichone + '_showhide').innerHTML = '<i class="icon-chevron-up"></i>';
+				cookie.set('status_overview_' + whichone + '_vis', 0);
+			} else {
+				E('sesdiv_' + whichone).style.display='';
+				E('sesdiv_' + whichone + '_showhide').innerHTML = '<i class="icon-chevron-down"></i>';
+				cookie.set('status_overview_' + whichone + '_vis', 1);
+			}
+		}
 
-function init()
-{
-	var s;
-	if ((s = cookie.get('shellcmd')) != null) E('_f_cmd').value = unescape(s);
-}
-</script>
+	</script>
 
-</head>
+	<ul class="nav-tabs">
+		<li><a class="ajaxload" href="tools-ping.asp">Ping</a></li>
+		<li><a class="ajaxload" href="tools-trace.asp">Trace</a></li>
+		<li><a class="active">System Commands</a></li>
+		<li><a class="ajaxload" href="tools-survey.asp">Wireless Survey</a></li>
+		<li><a class="ajaxload" href="tools-wol.asp">WOL</a></li>
+	</ul>
 
-<body onload='init()'>
-<form action='javascript:{}'>
-<table id='container' cellspacing=0>
-<tr><td colspan=2 id='header'>
-	<div class='title'>Tomato</div>
-	<div class='version'>Version <% version(); %></div>
-</td></tr>
-<tr id='body'><td id='navi'><script type='text/javascript'>navi()</script></td>
-<td id='content'>
-<div id='ident'><% ident(); %></div>
+	<div class="sectionshell">
+		<div class="command"></div>
+		<script type="text/javascript">
+			createFieldTable('', [
+				{ title: 'Command (<i class="icon-info tooltip icon-normal" data-info="Use the command &quot;nvram export --set&quot; or &quot;nvram export --set | grep qos&quot; to cut and paste configuration"></i>)', 
+				name: 'f_cmd', type: 'textarea', wrap: 'off', value: '' }
+				], '.sectionshell .command');
+		</script>
+		<div id="refresh"></div><button type="button" value="Execute" onclick="execute()" id="execb" class="btn">Execute <i class="icon-cmd"></i></button>
+	</div>
+	
+	<pre id="result"></pre>
 
-<!-- / / / -->
-
-<div class='section-title'>Execute System Commands</div>
-<div class='section'>
-<script type='text/javascript'>
-createFieldTable('', [
-	{ title: 'Command', name: 'f_cmd', type: 'textarea', wrap: 'off', value: '' }
-]);
-</script>
-<div style='float:left'><input type='button' value='Execute' onclick='execute()' id='execb'></div>
-<script type='text/javascript'>genStdRefresh(1,5,'ref.toggle()');</script>
-</div>
-
-<div style="visibility:hidden;text-align:right" id="wait">Please wait... <img src='spin.gif' style="vertical-align:top"></div>
-<pre id='result'></pre>
-
-<!-- / / / -->
-
-</td></tr>
-<tr><td id='footer' colspan=2>&nbsp;</td></tr>
-</table>
-</form>
-</body>
-</html>
+	<div style="visibility:hidden;" id="wait">Please wait... <div class="spinner"></div></div>
+	
+	<script type="text/javascript">init();</script>
+</content>

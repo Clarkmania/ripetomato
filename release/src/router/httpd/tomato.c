@@ -305,10 +305,11 @@ const struct mime_handler mime_handlers[] = {
 	{ "**.js",			mime_javascript,			2,	wi_generic_noid,	do_file,		1 },
 	{ "**.jsx",			mime_javascript,			0,	wi_generic,			wo_asp,			1 },
 	{ "**.svg",			"image/svg+xml",			2,	wi_generic_noid,	do_file,		1 },
-	{ "**.txt",			mime_plain,					2,	wi_generic_noid,	do_file,		1 },
+	{ "**.woff",			"application/font-woff",		2,	wi_generic_noid,	do_file,		1 },
+	{ "**.txt",			mime_plain,				2,	wi_generic_noid,	do_file,		1 },
 	{ "**.bin",			mime_binary,				0,	wi_generic_noid,	do_file,		1 },
-	{ "**.bino",		mime_octetstream,			0,	wi_generic_noid,	do_file,		1 },
-	{ "favicon.ico",	NULL,						5,	wi_generic_noid,	wo_favicon,		1 },
+	{ "**.bino",			mime_octetstream,			0,	wi_generic_noid,	do_file,		1 },
+	{ "favicon.ico",		NULL,					5,	wi_generic_noid,	wo_favicon,		1 },
 // !!TB - CGI Support, enable downloading archives
 	{ "**/cgi-bin/**|**.sh",	NULL,					0,	wi_cgi_bin,		wo_cgi_bin,			1 },
 	{ "**.tar|**.gz",		mime_binary,				0,	wi_generic_noid,	do_file,		1 },
@@ -426,12 +427,12 @@ static void asp_css(int argc, char **argv)
 {
 	const char *css = nvram_safe_get("web_css");
 	const char *ttb = nvram_safe_get("ttb_css");
-
+	
 	if( nvram_match( "web_css", "online" ) ) {
-		web_printf("<link rel='stylesheet' type='text/css' href='ext/%s.css'>", ttb);
+		web_printf("<link rel=\"stylesheet\" type=\"text/css\" href=\"ext/%s.css\">", ttb);
 	} else {
 		if (strcmp(css, "tomato") != 0) {
-			web_printf("<link rel='stylesheet' type='text/css' href='%s.css'>", css);
+			web_printf("<link rel=\"stylesheet\" type=\"text/css\" href=\"%s.css\">", css);
 		}
 	}
 }
@@ -1089,6 +1090,11 @@ static const nvset_t nvset_list[] = {
 	{ "tomatoanon_enable",		V_RANGE(-1, 1)			},
 	{ "tomatoanon_id",		V_LENGTH(0, 32)			},
 	{ "tomatoanon_notify",		V_01				},
+    
+// AdvancedTomato
+    { "at_update",      V_LENGTH(0,32)    },
+    { "at_width",       V_LENGTH(0,32)    },
+    { "web_nav",        V_TEXT(0, 4096)     },  
 
 // nas-usb - !!TB
 #ifdef TCONFIG_USB
