@@ -1,5 +1,5 @@
-@import url('//fonts.googleapis.com/css?family=Open+Sans:400,700,300,400italic,600,600italic,300italic,700italic,800,800italic');html{min-width:800px;}
-body{font-size:12px;font-family:'Open Sans','Segoe UI','Droid Sans',sans-serif;color:#505050;line-height:160%;background-color:#f9f9f9;-webkit-font-smoothing:antialiased;}
+html{min-width:800px;}
+body{font-size:12px;font-family:'Open Sans','Segoe UI','Droid Sans','Ubuntu','Verdana',sans-serif;color:#505050;line-height:160%;background-color:#f9f9f9;-webkit-font-smoothing:antialiased;}
 body.fixedwidth{background:#ffffff;}
 body.fixedwidth > #wrapper{display:block;height:auto;border:1px solid #DCDCDC;margin:0 auto;padding:0;background:#f9f9f9;border-radius:3px;-webkit-border-radius:3px;border-width:0 1px 1px;}
 a{color:#FF442B;text-decoration:none;transition:color 0.1s ease-out;-webkit-transition:color 0.1s ease-out;outline-style:none;}

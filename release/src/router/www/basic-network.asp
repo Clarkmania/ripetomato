@@ -349,16 +349,6 @@ No part of this file may be used without permission.
 			return ok;
 		}
 
-		W('<style type=\'text/css\'>');
-		for (var u = 0; u < wl_ifaces.length; ++u) {
-			W('#spin'+wl_unit(u)+', ');
-		}
-		W('#spin {');
-		W('	visibility: hidden;');
-		W('	vertical-align: middle;');
-		W('}');
-		W('</style>');
-
 		var xob = null;
 		var refresher = [];
 		var nphy = features('11n');
@@ -435,6 +425,31 @@ No part of this file may be used without permission.
 			nm_loaded[uidx] = 1;
 		}
 
+		function refreshBandWidth(uidx) {
+			var e, i, buf, val;
+			if (uidx >= wl_ifaces.length) return;
+			var u = wl_unit(uidx);
+
+			var m = [['0','20 MHz']];
+			if(nphy || acphy){
+				m.push(['1','40 MHz']);
+			}
+			if(acphy && selectedBand(uidx) == '1') {
+				m.push(['3','80 MHz']);
+			}
+
+			e = E('_wl'+u+'_nbw_cap');
+			buf = '';
+			val = (!nm_loaded[uidx] || (e.value + '' == '')) ? eval('nvram.wl'+u+'_nbw_cap') : e.value;
+			for (i = 0; i < m.length; ++i)
+				buf += '<option value="' + m[i][0] + '"' + ((m[i][0] == val) ? ' selected' : '') + '>' + m[i][1] + '</option>';
+
+			e = E('__wl'+u+'_nbw_cap');
+			buf = '<select name="wl'+u+'_nbw_cap" onchange="verifyFields(this, 1)" id = "_wl'+u+'_nbw_cap">' + buf + '</select>';
+			elem.setInnerHTML(e, buf);
+			nm_loaded[uidx] = 1;
+		}
+
 		function refreshChannels(uidx)
 		{
 			if (refresher[uidx] != null) return;
@@ -484,7 +499,7 @@ No part of this file may be used without permission.
 			bw = (e.value + '' == '' ? eval('nvram.wl'+u+'_nbw_cap') : e.value) == '0' ? '20' : '40';
 
 			refresher[uidx].onError = function(ex) { alert(ex); refresher[uidx] = null; reloadPage(); }
-			refresher[uidx].post('update.cgi', 'exec=wlchannels&arg0=' + u + '&arg1=' + (nphy ? '1' : '0') +
+			refresher[uidx].post('update.cgi', 'exec=wlchannels&arg0=' + u + '&arg1=' + (nphy || acphy ? '1' : '0') +
 				'&arg2=' + bw + '&arg3=' + selectedBand(uidx) + '&arg4=' + sb);
 		}
 
@@ -496,7 +511,7 @@ No part of this file may be used without permission.
 			var e = E('_f_wl'+unit+'_scan');
 			if (x) e.value = 'Scan ' + (wscan.tries + 1);
 			else e.value = 'Scan';
-			E('spin'+unit).style.visibility = x ? 'visible' : 'hidden';
+			E('spin'+unit).style.display = x ? 'inline-block' : 'none';
 		}
 
 		function scan()
@@ -733,8 +748,8 @@ No part of this file may be used without permission.
 						_wl_ssid: 1,
 						_f_wl_bcast: 1,
 						_wl_channel: 1,
-						_wl_nbw_cap: nphy ? 1 : 0,
-						_f_wl_nctrlsb: nphy ? 1 : 0,
+						_wl_nbw_cap: nphy || acphy ? 1 : 0,
+						_f_wl_nctrlsb: nphy || acphy ? 1 : 0,
 						_f_wl_scan: 1,
 
 						_wl_security_mode: 1,
@@ -952,7 +967,7 @@ No part of this file may be used without permission.
 							wl_vis[uidx][a] = 2;
 						}
 						wl_vis[uidx]._f_wl_radio = 1;
-						wl_vis[uidx]._wl_nbw_cap = nphy ? 2 : 0;
+						wl_vis[uidx]._wl_nbw_cap = nphy || acphy ? 2 : 0;
 						wl_vis[uidx]._f_wl_nband = (bands[uidx].length > 1) ? 2 : 0;
 					}
 
@@ -1124,7 +1139,7 @@ No part of this file may be used without permission.
 						case 'mixed':
 						case 'n-only':
 							if (nphy && (a.value == 'tkip') && (sm2.indexOf('wpa') != -1)) {
-								ferror.set(a, 'TKIP encryption is not supported with WPA / WPA2 in N mode.', quiet || !ok);
+								ferror.set(a, 'TKIP encryption is not supported with WPA / WPA2 in N and AC mode.', quiet || !ok);
 								ok = 0;
 							}
 							else ferror.clear(a);
@@ -1261,6 +1276,7 @@ No part of this file may be used without permission.
 
 		function earlyInit()
 		{
+			init();
 			verifyFields(null, 1);
 		}
 
@@ -1382,7 +1398,7 @@ No part of this file may be used without permission.
 					E('_wl'+u+'_nctrlsb').value = eval('nvram.wl'+u+'_nctrlsb');
 					if (E('_wl'+u+'_nmode').value != 0) {
 						E('_wl'+u+'_nctrlsb').value = E('_f_wl'+u+'_nctrlsb').value;
-						E('_wl'+u+'_nbw').value = (E('_wl'+u+'_nbw_cap').value == 0) ? 20 : 40;
+						E('_wl'+u+'_nbw').value = (E('_wl'+u+'_nbw_cap').value == 0) ? 20 : ((E('_wl'+u+'_nbw_cap').value== 3) ? 80:40);
 					}
 
 					E('_wl'+u+'_closed').value = E('_f_wl'+u+'_bcast').checked ? 0 : 1;
@@ -1504,6 +1520,7 @@ No part of this file may be used without permission.
 				if (wl_sunit(uidx)<0) {
 					refreshNetModes(uidx);
 					refreshChannels(uidx);
+					refreshBandWidth(uidx);
 				}
 			}
 		}
@@ -1555,10 +1572,14 @@ No part of this file may be used without permission.
 			<script type="text/javascript">
 				createFieldTable('', [
 					{ title: 'Type', name: 'wan_proto', type: 'select', options: [['dhcp','DHCP'],['pppoe','PPPoE'],['static','Static'],['pptp','PPTP'],['l2tp','L2TP'],
+						/* LINUX26-BEGIN */
+						/* USB-BEGIN */
 						['ppp3g','3G Modem'],
-						['disabled','disabled']],
+						/* USB-END */
+						/* LINUX26-END */
+						['disabled','Disabled']],
 						value: nvram.wan_proto },
-					{ title: 'Modem device', name: 'modem_dev', type: 'select', options: [['ttyUSB0', '/dev/ttyUSB0'],['ttyUSB1', '/dev/ttyUSB1'],['ttyUSB2', '/dev/ttyUSB2'],['ttyUSB3', '/dev/ttyUSB3'],['ttyACM0', '/dev/ttyACM0']], value: nvram.modem_dev },
+					{ title: 'Modem device', name: 'modem_dev', type: 'select', options: [['ttyUSB0', '/dev/ttyUSB0'],['ttyUSB1', '/dev/ttyUSB1'],['ttyUSB2', '/dev/ttyUSB2'],['ttyUSB3', '/dev/ttyUSB3'],['ttyUSB4', '/dev/ttyUSB4'],['ttyUSB5', '/dev/ttyUSB5'],['ttyUSB6', '/dev/ttyUSB6'],['ttyACM0', '/dev/ttyACM0']], value: nvram.modem_dev },
 					{ title: 'PIN Code', name: 'modem_pin', type: 'text', maxlen: 6, size: 8, value: nvram.modem_pin, suffix: ' <i>Advised to turn off PIN Code</i>' },
 					{ title: 'Modem init string', name: 'modem_init', type: 'text', maxlen: 25, size: 32, value: nvram.modem_init },
 					{ title: 'APN', name: 'modem_apn', type: 'text', maxlen: 25, size: 32, value: nvram.modem_apn },
@@ -1586,7 +1607,9 @@ No part of this file may be used without permission.
 						{ name: 'mtu_enable', type: 'select', options: [['0', 'Default'],['1','Manual']], value: nvram.mtu_enable },
 						{ name: 'f_wan_mtu', type: 'text', maxlen: 4, size: 6, value: nvram.wan_mtu } ] },
 					{ title: 'Single Line MLPPP', name: 'f_ppp_mlppp', type: 'checkbox', value: (nvram.ppp_mlppp == 1) },
+
 					{ title: 'Route Modem IP', name: 'modem_ipaddr', type: 'text', maxlen: 15, size: 17, suffix: ' <i>(must be in different subnet to router, 0.0.0.0 to disable)</i>', value: nvram.modem_ipaddr },
+
 					{ title: 'Bridge WAN port to primary LAN (br0)', name: 'f_wan_islan', type: 'checkbox', value: (nvram.wan_islan == 1) }
 					], '.wan-internet', 'fields-table');
 			</script>
@@ -1687,10 +1710,10 @@ No part of this file may be used without permission.
 							options: [], prefix: '<span id="__wl'+u+'_net_mode">', suffix: '</span>' },
 						{ title: 'SSID', name: 'wl'+u+'_ssid', type: 'text', maxlen: 32, size: 34, value: eval('nvram.wl'+u+'_ssid') },
 						{ title: 'Broadcast', indent: 2, name: 'f_wl'+u+'_bcast', type: 'checkbox', value: (eval('nvram.wl'+u+'_closed') == '0') },
-						{ title: 'Channel', name: 'wl'+u+'_channel', type: 'select', options: ghz[uidx], prefix: '<span id="__wl'+u+'_channel">', suffix: '</span> <button class="btn" type="button" id="_f_wl'+u+'_scan" value="Scan" onclick="scanButton('+u+')">Scan <i class="icon-search"></i></button> <div class="spinner" id="spin'+u+'" style="visibility: hidden;"></div>',
+						{ title: 'Channel', name: 'wl'+u+'_channel', type: 'select', options: ghz[uidx], prefix: '<span id="__wl'+u+'_channel">', suffix: '</span> <button class="btn btn-primary" type="button" id="_f_wl'+u+'_scan" value="Scan" onclick="scanButton('+u+')">Scan</button> <div class="spinner" id="spin'+u+'" style="display: none;"></div>',
 							value: eval('nvram.wl'+u+'_channel') },
-						{ title: 'Channel Width', name: 'wl'+u+'_nbw_cap', type: 'select', options: [['0','20 MHz'],['1','40 MHz']],
-							value: eval('nvram.wl'+u+'_nbw_cap') },
+						{ title: 'Channel Width', name: 'wl'+u+'_nbw_cap', type: 'select', options: [],
+							value: eval('nvram.wl'+u+'_nbw_cap'), prefix: '<span id="__wl'+u+'_nbw_cap">', suffix: '</span>' },
 						{ title: 'Control Sideband', name: 'f_wl'+u+'_nctrlsb', type: 'select', options: [['lower','Lower'],['upper','Upper']],
 							value: eval('nvram.wl'+u+'_nctrlsb') == 'none' ? 'lower' : eval('nvram.wl'+u+'_nctrlsb') },
 						null,
@@ -1703,7 +1726,7 @@ No part of this file may be used without permission.
 							suffix: ' <button class="btn" type="button" id="_f_wl'+u+'_psk_random1" value="Random" onclick="random_psk(\'_wl'+u+'_wpa_psk\')">Random</button>',
 							value: eval('nvram.wl'+u+'_wpa_psk') },
 						{ title: 'Shared Key', indent: 2, name: 'wl'+u+'_radius_key', type: 'password', maxlen: 80, size: 32, peekaboo: 1,
-							suffix: ' <button class="btn" type="button" id="_f_wl'+u+'_psk_random2" value="Random" onclick="random_psk(\'_wl'+u+'_radius_key\')">Random</button>',
+							suffix: ' <input type="button" id="_f_wl'+u+'_psk_random2" value="Random" onclick="random_psk(\'_wl'+u+'_radius_key\')">',
 							value: eval('nvram.wl'+u+'_radius_key') },
 						{ title: 'Group Key Renewal', indent: 2, name: 'wl'+u+'_wpa_gtk_rekey', type: 'text', maxlen: 4, size: 6, suffix: ' <i>(seconds)</i>',
 							value: eval('nvram.wl'+u+'_wpa_gtk_rekey') },
@@ -1713,8 +1736,7 @@ No part of this file may be used without permission.
 						{ title: 'Encryption', indent: 2, name: 'wl'+u+'_wep_bit', type: 'select', options: [['128','128-bits'],['64','64-bits']],
 							value: eval('nvram.wl'+u+'_wep_bit') },
 						{ title: 'Passphrase', indent: 2, name: 'wl'+u+'_passphrase', type: 'text', maxlen: 16, size: 20,
-							suffix: ' <button class="btn" type="button" id="_f_wl'+u+'_wep_gen" value="Generate" onclick="generate_wep('+u+')">Generate</button>' +
-							'<button class="btn" type="button" id="_f_wl'+u+'_wep_random" value="Random" onclick="random_wep('+u+')">Random</button>',
+							suffix: ' <input type="button" id="_f_wl'+u+'_wep_gen" value="Generate" onclick="generate_wep('+u+')"> <button class="btn" type="button" id="_f_wl'+u+'_wep_random" value="Random" onclick="random_wep('+u+')">Random</button>',
 							value: eval('nvram.wl'+u+'_passphrase') }
 					];
 
