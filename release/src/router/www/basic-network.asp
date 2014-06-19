@@ -352,6 +352,7 @@ No part of this file may be used without permission.
 		var xob = null;
 		var refresher = [];
 		var nphy = features('11n');
+		var acphy = features('11ac');
 
 		var ghz = [];
 		var bands = [];
