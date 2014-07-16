@@ -42,7 +42,7 @@ LAN Access admin module by Augusto Bott
 		}
 	</style>
 	<script type="text/javascript">                          
-		//	<% nvram('at_update,tomatoanon_answer,cstats_enable,lan_ipaddr,lan1_ipaddr,lan2_ipaddr,lan3_ipaddr,lan_netmask,lan1_netmask,lan2_netmask,lan3_netmask,dhcpd_static,web_svg'); %>
+		//	<% nvram('at_update,tomatoanon_answer,cstats_enable,lan_ipaddr,lan1_ipaddr,lan2_ipaddr,lan3_ipaddr,lan4_ipaddr,lan5_ipaddr,lan6_ipaddr,lan7_ipaddr,lan_netmask,lan1_netmask,lan2_netmask,lan3_netmask,lan4_ipaddr,lan5_ipaddr,lan6_ipaddr,lan7_ipaddr,dhcpd_static,web_svg'); %>
 		// <% iptraffic(); %>
 
 		nfmarks = [];

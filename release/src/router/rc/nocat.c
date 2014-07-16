@@ -56,6 +56,26 @@ int build_nocat_conf( void )
             fprintf( fp, "InternalDevice\t%s\n", nvram_safe_get( "lan3_ifname" ));
             fprintf( fp, "GatewayAddr\t%s\n", nvram_safe_get( "lan3_ipaddr" ) );
     }
+    if (nvram_match( "NC_BridgeLAN", "br4") )
+    {
+            fprintf( fp, "InternalDevice\t%s\n", nvram_safe_get( "lan4_ifname" ));
+            fprintf( fp, "GatewayAddr\t%s\n", nvram_safe_get( "lan4_ipaddr" ) );
+    }
+    if (nvram_match( "NC_BridgeLAN", "br5") )
+    {
+            fprintf( fp, "InternalDevice\t%s\n", nvram_safe_get( "lan5_ifname" ));
+            fprintf( fp, "GatewayAddr\t%s\n", nvram_safe_get( "lan5_ipaddr" ) );
+    }
+    if (nvram_match( "NC_BridgeLAN", "br6") )
+    {
+            fprintf( fp, "InternalDevice\t%s\n", nvram_safe_get( "lan6_ifname" ));
+            fprintf( fp, "GatewayAddr\t%s\n", nvram_safe_get( "lan6_ipaddr" ) );
+    }
+    if (nvram_match( "NC_BridgeLAN", "br7") )
+    {
+            fprintf( fp, "InternalDevice\t%s\n", nvram_safe_get( "lan7_ifname" ));
+            fprintf( fp, "GatewayAddr\t%s\n", nvram_safe_get( "lan7_ipaddr" ) );
+    }
 
     fprintf( fp, "GatewayMAC\t%s\n", nvram_safe_get( "et0macaddr" ) );
 

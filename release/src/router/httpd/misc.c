@@ -828,6 +828,14 @@ void wo_wakeup(char *url)
 				eval("ether-wake", "-b", "-i", nvram_safe_get("lan2_ifname"), mac);
 			if (strcmp(nvram_safe_get("lan3_ifname"), "") != 0)
 				eval("ether-wake", "-b", "-i", nvram_safe_get("lan3_ifname"), mac);
+			if (strcmp(nvram_safe_get("lan4_ifname"), "") != 0)
+				eval("ether-wake", "-b", "-i", nvram_safe_get("lan4_ifname"), mac);
+			if (strcmp(nvram_safe_get("lan5_ifname"), "") != 0)
+				eval("ether-wake", "-b", "-i", nvram_safe_get("lan5_ifname"), mac);
+			if (strcmp(nvram_safe_get("lan6_ifname"), "") != 0)
+				eval("ether-wake", "-b", "-i", nvram_safe_get("lan6_ifname"), mac);
+			if (strcmp(nvram_safe_get("lan7_ifname"), "") != 0)
+				eval("ether-wake", "-b", "-i", nvram_safe_get("lan7_ifname"), mac);
 			mac = p + 1;
 		}
 	}

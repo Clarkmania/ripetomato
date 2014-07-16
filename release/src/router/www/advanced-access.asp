@@ -8,18 +8,22 @@ LAN Access admin module by Augusto Bott
 --><title>LAN Access</title>
 <content>
 	<script type="text/javascript" src="js/wireless.jsx?_http_id=<% nv(http_id); %>"></script>
+	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript">
-		//<% nvram ("at_update,tomatoanon_answer,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,lan_access");%> 
-
-		var MAX_BRIDGE_ID = 3;
+		//<% nvram ("at_update,tomatoanon_answer,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,lan4_ifname,lan5_ifname,lan6_ifname,lan7_ifname,lan_access");%> 
 
 		var la = new TomatoGrid();
+		var lans = [];
+		for (var i=0; i<=MAX_BRIDGE_ID; i++) {
+			var ln = (i == 0) ? "" : i;
+			lans.push.apply(lans, [[i, 'LAN'+ln+' (br'+i+')']]);
+		}
 		la.setup = function() {
 			this.init('la-grid', 'sort', 50, [
 				{ type: 'checkbox', prefix: '<div class="centered">', suffix: '</div>', class: 'input-medium' },
-				{ type: 'select', options: [[0, 'LAN (br0)'],[1, 'LAN1 (br1)'],[2, 'LAN2 (br2)'],[3, 'LAN3 (br3)']], prefix: '<div class="centered">', suffix: '</div>', class: 'input-medium' },
+				{ type: 'select', options: lans, prefix: '<div class="centered">', suffix: '</div>', class: 'input-medium' },
 				{ type: 'text', maxlen: 32, class: 'input-medium' },
-				{ type: 'select', options: [[0, 'LAN (br0)'],[1, 'LAN1 (br1)'],[2, 'LAN2 (br2)'],[3, 'LAN3 (br3)']], prefix: '<div class="centered">', suffix: '</div>', class: 'input-medium' },
+				{ type: 'select', options: lans, prefix: '<div class="centered">', suffix: '</div>', class: 'input-medium' },
 				{ type: 'text', maxlen: 32, class: 'input-medium' },
 				{ type: 'text', maxlen: 32, class: 'input-medium' }]);
 			this.headerSet(['On', 'Src', 'Src Address', 'Dst', 'Dst Address', 'Description']);
@@ -125,9 +129,9 @@ LAN Access admin module by Augusto Bott
 
 		la.dataToView = function(data) {
 			return [(data[0] != 0) ? 'On' : '',
-				['LAN', 'LAN1', 'LAN2', 'LAN3'][data[1]],
+				['LAN', 'LAN1', 'LAN2', 'LAN3', 'LAN4', 'LAN5', 'LAN6', 'LAN7'][data[1]],
 				data[2],
-				['LAN', 'LAN1', 'LAN2', 'LAN3'][data[3]],
+				['LAN', 'LAN1', 'LAN2', 'LAN3', 'LAN4', 'LAN5', 'LAN6', 'LAN7'][data[3]],
 				data[4],
 				data[5] ];
 		}

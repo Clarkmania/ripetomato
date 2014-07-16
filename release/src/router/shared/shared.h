@@ -61,6 +61,8 @@ extern const char *tomato_shortver;
 #define	IPV6_6RD_DHCP		7
 #endif
 
+#define MAX_BRIDGE_ID		7
+
 enum {
 	ACT_IDLE,
 	ACT_TFTP_UPGRADE_UNUSED,

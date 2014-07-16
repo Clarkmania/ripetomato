@@ -1,4 +1,4 @@
-MAX_BRIDGE_ID = 3;
+MAX_BRIDGE_ID = 7;
 MAX_PORT_ID = 4;
 MAX_VLAN_ID = 15;
 function h_countbitsfromleft(num) {

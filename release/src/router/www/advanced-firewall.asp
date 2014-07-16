@@ -11,8 +11,9 @@ For use with Tomato Firmware only.
 No part of this file may be used without permission.
 --><title>Firewall</title>
 <content>
+	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript">
-		//	<% nvram("at_update,tomatoanon_answer,block_wan,block_wan_limit,block_wan_limit_icmp,block_wan_limit_tr,nf_loopback,ne_syncookies,DSCP_fix_enable,multicast_pass,multicast_lan,multicast_lan1,multicast_lan2,multicast_lan3,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,udpxy_enable,udpxy_stats,udpxy_clients,udpxy_port,ne_snat"); %>
+		//	<% nvram("at_update,tomatoanon_answer,block_wan,block_wan_limit,block_wan_limit_icmp,block_wan_limit_tr,nf_loopback,ne_syncookies,DSCP_fix_enable,multicast_pass,multicast_lan,multicast_lan1,multicast_lan2,multicast_lan3,multicast_lan4,multicast_lan5,multicast_lan6,multicast_lan7,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,lan4_ifname,lan5_ifname,lan6_ifname,lan7_ifname,udpxy_enable,udpxy_stats,udpxy_clients,udpxy_port,ne_snat"); %>
 
 		function verifyFields(focused, quiet)
 		{
@@ -23,19 +24,17 @@ No part of this file may be used without permission.
 
 			/* VLAN-BEGIN */
 			var enable_mcast = E('_f_multicast').checked;
-			E('_f_multicast_lan').disabled = ((!enable_mcast) || (nvram.lan_ifname.length < 1));
-			E('_f_multicast_lan1').disabled = ((!enable_mcast) || (nvram.lan1_ifname.length < 1));
-			E('_f_multicast_lan2').disabled = ((!enable_mcast) || (nvram.lan2_ifname.length < 1));
-			E('_f_multicast_lan3').disabled = ((!enable_mcast) || (nvram.lan3_ifname.length < 1));
-			if(nvram.lan_ifname.length < 1)
-				E('_f_multicast_lan').checked = false;
-			if(nvram.lan1_ifname.length < 1)
-				E('_f_multicast_lan1').checked = false;
-			if(nvram.lan2_ifname.length < 1)
-				E('_f_multicast_lan2').checked = false;
-			if(nvram.lan3_ifname.length < 1)
-				E('_f_multicast_lan3').checked = false;
-			if ((enable_mcast) && (!E('_f_multicast_lan').checked) && (!E('_f_multicast_lan1').checked) && (!E('_f_multicast_lan2').checked) && (!E('_f_multicast_lan3').checked)) {
+			var multicast_check = false;
+			for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+				var ln = (i == 0) ? "" : i;
+				E('_f_multicast_lan'+ln).disabled = ((!enable_mcast) || (nvram['lan'+ln+'_ifname'].length < 1));
+				if(nvram['lan'+ln+'_ifname'].length < 1)
+					E('_f_multicast_lan'+ln).checked = false;
+				if ((enable_mcast) && E('_f_multicast_lan'+ln).checked) {
+					multicast_check = true;
+				}
+			}
+			if (enable_mcast && !multicast_check) {
 				ferror.set('_f_multicast', 'IGMPproxy must be enabled in least one LAN bridge', quiet);
 				return 0;
 			} else {
@@ -64,10 +63,10 @@ No part of this file may be used without permission.
 			fom.DSCP_fix_enable.value = E('_f_DSCP_fix_enable').checked ? 1 : 0;
 			fom.multicast_pass.value = E('_f_multicast').checked ? 1 : 0;
 			/* VLAN-BEGIN */
-			fom.multicast_lan.value = E('_f_multicast_lan').checked ? 1 : 0;
-			fom.multicast_lan1.value = E('_f_multicast_lan1').checked ? 1 : 0;
-			fom.multicast_lan2.value = E('_f_multicast_lan2').checked ? 1 : 0;
-			fom.multicast_lan3.value = E('_f_multicast_lan3').checked ? 1 : 0;
+			for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+				var ln = (i == 0) ? "" : i;
+				fom['multicast_lan'+ln].value = E('_f_multicast_lan'+ln).checked ? 1 : 0;
+			}
 			/* VLAN-END */
 			fom.udpxy_enable.value = E('_f_udpxy_enable').checked ? 1 : 0;
 			fom.udpxy_stats.value = E('_f_udpxy_stats').checked ? 1 : 0;
@@ -93,6 +92,10 @@ No part of this file may be used without permission.
 		<input type="hidden" name="multicast_lan1">
 		<input type="hidden" name="multicast_lan2">
 		<input type="hidden" name="multicast_lan3">
+		<input type="hidden" name="multicast_lan4">
+		<input type="hidden" name="multicast_lan5">
+		<input type="hidden" name="multicast_lan6">
+		<input type="hidden" name="multicast_lan7">
 
 		<input type="hidden" name="udpxy_enable">
 		<input type="hidden" name="udpxy_stats">
@@ -125,19 +128,22 @@ No part of this file may be used without permission.
 		<h3>Multicast</h3>
 		<div class="section multicast">
 			<script type="text/javascript">
-				createFieldTable('', [
+				var multicast_options = [
 					{ title: 'Enable IGMPproxy', name: 'f_multicast', type: 'checkbox', value: nvram.multicast_pass == '1' },
-					/* VLAN-BEGIN */
-					{ title: 'LAN', indent: 2, name: 'f_multicast_lan', type: 'checkbox', value: (nvram.multicast_lan == '1') },
-					{ title: 'LAN1', indent: 2, name: 'f_multicast_lan1', type: 'checkbox', value: (nvram.multicast_lan1 == '1') },
-					{ title: 'LAN2', indent: 2, name: 'f_multicast_lan2', type: 'checkbox', value: (nvram.multicast_lan2 == '1') },
-					{ title: 'LAN3', indent: 2, name: 'f_multicast_lan3', type: 'checkbox', value: (nvram.multicast_lan3 == '1') },
-					/* VLAN-END */
+				];
+				/* VLAN-BEGIN */
+				for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+					var ln = (i == 0) ? "" : i;
+					multicast_options.push.apply(multicast_options, [{ title: 'LAN'+ln, indent: 2, name: 'f_multicast_lan'+ln, type: 'checkbox', value: (nvram['multicast_lan'+ln] == '1') }]);
+				}
+				/* VLAN-END */
+				multicast_options.push.apply(multicast_options, [
 					{ title: 'Enable Udpxy', name: 'f_udpxy_enable', type: 'checkbox', value: (nvram.udpxy_enable == '1') },
 					{ title: 'Enable client statistics', indent: 2, name: 'f_udpxy_stats', type: 'checkbox', value: (nvram.udpxy_stats == '1') },
 					{ title: 'Max clients', indent: 2, name: 'f_udpxy_clients', type: 'text', maxlen: 4, size: 6, value: fixInt(nvram.udpxy_clients || 3, 1, 5000, 3) },
 					{ title: 'Udpxy port', indent: 2, name: 'f_udpxy_port', type: 'text', maxlen: 5, size: 7, value: fixPort(nvram.udpxy_port, 4022) }
-				], '.section.multicast', 'fields-table');
+				]);
+				createFieldTable('', multicast_options, '.section.multicast', 'fields-table');
 			</script>
 		</div>
 

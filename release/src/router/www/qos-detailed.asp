@@ -25,7 +25,7 @@ No part of this file may be used without permission.
 	<script type="text/javascript" src="js/protocols.js"></script>
 	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript">
-		//	<% nvram('at_update,tomatoanon_answer,qos_enable,qos_classnames,lan_ipaddr,lan1_ipaddr,lan2_ipaddr,lan3_ipaddr,lan_netmask,lan1_netmask,lan2_netmask,lan3_netmask,t_hidelr'); %>
+		//	<% nvram('at_update,tomatoanon_answer,qos_enable,qos_classnames,lan_ipaddr,lan1_ipaddr,lan2_ipaddr,lan3_ipaddr,lan4_ipaddr,lan5_ipaddr,lan6_ipaddr,lan7_ipaddr,lan_netmask,lan1_netmask,lan2_netmask,lan3_netmask,lan4_netmask,lan5_netmask,lan6_netmask,lan7_netmask,t_hidelr'); %>
 
 		var Unclassified = ['Unclassified'];
 		var classNames = nvram.qos_classnames.split(' ');		//Toastman Class Labels
@@ -255,6 +255,10 @@ No part of this file may be used without permission.
 						(b[2] == nvram.lan1_ipaddr) || (b[3] == nvram.lan1_ipaddr) ||
 						(b[2] == nvram.lan2_ipaddr) || (b[3] == nvram.lan2_ipaddr) ||
 						(b[2] == nvram.lan3_ipaddr) || (b[3] == nvram.lan3_ipaddr) ||
+						(b[2] == nvram.lan4_ipaddr) || (b[3] == nvram.lan4_ipaddr) ||
+						(b[2] == nvram.lan5_ipaddr) || (b[3] == nvram.lan5_ipaddr) ||
+						(b[2] == nvram.lan6_ipaddr) || (b[3] == nvram.lan6_ipaddr) ||
+						(b[2] == nvram.lan7_ipaddr) || (b[3] == nvram.lan7_ipaddr) ||
 						(b[2] == '127.0.0.1') || (b[3] == '127.0.0.1')) {
 						continue;
 					}
@@ -265,6 +269,10 @@ No part of this file may be used without permission.
 						(b[3] == getBroadcastAddress(getNetworkAddress(nvram.lan1_ipaddr,nvram.lan1_netmask),nvram.lan1_netmask)) ||
 						(b[3] == getBroadcastAddress(getNetworkAddress(nvram.lan2_ipaddr,nvram.lan2_netmask),nvram.lan2_netmask)) ||
 						(b[3] == getBroadcastAddress(getNetworkAddress(nvram.lan3_ipaddr,nvram.lan3_netmask),nvram.lan3_netmask)) ||
+						(b[3] == getBroadcastAddress(getNetworkAddress(nvram.lan4_ipaddr,nvram.lan4_netmask),nvram.lan4_netmask)) ||
+						(b[3] == getBroadcastAddress(getNetworkAddress(nvram.lan5_ipaddr,nvram.lan5_netmask),nvram.lan5_netmask)) ||
+						(b[3] == getBroadcastAddress(getNetworkAddress(nvram.lan6_ipaddr,nvram.lan6_netmask),nvram.lan6_netmask)) ||
+						(b[3] == getBroadcastAddress(getNetworkAddress(nvram.lan7_ipaddr,nvram.lan7_netmask),nvram.lan7_netmask)) ||
 						(b[3] == '255.255.255.255') || (b[3] == '0.0.0.0')) {
 						continue;
 					}

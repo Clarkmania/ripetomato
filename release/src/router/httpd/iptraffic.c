@@ -51,7 +51,7 @@ void asp_iptraffic(int argc, char **argv) {
 	web_puts("\n\niptraffic=[");
 	comma = ' ';
 
-	for(br=0 ; br<=3 ; br++) {
+	for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 		char bridge[2] = "0";
 		if (br!=0)
 			bridge[0]+=br;
@@ -112,7 +112,7 @@ void iptraffic_conntrack_init() {
 	unsigned long mask[4];
 	unsigned short int br;
 
-	for(br=0 ; br<=3 ; br++) {
+	for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 		char bridge[2] = "0";
 		if (br!=0)
 			bridge[0]+=br;
@@ -162,7 +162,7 @@ void iptraffic_conntrack_init() {
 
 		foreach(ipaddr, sb, next) {
 			skip = 1;
-			for(br=0 ; br<=3 ; br++) {
+			for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 				if ((mask[br] != 0) && ((inet_addr(ipaddr) & mask[br]) == lan[br])) {
 						skip = 0;
 						break;

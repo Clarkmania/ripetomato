@@ -107,6 +107,14 @@ static void set_lan_hostname(const char *wan_hostname)
 			fprintf(f, "%s  %s-lan2\n", s, nvram_safe_get("lan_hostname"));
 		if ((s = nvram_get("lan3_ipaddr")) && (*s) && (strcmp(s,"") != 0))
 			fprintf(f, "%s  %s-lan3\n", s, nvram_safe_get("lan_hostname"));
+		if ((s = nvram_get("lan4_ipaddr")) && (*s) && (strcmp(s,"") != 0))
+			fprintf(f, "%s  %s-lan4\n", s, nvram_safe_get("lan_hostname"));
+		if ((s = nvram_get("lan5_ipaddr")) && (*s) && (strcmp(s,"") != 0))
+			fprintf(f, "%s  %s-lan5\n", s, nvram_safe_get("lan_hostname"));
+		if ((s = nvram_get("lan6_ipaddr")) && (*s) && (strcmp(s,"") != 0))
+			fprintf(f, "%s  %s-lan6\n", s, nvram_safe_get("lan_hostname"));
+		if ((s = nvram_get("lan7_ipaddr")) && (*s) && (strcmp(s,"") != 0))
+			fprintf(f, "%s  %s-lan7\n", s, nvram_safe_get("lan_hostname"));
 #ifdef TCONFIG_IPV6
 		if (ipv6_enabled()) {
 			fprintf(f, "::1  localhost\n");
@@ -373,7 +381,7 @@ void stop_lan_wl(void)
 	char tmp[32];
 	char br;
 
-	for(br=0 ; br<4 ; br++) {
+	for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 		char bridge[2] = "0";
 		if (br!=0)
 			bridge[0]+=br;
@@ -430,7 +438,7 @@ void start_lan_wl(void)
 	foreach_wif(1, NULL, set_wlmac);
 #endif
 
-	for(br=0 ; br<4 ; br++) {
+	for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 		char bridge[2] = "0";
 		if (br!=0)
 			bridge[0]+=br;
@@ -533,7 +541,7 @@ void restart_wl(void)
 	char tmp[32];
 	char br;
 
-	for(br=0 ; br<4 ; br++) {
+	for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 		char bridge[2] = "0";
 		if (br!=0)
 			bridge[0]+=br;
@@ -615,7 +623,7 @@ void start_wl(void)
 	}
 #endif
 
-	for(br=0 ; br<4 ; br++) {
+	for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 		char bridge[2] = "0";
 		if (br!=0)
 			bridge[0]+=br;
@@ -743,7 +751,7 @@ void start_lan(void)
 	vlan0tag = nvram_get_int("vlan0tag");
 
 	if ((sfd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW)) < 0) return;
-	for(br=0 ; br<4 ; br++) {
+	for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 		char bridge[2] = "0";
 		if (br!=0)
 			bridge[0]+=br;
@@ -942,7 +950,7 @@ void stop_lan(void)
 
 	vlan0tag = nvram_get_int("vlan0tag");
 
-	for(br=0 ; br<4 ; br++) {
+	for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 		char bridge[2] = "0";
 		if (br!=0)
 			bridge[0]+=br;
@@ -1019,7 +1027,11 @@ void do_static_routes(int add)
 					((strcmp(ifname,"LAN1")==0) ? "lan1_ifname" :
 					((strcmp(ifname,"LAN2")==0) ? "lan2_ifname" :
 					((strcmp(ifname,"LAN3")==0) ? "lan3_ifname" :
-					((*ifname == 'W') ? "wan_iface" : "wan_ifname"))))));
+					((strcmp(ifname,"LAN4")==0) ? "lan4_ifname" :
+					((strcmp(ifname,"LAN5")==0) ? "lan5_ifname" :
+					((strcmp(ifname,"LAN6")==0) ? "lan6_ifname" :
+					((strcmp(ifname,"LAN7")==0) ? "lan7_ifname" :
+					((*ifname == 'W') ? "wan_iface" : "wan_ifname"))))))))));
 		if (add) {
 			for (r = 3; r >= 0; --r) {
 				if (route_add(ifname, atoi(metric), dest, gateway, mask) == 0) break;

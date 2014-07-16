@@ -815,6 +815,10 @@ static void setup_listeners(int do_ipv6)
 	char ipaddr1[INET6_ADDRSTRLEN];
 	char ipaddr2[INET6_ADDRSTRLEN];
 	char ipaddr3[INET6_ADDRSTRLEN];
+	char ipaddr4[INET6_ADDRSTRLEN];
+	char ipaddr5[INET6_ADDRSTRLEN];
+	char ipaddr6[INET6_ADDRSTRLEN];
+	char ipaddr7[INET6_ADDRSTRLEN];
 	IF_TCONFIG_IPV6(const char *wanaddr);
 	int wanport, p;
 	IF_TCONFIG_IPV6(int wan6port);
@@ -834,6 +838,10 @@ static void setup_listeners(int do_ipv6)
 	strlcpy(ipaddr1, nvram_safe_get("lan1_ipaddr"), sizeof(ipaddr));
 	strlcpy(ipaddr2, nvram_safe_get("lan2_ipaddr"), sizeof(ipaddr));
 	strlcpy(ipaddr3, nvram_safe_get("lan3_ipaddr"), sizeof(ipaddr));
+	strlcpy(ipaddr4, nvram_safe_get("lan4_ipaddr"), sizeof(ipaddr));
+	strlcpy(ipaddr5, nvram_safe_get("lan5_ipaddr"), sizeof(ipaddr));
+	strlcpy(ipaddr6, nvram_safe_get("lan6_ipaddr"), sizeof(ipaddr));
+	strlcpy(ipaddr7, nvram_safe_get("lan7_ipaddr"), sizeof(ipaddr));
 
 	if (!nvram_match("http_enable", "0")) {
 		p = nvram_get_int("http_lanport");
@@ -844,6 +852,14 @@ static void setup_listeners(int do_ipv6)
 			add_listen_socket(ipaddr2, p, do_ipv6, 0);
 		if (strcmp(ipaddr3,"")!=0)
 			add_listen_socket(ipaddr3, p, do_ipv6, 0);
+		if (strcmp(ipaddr4,"")!=0)
+			add_listen_socket(ipaddr4, p, do_ipv6, 0);
+		if (strcmp(ipaddr5,"")!=0)
+			add_listen_socket(ipaddr5, p, do_ipv6, 0);
+		if (strcmp(ipaddr6,"")!=0)
+			add_listen_socket(ipaddr6, p, do_ipv6, 0);
+		if (strcmp(ipaddr7,"")!=0)
+			add_listen_socket(ipaddr7, p, do_ipv6, 0);
 
 		IF_TCONFIG_IPV6(if (do_ipv6 && wanport == p) wan6port = 0);
 	}
@@ -859,6 +875,14 @@ static void setup_listeners(int do_ipv6)
 			add_listen_socket(ipaddr2, p, do_ipv6, 1);
 		if (strcmp(ipaddr3,"")!=0)
 			add_listen_socket(ipaddr3, p, do_ipv6, 1);
+		if (strcmp(ipaddr4,"")!=0)
+			add_listen_socket(ipaddr4, p, do_ipv6, 1);
+		if (strcmp(ipaddr5,"")!=0)
+			add_listen_socket(ipaddr5, p, do_ipv6, 1);
+		if (strcmp(ipaddr6,"")!=0)
+			add_listen_socket(ipaddr6, p, do_ipv6, 1);
+		if (strcmp(ipaddr7,"")!=0)
+			add_listen_socket(ipaddr7, p, do_ipv6, 1);
 
 		IF_TCONFIG_IPV6(if (do_ipv6 && wanport == p) wan6port = 0);
 	}

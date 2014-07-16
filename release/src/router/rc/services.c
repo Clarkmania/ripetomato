@@ -181,7 +181,7 @@ void start_dnsmasq()
 	char dhcpN_num[] = "dhcpXX_num";
 	char dhcpN_lease[] = "dhcpXX_lease";
 	char br;
-	for(br=0 ; br<=3 ; br++) {
+	for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 		char bridge[2] = "0";
 		if (br!=0)
 			bridge[0]+=br;
@@ -937,7 +937,7 @@ void start_upnp(void)
 				char upnp_lanN[] = "upnp_lanXX";
 				char br;
 
-				for(br=0 ; br<4 ; br++) {
+				for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 					char bridge[2] = "0";
 					if (br!=0)
 						bridge[0]+=br;
@@ -1065,6 +1065,14 @@ void start_zebra(void)
 	char *lan2_rx = nvram_safe_get("dr_lan2_rx");
 	char *lan3_tx = nvram_safe_get("dr_lan3_tx");
 	char *lan3_rx = nvram_safe_get("dr_lan3_rx");
+	char *lan4_tx = nvram_safe_get("dr_lan4_tx");
+	char *lan4_rx = nvram_safe_get("dr_lan4_rx");
+	char *lan5_tx = nvram_safe_get("dr_lan5_tx");
+	char *lan5_rx = nvram_safe_get("dr_lan5_rx");
+	char *lan6_tx = nvram_safe_get("dr_lan6_tx");
+	char *lan6_rx = nvram_safe_get("dr_lan6_rx");
+	char *lan7_tx = nvram_safe_get("dr_lan7_tx");
+	char *lan7_rx = nvram_safe_get("dr_lan7_rx");
 	char *wan_tx = nvram_safe_get("dr_wan_tx");
 	char *wan_rx = nvram_safe_get("dr_wan_rx");
 
@@ -1072,6 +1080,10 @@ void start_zebra(void)
 		(*lan1_tx == '0') && (*lan1_rx == '0') && 
 		(*lan2_tx == '0') && (*lan2_rx == '0') && 
 		(*lan3_tx == '0') && (*lan3_rx == '0') && 
+		(*lan4_tx == '0') && (*lan4_rx == '0') && 
+		(*lan5_tx == '0') && (*lan5_rx == '0') && 
+		(*lan6_tx == '0') && (*lan6_rx == '0') && 
+		(*lan7_tx == '0') && (*lan7_rx == '0') && 
 		(*wan_tx == '0') && (*wan_rx == '0')) {
 		return;
 	}
@@ -1087,6 +1099,10 @@ void start_zebra(void)
 		char *lan1_ifname = nvram_safe_get("lan1_ifname");
 		char *lan2_ifname = nvram_safe_get("lan2_ifname");
 		char *lan3_ifname = nvram_safe_get("lan3_ifname");
+		char *lan4_ifname = nvram_safe_get("lan4_ifname");
+		char *lan5_ifname = nvram_safe_get("lan5_ifname");
+		char *lan6_ifname = nvram_safe_get("lan6_ifname");
+		char *lan7_ifname = nvram_safe_get("lan7_ifname");
 		char *wan_ifname = nvram_safe_get("wan_ifname");
 
 		fprintf(fp, "router rip\n");
@@ -1098,6 +1114,14 @@ void start_zebra(void)
 			fprintf(fp, "network %s\n", lan2_ifname);
 		if(strcmp(lan3_ifname,"")!=0)
 			fprintf(fp, "network %s\n", lan3_ifname);
+		if(strcmp(lan4_ifname,"")!=0)
+			fprintf(fp, "network %s\n", lan4_ifname);
+		if(strcmp(lan5_ifname,"")!=0)
+			fprintf(fp, "network %s\n", lan5_ifname);
+		if(strcmp(lan6_ifname,"")!=0)
+			fprintf(fp, "network %s\n", lan6_ifname);
+		if(strcmp(lan7_ifname,"")!=0)
+			fprintf(fp, "network %s\n", lan7_ifname);
 		fprintf(fp, "network %s\n", wan_ifname);
 		fprintf(fp, "redistribute connected\n");
 		//fprintf(fp, "redistribute static\n");
@@ -1125,6 +1149,26 @@ void start_zebra(void)
 			if (*lan3_tx != '0') fprintf(fp, "ip rip send version %s\n", lan3_tx);
 			if (*lan3_rx != '0') fprintf(fp, "ip rip receive version %s\n", lan3_rx);
 		}
+		if(strcmp(lan4_ifname,"")!=0) {
+		fprintf(fp, "interface %s\n", lan4_ifname);
+			if (*lan4_tx != '0') fprintf(fp, "ip rip send version %s\n", lan4_tx);
+			if (*lan4_rx != '0') fprintf(fp, "ip rip receive version %s\n", lan4_rx);
+		}
+		if(strcmp(lan5_ifname,"")!=0) {
+		fprintf(fp, "interface %s\n", lan5_ifname);
+			if (*lan5_tx != '0') fprintf(fp, "ip rip send version %s\n", lan5_tx);
+			if (*lan5_rx != '0') fprintf(fp, "ip rip receive version %s\n", lan5_rx);
+		}
+		if(strcmp(lan6_ifname,"")!=0) {
+		fprintf(fp, "interface %s\n", lan6_ifname);
+			if (*lan6_tx != '0') fprintf(fp, "ip rip send version %s\n", lan6_tx);
+			if (*lan6_rx != '0') fprintf(fp, "ip rip receive version %s\n", lan6_rx);
+		}
+		if(strcmp(lan7_ifname,"")!=0) {
+		fprintf(fp, "interface %s\n", lan7_ifname);
+			if (*lan7_tx != '0') fprintf(fp, "ip rip send version %s\n", lan7_tx);
+			if (*lan7_rx != '0') fprintf(fp, "ip rip receive version %s\n", lan7_rx);
+		}
 		fprintf(fp, "interface %s\n", wan_ifname);
 		if (*wan_tx != '0') fprintf(fp, "ip rip send version %s\n", wan_tx);
 		if (*wan_rx != '0') fprintf(fp, "ip rip receive version %s\n", wan_rx);
@@ -1145,6 +1189,22 @@ void start_zebra(void)
 		if(strcmp(lan3_ifname,"")!=0) {
 			if (*lan3_tx == '0') fprintf(fp, "distribute-list private out %s\n", lan3_ifname);
 			if (*lan3_rx == '0') fprintf(fp, "distribute-list private in %s\n", lan3_ifname);
+		}
+		if(strcmp(lan4_ifname,"")!=0) {
+			if (*lan4_tx == '0') fprintf(fp, "distribute-list private out %s\n", lan4_ifname);
+			if (*lan4_rx == '0') fprintf(fp, "distribute-list private in %s\n", lan4_ifname);
+		}
+		if(strcmp(lan5_ifname,"")!=0) {
+			if (*lan5_tx == '0') fprintf(fp, "distribute-list private out %s\n", lan5_ifname);
+			if (*lan5_rx == '0') fprintf(fp, "distribute-list private in %s\n", lan5_ifname);
+		}
+		if(strcmp(lan6_ifname,"")!=0) {
+			if (*lan6_tx == '0') fprintf(fp, "distribute-list private out %s\n", lan6_ifname);
+			if (*lan6_rx == '0') fprintf(fp, "distribute-list private in %s\n", lan6_ifname);
+		}
+		if(strcmp(lan7_ifname,"")!=0) {
+			if (*lan7_tx == '0') fprintf(fp, "distribute-list private out %s\n", lan7_ifname);
+			if (*lan7_rx == '0') fprintf(fp, "distribute-list private in %s\n", lan7_ifname);
 		}
 		if (*wan_tx == '0') fprintf(fp, "distribute-list private out %s\n", wan_ifname);
 		if (*wan_rx == '0') fprintf(fp, "distribute-list private in %s\n", wan_ifname);
@@ -1337,7 +1397,7 @@ void start_igmp_proxy(void)
 				char multicast_lanN[] = "multicast_lanXX";
 				char br;
 
-				for(br=0 ; br<4 ; br++) {
+				for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 					char bridge[2] = "0";
 					if (br!=0)
 						bridge[0]+=br;

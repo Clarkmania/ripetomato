@@ -10,8 +10,9 @@ For use with Tomato Firmware only.
 No part of this file may be used without permission.
 --><title>Captive Portal Management</title>
 <content>
+	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript">
-		//	<% nvram("at_update,tomatoanon_answer,NC_enable,NC_Verbosity,NC_GatewayName,NC_GatewayPort,NC_ForcedRedirect,NC_HomePage,NC_DocumentRoot,NC_LoginTimeout,NC_IdleTimeout,NC_MaxMissedARP,NC_ExcludePorts,NC_IncludePorts,NC_AllowedWebHosts,NC_MACWhiteList,NC_BridgeLAN,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname"); %>
+		//	<% nvram("at_update,tomatoanon_answer,NC_enable,NC_Verbosity,NC_GatewayName,NC_GatewayPort,NC_ForcedRedirect,NC_HomePage,NC_DocumentRoot,NC_LoginTimeout,NC_IdleTimeout,NC_MaxMissedARP,NC_ExcludePorts,NC_IncludePorts,NC_AllowedWebHosts,NC_MACWhiteList,NC_BridgeLAN,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,lan4_ifname,lan5_ifname,lan6_ifname,lan7_ifname"); %>
 
 		function fix(name)
 		{
@@ -58,14 +59,12 @@ No part of this file may be used without permission.
 			E('_NC_BridgeLAN').disabled = !a;
 
 			var bridge = E('_NC_BridgeLAN');
-			if(nvram.lan_ifname.length < 1)
-				bridge.options[0].disabled=true;
-			if(nvram.lan1_ifname.length < 1)
-				bridge.options[1].disabled=true;
-			if(nvram.lan2_ifname.length < 1)
-				bridge.options[2].disabled=true;
-			if(nvram.lan3_ifname.length < 1)
-				bridge.options[3].disabled=true;
+
+			for (var i = 1; i <= MAX_BRIDGE_ID; i++) {
+				var ln = (i == 0) ? "" : i;
+				if(nvram['lan'+ln+'_ifname'].length < 1)
+					bridge.options[i].disabled=true;
+			}
 
 			if ( (E('_f_NC_ForcedRedirect').checked) && (!v_length('_NC_HomePage', quiet, 1, 255))) return 0;
 			if (!v_length('_NC_GatewayName', quiet, 1, 255)) return 0;	
@@ -112,16 +111,16 @@ No part of this file may be used without permission.
 			<input type="hidden" name="NC_enable">
 			<input type="hidden" name="NC_ForcedRedirect">
 			<script type="text/javascript">
+				var lans = [];
+				for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+					var ln = (i == 0) ? "" : i;
+					lans.push.apply(lans, [['br'+i, 'LAN'+ln+' (br'+i+')']]);
+				}
 				createFieldTable('', [
 					{ title: 'Enable Function', name: 'f_NC_enable', type: 'checkbox', value: nvram.NC_enable == '1' },
 					/* VLAN-BEGIN */
 					{ title: 'Interface', multi: [
-						{ name: 'NC_BridgeLAN', type: 'select', options: [
-							['br0','LAN (br0)*'],
-							['br1','LAN1 (br1)'],
-							['br2','LAN2 (br2)'],
-							['br3','LAN3 (br3)']
-							], value: nvram.NC_BridgeLAN, suffix: ' <small>* default</small> ' } ] },
+						{ name: 'NC_BridgeLAN', type: 'select', options: lans, value: nvram.NC_BridgeLAN, suffix: ' <small>* default</small> ' } ] },
 					/* VLAN-END */
 					{ title: 'Gateway Name', name: 'NC_GatewayName', type: 'text', maxlen: 255, size: 34, value: nvram.NC_GatewayName },
 					{ title: 'Captive Site Forwarding', name: 'f_NC_ForcedRedirect', type: 'checkbox', value: (nvram.NC_ForcedRedirect == '1') },

@@ -33,7 +33,7 @@ LAN Access admin module by Augusto Bott
 	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript" src="js/wireless.js"></script>
 	<script type="text/javascript">
-		// <% nvram("at_update,tomatoanon_answer,nas_alternate,wl_auth,wl_auth_mode,wl_bss_enabled,wl_channel,wl_closed,wl_corerev,wl_crypto,wl_hwaddr,wl_ifname,wl_key,wl_key1,wl_key2,wl_key3,wl_key4,wl_lazywds,wl_mode,wl_nband,wl_nbw_cap,wl_nctrlsb,wl_net_mode,wl_passphrase,wl_phytype,wl_radio,wl_radius_ipaddr,wl_radius_key,wl_radius_port,wl_security_mode,wl_ssid,wl_vifs,wl_wds,wl_wds_enable,wl_wep_bit,wl_wpa_gtk_rekey,wl_wpa_psk,wl_bss_maxassoc,wl_wme,lan_ifname,lan_ifnames,lan1_ifname,lan1_ifnames,lan2_ifname,lan2_ifnames,lan3_ifname,lan3_ifnames,t_features");%>
+		// <% nvram("at_update,tomatoanon_answer,nas_alternate,wl_auth,wl_auth_mode,wl_bss_enabled,wl_channel,wl_closed,wl_corerev,wl_crypto,wl_hwaddr,wl_ifname,wl_key,wl_key1,wl_key2,wl_key3,wl_key4,wl_lazywds,wl_mode,wl_nband,wl_nbw_cap,wl_nctrlsb,wl_net_mode,wl_passphrase,wl_phytype,wl_radio,wl_radius_ipaddr,wl_radius_key,wl_radius_port,wl_security_mode,wl_ssid,wl_vifs,wl_wds,wl_wds_enable,wl_wep_bit,wl_wpa_gtk_rekey,wl_wpa_psk,wl_bss_maxassoc,wl_wme,lan_ifname,lan_ifnames,lan1_ifname,lan1_ifnames,lan2_ifname,lan2_ifnames,lan3_ifname,lan3_ifnames,lan4_ifname,lan4_ifnames,lan5_ifname,lan5_ifnames,lan6_ifname,lan6_ifnames,lan7_ifname,lan7_ifnames,t_features");%>
 
 		var vifs_possible = [];
 		var vifs_defined = [];
@@ -93,7 +93,7 @@ LAN Access admin module by Augusto Bott
 				{ type: 'checkbox', prefix: '<div class="centered">', suffix: '</div>' },
 				{ type: 'text', maxlen: 32, size: 34, prefix: '<div class="centered">', suffix: '</div>', class: 'input-medium' },
 				{ type: 'select', options: wl_modes_available , prefix: '<div class="centered">', suffix: '</div>' },
-				{ type: 'select', options: [[0,'LAN (br0)'],[1,'LAN1  (br1)'],[2,'LAN2 (br2)'],[3,'LAN3 (br3)'],[4,'none']], class: 'input-medium' }
+				{ type: 'select', options: [[0,'LAN (br0)'],[1,'LAN1  (br1)'],[2,'LAN2 (br2)'],[3,'LAN3 (br3)'],[4,'LAN4 (br4)'],[5,'LAN5 (br5)'],[6,'LAN6 (br6)'],[7,'LAN7 (br7)'],[8,'none']], class: 'input-medium' }
 			]);
 
 			this.headerSet(['Interface', 'Enabled', 'SSID', 'Mode', 'Bridge']);
@@ -154,14 +154,11 @@ LAN Access admin module by Augusto Bott
 				f[3].options[i].disabled = (f[3].options[i].value != 'ap');
 			}
 
-			if (nvram.lan_ifname.length < 1)
-				f[4].options[0].disabled=1;
-			if (nvram.lan1_ifname.length < 1)
-				f[4].options[1].disabled=1;
-			if (nvram.lan2_ifname.length < 1)
-				f[4].options[2].disabled=1;
-			if (nvram.lan3_ifname.length < 1)
-				f[4].options[3].disabled=1;
+			for (var i = 0; i <= MAX_BRIDGE_ID; i++ ) {
+				var ln = (i == 0) ? '' : i;
+				if (nvram['lan'+ln+'_ifname'].length < 1)
+					f[4].options[i].disabled=1;
+			}
 
 			f[4].selectedIndex = 4;
 			ferror.clearAll(fields.getAll(this.newEditor));
@@ -171,14 +168,11 @@ LAN Access admin module by Augusto Bott
 			var ok = 1;
 			var f = fields.getAll(row);
 
-			if (nvram.lan_ifname.length < 1)
-				f[4].options[0].disabled=1;
-			if (nvram.lan1_ifname.length < 1)
-				f[4].options[1].disabled=1;
-			if (nvram.lan2_ifname.length < 1)
-				f[4].options[2].disabled=1;
-			if (nvram.lan3_ifname.length < 1)
-				f[4].options[3].disabled=1;
+			for (var i = 0; i <= MAX_BRIDGE_ID; i++ ) {
+				var ln = (i == 0) ? '' : i;
+				if (nvram['lan'+ln+'_ifname'].length < 1)
+					f[4].options[i].disabled=1;
+			}
 
 			if (f[0].value.indexOf('.') < 0) {
 				/* REMOVE-BEGIN */
@@ -223,7 +217,7 @@ LAN Access admin module by Augusto Bott
 				(data[1] == 1) ? 'Yes' : 'No',
 				ssid || '<small><i>(unset)</i></small>',
 				wmo[data[3]] || '<small><i>(unset)</i></small>',
-				['LAN (br0)', 'LAN1 (br1)', 'LAN2 (br2)', 'LAN3 (br3)', 'none' ][data[4]]
+				['LAN (br0)', 'LAN1 (br1)', 'LAN2 (br2)', 'LAN3 (br3)', 'LAN4 (br4)', 'LAN5 (br5)', 'LAN6 (br6)', 'LAN7 (br7)', 'none' ][data[4]]
 			]);
 		}
 
@@ -1236,6 +1230,10 @@ LAN Access admin module by Augusto Bott
 			var lan1_ifnames = nvram['lan1_ifnames'];
 			var lan2_ifnames = nvram['lan2_ifnames'];
 			var lan3_ifnames = nvram['lan3_ifnames'];
+			var lan4_ifnames = nvram['lan4_ifnames'];
+			var lan5_ifnames = nvram['lan5_ifnames'];
+			var lan6_ifnames = nvram['lan6_ifnames'];
+			var lan7_ifnames = nvram['lan7_ifnames'];
 			var wl0_vifs = nvram['wl0_vifs'];
 			var wl1_vifs = nvram['wl1_vifs'];
 
@@ -1250,6 +1248,10 @@ LAN Access admin module by Augusto Bott
 				lan1_ifnames = lan1_ifnames.replace('wl'+u, '');
 				lan2_ifnames = lan2_ifnames.replace('wl'+u, '');
 				lan3_ifnames = lan3_ifnames.replace('wl'+u, '');
+				lan4_ifnames = lan4_ifnames.replace('wl'+u, '');
+				lan5_ifnames = lan5_ifnames.replace('wl'+u, '');
+				lan6_ifnames = lan6_ifnames.replace('wl'+u, '');
+				lan7_ifnames = lan7_ifnames.replace('wl'+u, '');
 				if (typeof(wl0_vifs) != 'undefined') {
 					wl0_vifs = wl0_vifs.replace('wl'+u, '');
 				}
@@ -1265,6 +1267,10 @@ LAN Access admin module by Augusto Bott
 				s += 'nvram set lan1_ifnames=\'' + lan1_ifnames + '\'\n';
 				s += 'nvram set lan2_ifnames=\'' + lan2_ifnames + '\'\n';
 				s += 'nvram set lan3_ifnames=\'' + lan3_ifnames + '\'\n';
+				s += 'nvram set lan4_ifnames=\'' + lan4_ifnames + '\'\n';
+				s += 'nvram set lan5_ifnames=\'' + lan5_ifnames + '\'\n';
+				s += 'nvram set lan6_ifnames=\'' + lan6_ifnames + '\'\n';
+				s += 'nvram set lan7_ifnames=\'' + lan7_ifnames + '\'\n';
 				if (typeof(wl0_vifs) != 'undefined')
 					s += 'nvram set wl0_vifs=\'' + wl0_vifs + '\'\n';
 				if (typeof(wl1_vifs) != 'undefined')
@@ -1319,6 +1325,10 @@ LAN Access admin module by Augusto Bott
 	<input type="hidden" name="lan1_ifnames" value="">
 	<input type="hidden" name="lan2_ifnames" value="">
 	<input type="hidden" name="lan3_ifnames" value="">
+	<input type="hidden" name="lan4_ifnames" value="">
+	<input type="hidden" name="lan5_ifnames" value="">
+	<input type="hidden" name="lan6_ifnames" value="">
+	<input type="hidden" name="lan7_ifnames" value="">
 
 	<div id="sesdiv" style="display:none">
 

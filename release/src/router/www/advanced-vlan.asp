@@ -36,7 +36,7 @@ No part of this file may be used without permission.
 	<script type="text/javascript" src="js/wireless.jsx?_http_id=<% nv(http_id); %>"></script>
 	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript">
-		//<% nvram ("at_update,tomatoanon_answer,vlan0ports,vlan1ports,vlan2ports,vlan3ports,vlan4ports,vlan5ports,vlan6ports,vlan7ports,vlan8ports,vlan9ports,vlan10ports,vlan11ports,vlan12ports,vlan13ports,vlan14ports,vlan15ports,vlan0hwname,vlan1hwname,vlan2hwname,vlan3hwname,vlan4hwname,vlan5hwname,vlan6hwname,vlan7hwname,vlan8hwname,vlan9hwname,vlan10hwname,vlan11hwname,vlan12hwname,vlan13hwname,vlan14hwname,vlan15hwname,wan_ifnameX,manual_boot_nv,boardtype,boardflags,trunk_vlan_so,lan_ifname,lan_ifnames,lan1_ifname,lan1_ifnames,lan2_ifname,lan2_ifnames,lan3_ifname,lan3_ifnames,boardrev,vlan0tag,vlan0vid,vlan1vid,vlan2vid,vlan3vid,vlan4vid,vlan5vid,vlan6vid,vlan7vid,vlan8vid,vlan9vid,vlan10vid,vlan11vid,vlan12vid,vlan13vid,vlan14vid,vlan15vid");%>
+		//<% nvram ("at_update,tomatoanon_answer,vlan0ports,vlan1ports,vlan2ports,vlan3ports,vlan4ports,vlan5ports,vlan6ports,vlan7ports,vlan8ports,vlan9ports,vlan10ports,vlan11ports,vlan12ports,vlan13ports,vlan14ports,vlan15ports,vlan0hwname,vlan1hwname,vlan2hwname,vlan3hwname,vlan4hwname,vlan5hwname,vlan6hwname,vlan7hwname,vlan8hwname,vlan9hwname,vlan10hwname,vlan11hwname,vlan12hwname,vlan13hwname,vlan14hwname,vlan15hwname,wan_ifnameX,manual_boot_nv,boardtype,boardflags,trunk_vlan_so,lan_ifname,lan_ifnames,lan1_ifname,lan1_ifnames,lan2_ifname,lan2_ifnames,lan3_ifname,lan3_ifnames,lan4_ifname,lan4_ifnames,lan5_ifname,lan5_ifnames,lan6_ifname,lan6_ifnames,lan7_ifname,lan7_ifnames,boardrev,vlan0tag,vlan0vid,vlan1vid,vlan2vid,vlan3vid,vlan4vid,vlan5vid,vlan6vid,vlan7vid,vlan8vid,vlan9vid,vlan10vid,vlan11vid,vlan12vid,vlan13vid,vlan14vid,vlan15vid");%>
 
 		var port_vlan_supported = 0;
 		var trunk_vlan_supported = 0;
@@ -178,14 +178,12 @@ No part of this file may be used without permission.
 			for (var uidx = 0; uidx < wl_ifaces.length; ++uidx) {
 				var u = wl_fface(uidx);
 				var wlan = E('_f_bridge_wlan'+u+'_to');
-				if(nvram.lan_ifname.length < 1)
-					wlan.options[0].disabled=true;
-				if(nvram.lan1_ifname.length < 1)
-					wlan.options[1].disabled=true;
-				if(nvram.lan2_ifname.length < 1)
-					wlan.options[2].disabled=true;
-				if(nvram.lan3_ifname.length < 1)
-					wlan.options[3].disabled=true;
+
+				for (var ib = 0; ib <= MAX_BRIDGE_ID; ib++) {
+					var j = (ib == 0) ? "" : ib;
+					if(nvram['lan'+j+'_ifname'].length < 1)
+						wlan.options[ib].disabled=true;
+				}
 			}
 			var e = E('_vlan0tag');
 			if (!v_range('_vlan0tag', quiet, 0, 4080)) return 0;
@@ -210,10 +208,10 @@ No part of this file may be used without permission.
 				fom['vlan' + i + 'vid'].value = '';
 			}
 			fom['wan_ifnameX'].value = '';
-			fom['lan_ifnames'].value = '';
-			fom['lan1_ifnames'].value = '';
-			fom['lan2_ifnames'].value = '';
-			fom['lan3_ifnames'].value = '';
+			for (var ib = 0; ib <= MAX_BRIDGE_ID; ib++) {
+				var j = (ib == 0) ? "" : ib;
+				fom['lan'+j+'_ifnames'].value = '';
+			}
 
 			var v = '';
 			var d = vlg.getAllData();
@@ -254,14 +252,14 @@ No part of this file may be used without permission.
 				fom['vlan'+d[i][COL_VID]+'vid'].value = ((d[i][COL_MAP].toString() != '') && (d[i][COL_MAP].toString() != '0')) ? d[i][COL_MAP] : '';
 
 				fom['wan_ifnameX'].value += (d[i][COL_BRI] == '2') ? 'vlan'+d[i][0] : '';
-				fom['lan_ifnames'].value += (d[i][COL_BRI] == '3') ? 'vlan'+d[i][0] : '';
 				/* REMOVE-BEGIN
 				//    fom['lan_ifnames'].value += trailingSpace(fom['lan_ifnames'].value);
 				//    alert('vlan'+d[i][0]+'ports='+fom['vlan'+d[i][0]+'ports'].value+'\nvlan'+d[i][0]+'hwname='+fom['vlan'+d[i][0]+'hwname'].value);
 				REMOVE-END */
-				fom['lan1_ifnames'].value += (d[i][COL_BRI] == '4') ? 'vlan'+d[i][0] : '';
-				fom['lan2_ifnames'].value += (d[i][COL_BRI] == '5') ? 'vlan'+d[i][0] : '';
-				fom['lan3_ifnames'].value += (d[i][COL_BRI] == '6') ? 'vlan'+d[i][0] : '';
+				for (var ib = 0; ib <= MAX_BRIDGE_ID; ib++) {
+					var j = (ib == 0) ? "" : ib;
+					fom['lan'+j+'_ifnames'].value += (d[i][COL_BRI] == (ib+3).toString()) ? 'vlan'+d[i][0] : '';
+				}
 			}
 
 			for (var uidx = 0; uidx < wl_ifaces.length; ++uidx) {
@@ -271,19 +269,10 @@ No part of this file may be used without permission.
 				//  var wlan = E('_f_bridge_wlan_to');
 				//  alert(wlan.selectedIndex);
 				REMOVE-END */
-				switch(parseInt(wlan.selectedIndex)) {
-					case 0:
-						fom['lan_ifnames'].value += ' ' + wl_ifaces[uidx][0];
-						break;
-					case 1:
-						fom['lan1_ifnames'].value += ' ' + wl_ifaces[uidx][0];
-						break;
-					case 2:
-						fom['lan2_ifnames'].value += ' ' + wl_ifaces[uidx][0];
-						break;
-					case 3:
-						fom['lan3_ifnames'].value += ' ' + wl_ifaces[uidx][0];
-						break;
+				var wlanSI = parseInt(wlan.selectedIndex);
+				if (wlanSI >= 0 && wlanSI <= MAX_BRIDGE_ID) {
+					var ln = (wlanSI == 0) ? "" : wlanSI;
+					fom['lan'+ln+'_ifnames'].value += ' ' + wl_ifaces[uidx][0];
 				}
 			}
 			/* REMOVE-BEGIN
@@ -353,6 +342,11 @@ No part of this file may be used without permission.
 		}
 
 		if(port_vlan_supported) { // aka if(supported_hardware) block
+			var lanopts = [[1, 'none'],[2, 'WAN']];
+			for (var ib = 0; ib <= MAX_BRIDGE_ID; ib++) {
+				var j = (ib == 0) ? "" : ib;
+				lanopts.push.apply(lanopts, [[(ib+3), 'LAN'+j+' (br'+ib+')']]);
+			}
 			var vlg = new TomatoGrid();
 			vlg.setup = function() {
 				this.init('vlan-grid', '', (MAX_VLAN_ID + 1), [
@@ -369,7 +363,7 @@ No part of this file may be used without permission.
 					{ type: 'checkbox', prefix: '<div class="centered">', suffix: '</div>' },
 					{ type: 'checkbox', prefix: '<div class="centered">', suffix: '</div>' },
 					{ type: 'checkbox', prefix: '<div class="centered">', suffix: '</div>' },
-					{ type: 'select', options: [[1, 'none'],[2, 'WAN'],[3, 'LAN (br0)'],[4, 'LAN1 (br1)'],[5, 'LAN2 (br2)'],[6, 'LAN3 (br3)']], prefix: '<div class="centered">', suffix: '</div>', class: 'input-small' }]);
+					{ type: 'select', options: lanopts, prefix: '<div class="centered">', suffix: '</div>', class: 'input-small' }]);
 
 				this.headerSet(['VLAN', 'VID', 'Port 1', 'Tagged', 'Port 2', 'Tagged', 'Port 3', 'Tagged', 'Port 4', 'Tagged', 'WAN Port', 'Tagged', 'Default', 'Bridge']);
 
@@ -626,7 +620,7 @@ No part of this file may be used without permission.
 					(data[COL_P4].toString() != '0') ? 'Yes' : '',
 					(data[COL_P4T].toString() != '0') ? 'On' : '',
 					(data[COL_VID_DEF].toString() != '0') ? '*' : '',
-					['', 'WAN', 'LAN (br0)', 'LAN1 (br1)', 'LAN2 (br2)', 'LAN3 (br3)' ][data[COL_BRI] - 1]];
+					['', 'WAN', 'LAN (br0)', 'LAN1 (br1)', 'LAN2 (br2)', 'LAN3 (br3)', 'LAN4 (br4)', 'LAN5 (br5)', 'LAN6 (br6)', 'LAN7 (br7)' ][data[COL_BRI] - 1]];
 			}
 
 			vlg.dataToFieldValues = function (data) {
@@ -855,6 +849,10 @@ No part of this file may be used without permission.
 		<input type="hidden" name="lan1_ifnames">
 		<input type="hidden" name="lan2_ifnames">
 		<input type="hidden" name="lan3_ifnames">
+		<input type="hidden" name="lan4_ifnames">
+		<input type="hidden" name="lan5_ifnames">
+		<input type="hidden" name="lan6_ifnames">
+		<input type="hidden" name="lan7_ifnames">
 		<input type="hidden" name="trunk_vlan_so">
 
 		<input type="hidden" name="vlan0vid">
@@ -899,7 +897,7 @@ No part of this file may be used without permission.
 						var u = wl_fface(uidx);
 						f.push(
 							{ title: ('Bridge ' + wl_ifaces[uidx][0] + ' to'), name: ('f_bridge_wlan'+u+'_to'), type: 'select', 
-								options: [[0,'LAN (br0)'],[1,'LAN1  (br1)'],[2,'LAN2 (br2)'],[3,'LAN3 (br3)'],[4,'none']], value: 4 } );
+								options: [[0,'LAN (br0)'],[1,'LAN1  (br1)'],[2,'LAN2 (br2)'],[3,'LAN3 (br3)'],[4,'LAN4 (br4)'],[5,'LAN5 (br5)'],[6,'LAN6 (br6)'],[7,'LAN7 (br7)'],[8,'none']], value: 8 } );
 					}
 					createFieldTable('',f, '.section.wifi', 'fields-table');
 					if(port_vlan_supported) vlg.setup();

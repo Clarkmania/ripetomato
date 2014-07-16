@@ -74,6 +74,18 @@ const defaults_t defaults[] = {
 	{ "lan3_ipaddr",		""				},
 	{ "lan3_netmask",		""				},
 	{ "lan3_stp",			"0"				},
+	{ "lan4_ipaddr",		""				},
+	{ "lan4_netmask",		""				},
+	{ "lan4_stp",			"0"				},
+	{ "lan5_ipaddr",		""				},
+	{ "lan5_netmask",		""				},
+	{ "lan5_stp",			"0"				},
+	{ "lan6_ipaddr",		""				},
+	{ "lan6_netmask",		""				},
+	{ "lan6_stp",			"0"				},
+	{ "lan7_ipaddr",		""				},
+	{ "lan7_netmask",		""				},
+	{ "lan7_stp",			"0"				},
 
 	// WAN H/W parameters
 //!	{ "wan_ifname",			""				},	// WAN interface name
@@ -146,6 +158,26 @@ const defaults_t defaults[] = {
 	{ "dhcpd3_startip",		"" 				},
 	{ "dhcpd3_endip",		"" 				},
 	{ "dhcp3_lease",		"1440"				},
+	{ "dhcp4_start",		""				},
+	{ "dhcp4_num",			""				},
+	{ "dhcpd4_startip",		"" 				},
+	{ "dhcpd4_endip",		"" 				},
+	{ "dhcp4_lease",		"1440"				},
+	{ "dhcp5_start",		""				},
+	{ "dhcp5_num",			""				},
+	{ "dhcpd5_startip",		"" 				},
+	{ "dhcpd5_endip",		"" 				},
+	{ "dhcp5_lease",		"1440"				},
+	{ "dhcp6_start",		""				},
+	{ "dhcp6_num",			""				},
+	{ "dhcpd6_startip",		"" 				},
+	{ "dhcpd6_endip",		"" 				},
+	{ "dhcp6_lease",		"1440"				},
+	{ "dhcp7_start",		""				},
+	{ "dhcp7_num",			""				},
+	{ "dhcpd7_startip",		"" 				},
+	{ "dhcpd7_endip",		"" 				},
+	{ "dhcp7_lease",		"1440"				},
 
 	// 3G Modem
 	{ "modem_pin",			""				},
@@ -458,6 +490,10 @@ const defaults_t defaults[] = {
 	{ "multicast_lan1",		"0"				},	// on LAN1 (br1)
 	{ "multicast_lan2",		"0"				},	// on LAN2 (br2)
 	{ "multicast_lan3",		"0"				},	// on LAN3 (br3)
+	{ "multicast_lan4",		"0"				},	// on LAN4 (br4)
+	{ "multicast_lan5",		"0"				},	// on LAN5 (br5)
+	{ "multicast_lan6",		"0"				},	// on LAN6 (br6)
+	{ "multicast_lan7",		"0"				},	// on LAN7 (br7)
 	{ "udpxy_enable",		"0"				},
 	{ "udpxy_stats",		"0"				},
 	{ "udpxy_clients",		"3"				},
@@ -482,6 +518,14 @@ const defaults_t defaults[] = {
 	{ "dr_lan2_rx",			"0"				},	// Dynamic-Routing LAN in
 	{ "dr_lan3_tx",			"0"				},	// Dynamic-Routing LAN out
 	{ "dr_lan3_rx",			"0"				},	// Dynamic-Routing LAN in
+	{ "dr_lan4_tx",			"0"				},	// Dynamic-Routing LAN4 out
+	{ "dr_lan4_rx",			"0"				},	// Dynamic-Routing LAN4 in
+	{ "dr_lan5_tx",			"0"				},	// Dynamic-Routing LAN5 out
+	{ "dr_lan5_rx",			"0"				},	// Dynamic-Routing LAN5 in
+	{ "dr_lan6_tx",			"0"				},	// Dynamic-Routing LAN6 out
+	{ "dr_lan6_rx",			"0"				},	// Dynamic-Routing LAN6 in
+	{ "dr_lan7_tx",			"0"				},	// Dynamic-Routing LAN7 out
+	{ "dr_lan7_rx",			"0"				},	// Dynamic-Routing LAN7 in
 	{ "dr_wan_tx",			"0"				},	// Dynamic-Routing WAN out
 	{ "dr_wan_rx",			"0"				},	// Dynamic-Routing WAN in
 #endif
@@ -1154,6 +1198,30 @@ const defaults_t defaults[] = {
 	{ "limit_br3_dlr",			""			},
 	{ "limit_br3_ulr",			""			},
 	{ "limit_br3_prio",			"2"			},
+	{ "limit_br4_enable",			"0"			},
+	{ "limit_br4_dlc",			""			},
+	{ "limit_br4_ulc",			""			},
+	{ "limit_br4_dlr",			""			},
+	{ "limit_br4_ulr",			""			},
+	{ "limit_br4_prio",			"2"			},
+	{ "limit_br5_enable",			"0"			},
+	{ "limit_br5_dlc",			""			},
+	{ "limit_br5_ulc",			""			},
+	{ "limit_br5_dlr",			""			},
+	{ "limit_br5_ulr",			""			},
+	{ "limit_br5_prio",			"2"			},
+	{ "limit_br6_enable",			"0"			},
+	{ "limit_br6_dlc",			""			},
+	{ "limit_br6_ulc",			""			},
+	{ "limit_br6_dlr",			""			},
+	{ "limit_br6_ulr",			""			},
+	{ "limit_br6_prio",			"2"			},
+	{ "limit_br7_enable",			"0"			},
+	{ "limit_br7_dlc",			""			},
+	{ "limit_br7_ulc",			""			},
+	{ "limit_br7_dlr",			""			},
+	{ "limit_br7_ulr",			""			},
+	{ "limit_br7_prio",			"2"			},
 
 
 // NoCatSplash. !!Victek
@@ -1219,6 +1287,14 @@ const defaults_t if_vlan[] = {
 	{ "lan2_ifnames",	""					},
 	{ "lan3_ifname",	""					},
 	{ "lan3_ifnames",	""					},
+	{ "lan4_ifname",	""					},
+	{ "lan4_ifnames",	""					},
+	{ "lan5_ifname",	""					},
+	{ "lan5_ifnames",	""					},
+	{ "lan6_ifname",	""					},
+	{ "lan6_ifnames",	""					},
+	{ "lan7_ifname",	""					},
+	{ "lan7_ifnames",	""					},
 	{ "wan_ifname",		"vlan1"					},
 	{ "wan_ifnames",	"vlan1"					},
 	{ NULL, NULL }

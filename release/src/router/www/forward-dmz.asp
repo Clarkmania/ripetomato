@@ -9,7 +9,7 @@ No part of this file may be used without permission.
 <content>
 	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript">
-		//	<% nvram("at_update,tomatoanon_answer,dmz_enable,dmz_ipaddr,dmz_sip,dmz_ifname,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname"); %>
+		//	<% nvram("at_update,tomatoanon_answer,dmz_enable,dmz_ipaddr,dmz_sip,dmz_ifname,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,lan4_ifname,lan5_ifname,lan6_ifname,lan7_ifname"); %>
 
 		var lipp = '<% lipp(); %>.';
 
@@ -68,14 +68,11 @@ No part of this file may be used without permission.
 		function init() {
 			/* VLAN-BEGIN */
 			var dif = E('_dmz_ifname');
-			if(nvram.lan_ifname.length < 1)
-				dif.options[0].disabled=true;
-			if(nvram.lan1_ifname.length < 1)
-				dif.options[1].disabled=true;
-			if(nvram.lan2_ifname.length < 1)
-				dif.options[2].disabled=true;
-			if(nvram.lan3_ifname.length < 1)
-				dif.options[3].disabled=true;
+			for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+				var j = (i == 0) ? '' : i;
+				if(nvram['lan'+j+'_ifname'].length < 1)
+					dif.options[i].disabled=true;
+			}
 			if(nvram.dmz_enable == '1')
 				verifyFields(null,true);
 			/* VLAN-END */
@@ -93,13 +90,18 @@ No part of this file may be used without permission.
 
 		<div class="section dmz-settings">
 			<script type="text/javascript">
+				var lans = [];
+				for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+					var j = (i == 0) ? "" : i;
+					lans.push.apply(lans, [['br'+i, 'LAN'+j+' (br'+i+')']]);
+				}
 				createFieldTable('', [
 					{ title: 'Enable DMZ', name: 'f_dmz_enable', type: 'checkbox', value: (nvram.dmz_enable == '1') },
 					{ title: 'Destination Address', indent: 2, name: 'f_dmz_ipaddr', type: 'text', maxlen: 15, size: 17,
 						value: (nvram.dmz_ipaddr.indexOf('.') != -1) ? nvram.dmz_ipaddr : (lipp + nvram.dmz_ipaddr) },
 					/* VLAN-BEGIN */
 					{ title: 'Destination Interface', indent: 2, name: 'dmz_ifname', type: 'select',
-						options: [['br0','LAN (br0)'],['br1','LAN1  (br1)'],['br2','LAN2 (br2)'],['br3','LAN3 (br3)']], value: nvram.dmz_ifname },
+						options: lans, value: nvram.dmz_ifname },
 					/* VLAN-END */
 					{ title: 'Source Address<br>Restriction', indent: 2, name: 'f_dmz_sip', type: 'text', maxlen: 512, size: 64,
 						value: nvram.dmz_sip, suffix: '<br><small>(optional; ex: "1.1.1.1", "1.1.1.0/24", "1.1.1.1 - 2.2.2.2" or "me.example.com")</small>' }

@@ -22,7 +22,7 @@ No part of this file may be used without permission.
 	<script type="text/javascript" src="js/bwm-common.js"></script>
 	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript">
-		//	<% nvram("at_update,tomatoanon_answer,wan_ifname,lan_ifname,wl_ifname,wan_proto,wan_iface,web_svg,cstats_enable,cstats_colors,dhcpd_static,lan_ipaddr,lan_netmask,lan1_ipaddr,lan1_netmask,lan2_ipaddr,lan2_netmask,lan3_ipaddr,lan3_netmask"); %>
+		//	<% nvram("at_update,tomatoanon_answer,wan_ifname,lan_ifname,wl_ifname,wan_proto,wan_iface,web_svg,cstats_enable,cstats_colors,dhcpd_static,lan_ipaddr,lan_netmask,lan1_ipaddr,lan1_netmask,lan2_ipaddr,lan2_netmask,lan3_ipaddr,lan3_netmask,lan4_ipaddr,lan4_netmask,lan5_ipaddr,lan5_netmask,lan6_ipaddr,lan6_netmask,lan7_ipaddr,lan7_netmask"); %>
 		//	<% devlist(); %>
 
 		try {
@@ -125,7 +125,11 @@ No part of this file may be used without permission.
 					if ((b[1] == getNetworkAddress(nvram.lan_ipaddr,nvram.lan_netmask)) ||
 						(b[1] == getNetworkAddress(nvram.lan1_ipaddr,nvram.lan1_netmask)) ||
 						(b[1] == getNetworkAddress(nvram.lan2_ipaddr,nvram.lan2_netmask)) ||
-						(b[1] == getNetworkAddress(nvram.lan3_ipaddr,nvram.lan3_netmask))) {
+						(b[1] == getNetworkAddress(nvram.lan3_ipaddr,nvram.lan3_netmask)) ||
+						(b[1] == getNetworkAddress(nvram.lan4_ipaddr,nvram.lan4_netmask)) ||
+						(b[1] == getNetworkAddress(nvram.lan5_ipaddr,nvram.lan5_netmask)) ||
+						(b[1] == getNetworkAddress(nvram.lan6_ipaddr,nvram.lan6_netmask)) ||
+						(b[1] == getNetworkAddress(nvram.lan7_ipaddr,nvram.lan7_netmask))) {
 						if(E('_f_subnet').checked == 0) {
 							continue;
 						} else {

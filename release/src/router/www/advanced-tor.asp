@@ -12,8 +12,9 @@ No part of this file may be used without permission.
 			height: 15em;
 		}
 	</style>
+	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript">
-		//	<% nvram("at_update,tomatoanon_answer,tor_enable,tor_socksport,tor_transport,tor_dnsport,tor_datadir,tor_users,tor_custom,tor_iface,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname"); %>
+		//	<% nvram("at_update,tomatoanon_answer,tor_enable,tor_socksport,tor_transport,tor_dnsport,tor_datadir,tor_users,tor_custom,tor_iface,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,lan4_ifname,lan5_ifname,lan6_ifname,lan7_ifname"); %>
 
 		function verifyFields(focused, quiet)
 		{
@@ -28,14 +29,11 @@ No part of this file may be used without permission.
 			E('_tor_custom').disabled = !a;
 			elem.display('_tor_users', o && a);
 			var bridge = E('_tor_iface');
-			if(nvram.lan_ifname.length < 1)
-				bridge.options[0].disabled=true;
-			if(nvram.lan1_ifname.length < 1)
-				bridge.options[1].disabled=true;
-			if(nvram.lan2_ifname.length < 1)
-				bridge.options[2].disabled=true;
-			if(nvram.lan3_ifname.length < 1)
-				bridge.options[3].disabled=true;
+			for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+				var ln = (i == 0) ? "" : i;
+				if(nvram['lan'+ln+'_ifname'].length < 1)
+					bridge.options[i].disabled=true;
+			}
 			var s = E('_tor_custom');
 			if (s.value.search(/SocksPort/) == 0)  {
 				ferror.set(s, 'Cannot set "SocksPort" option here. You can set it in Tomato GUI', quiet);
@@ -104,6 +102,10 @@ No part of this file may be used without permission.
 						['br1','LAN1 (br1)'],
 						['br2','LAN2 (br2)'],
 						['br3','LAN3 (br3)'],
+						['br4','LAN3 (br4)'],
+						['br5','LAN3 (br5)'],
+						['br6','LAN3 (br6)'],
+						['br7','LAN3 (br7)'],
 						['custom','Only selected IP`s']
 						], value: nvram.tor_iface },
 					{ name: 'tor_users', type: 'text', maxlen: 512, size: 64, value: nvram.tor_users } ] },

@@ -80,7 +80,7 @@ static int nas_starter(int idx, int unit, int subunit, void *param) {
 			else
 				snprintf(unit_str, sizeof(unit_str), "%d", unit);
 
-			for(br=3 ; br>=0 ; br--) {
+			for(br=MAX_BRIDGE_ID ; br>=0 ; br--) {
 				char bridge[2] = "0";
 				if (br!=0)
 					bridge[0]+=br;
@@ -139,6 +139,14 @@ void start_nas(void)
 			xstart("nas", "/etc/nas.conf", "/var/run/nas.pid", "lan2");
 		if(strstr(nvram_safe_get("lan3_ifnames"),nvram_safe_get("wl0_ifname")) != NULL)
 			xstart("nas", "/etc/nas.conf", "/var/run/nas.pid", "lan3");
+		if(strstr(nvram_safe_get("lan4_ifnames"),nvram_safe_get("wl0_ifname")) != NULL)
+			xstart("nas", "/etc/nas.conf", "/var/run/nas.pid", "lan4");
+		if(strstr(nvram_safe_get("lan5_ifnames"),nvram_safe_get("wl0_ifname")) != NULL)
+			xstart("nas", "/etc/nas.conf", "/var/run/nas.pid", "lan5");
+		if(strstr(nvram_safe_get("lan6_ifnames"),nvram_safe_get("wl0_ifname")) != NULL)
+			xstart("nas", "/etc/nas.conf", "/var/run/nas.pid", "lan6");
+		if(strstr(nvram_safe_get("lan7_ifnames"),nvram_safe_get("wl0_ifname")) != NULL)
+			xstart("nas", "/etc/nas.conf", "/var/run/nas.pid", "lan7");
 
 		if (foreach_wif(1, NULL, is_sta))
 			xstart("nas", "/etc/nas.wan.conf", "/var/run/nas.wan.pid", "wan");

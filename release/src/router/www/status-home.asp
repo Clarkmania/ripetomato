@@ -291,7 +291,7 @@
 					var j = (i == 0) ? '' : i.toString();
 					if (nvram['lan' + j + '_ifname'].length > 0) {
 						if (nvram['lan' + j + '_proto'] == 'dhcp') {
-							if ((!fixIP(nvram.dhcpd_startip)) || (!fixIP(nvram.dhcpd_endip))) {
+							if ((!fixIP(nvram['dhcpd'+j+'_startip'])) || (!fixIP(nvram['dhcpd'+j+'_endip']))) {
 								var x = nvram['lan' + j + '_ipaddr'].split('.').splice(0, 3).join('.') + '.';
 								nvram['dhcpd' + j + '_startip'] = x + nvram['dhcp' + j + '_start'];
 								nvram['dhcpd' + j + '_endip'] = x + ((nvram['dhcp' + j + '_start'] * 1) + (nvram['dhcp' + j + '_num'] * 1) - 1);

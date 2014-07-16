@@ -263,7 +263,7 @@ void asp_iptmon(int argc, char **argv) {
 	web_puts("\n\niptmon={");
 	comma = ' ';
 
-	for(br=0 ; br<=3 ; br++) {
+	for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 
 		char wholenetstatsline = 1;
 

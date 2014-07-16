@@ -1040,6 +1040,26 @@ void start_wan_done(char *wan_ifname)
 			if (nvram_match("lan3_stp", "1")) 
 				eval("brctl", "stp", nvram_safe_get("lan3_ifname"), "1");
 		}
+		if(strcmp(nvram_safe_get("lan4_ifname"),"")!=0) {
+			eval("brctl", "stp", nvram_safe_get("lan4_ifname"), "0");
+			if (nvram_match("lan4_stp", "1")) 
+				eval("brctl", "stp", nvram_safe_get("lan4_ifname"), "1");
+		}
+		if(strcmp(nvram_safe_get("lan5_ifname"),"")!=0) {
+			eval("brctl", "stp", nvram_safe_get("lan5_ifname"), "0");
+			if (nvram_match("lan5_stp", "1")) 
+				eval("brctl", "stp", nvram_safe_get("lan5_ifname"), "1");
+		}
+		if(strcmp(nvram_safe_get("lan6_ifname"),"")!=0) {
+			eval("brctl", "stp", nvram_safe_get("lan6_ifname"), "0");
+			if (nvram_match("lan6_stp", "1")) 
+				eval("brctl", "stp", nvram_safe_get("lan6_ifname"), "1");
+		}
+		if(strcmp(nvram_safe_get("lan7_ifname"),"")!=0) {
+			eval("brctl", "stp", nvram_safe_get("lan7_ifname"), "0");
+			if (nvram_match("lan7_stp", "1")) 
+				eval("brctl", "stp", nvram_safe_get("lan7_ifname"), "1");
+		}
 	}
 
 	if (wanup)

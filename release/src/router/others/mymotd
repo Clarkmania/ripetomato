@@ -40,6 +40,10 @@ mask2cidr() {
 LAN1=`/bin/nvram get lan1_ipaddr | /usr/bin/wc -w`
 LAN2=`/bin/nvram get lan2_ipaddr | /usr/bin/wc -w`
 LAN3=`/bin/nvram get lan3_ipaddr | /usr/bin/wc -w`
+LAN4=`/bin/nvram get lan4_ipaddr | /usr/bin/wc -w`
+LAN5=`/bin/nvram get lan5_ipaddr | /usr/bin/wc -w`
+LAN6=`/bin/nvram get lan6_ipaddr | /usr/bin/wc -w`
+LAN7=`/bin/nvram get lan7_ipaddr | /usr/bin/wc -w`
 DUAL=`/bin/nvram get landevs | /bin/grep wl1 | /usr/bin/wc -l`
 
 WAN_MASK=`/bin/nvram get wan_netmask`
@@ -102,6 +106,26 @@ if /usr/bin/[ "$LAN3" == "1" ]; then
     LAN3_MASK=`/bin/nvram get lan3_netmask`
     LAN3_NUMBITS=$(mask2cidr $LAN3_MASK)
     /bin/echo " LAN3: `/bin/nvram get lan3_ipaddr`/$LAN3_NUMBITS @ DHCP: `/bin/nvram get dhcpd3_startip` - `/bin/nvram get dhcpd3_endip`";
+fi
+if /usr/bin/[ "$LAN4" == "1" ]; then 
+    LAN4_MASK=`/bin/nvram get lan4_netmask`
+    LAN4_NUMBITS=$(mask2cidr $LAN4_MASK)
+    /bin/echo " LAN4: `/bin/nvram get lan4_ipaddr`/$LAN4_NUMBITS @ DHCP: `/bin/nvram get dhcpd4_startip` - `/bin/nvram get dhcpd4_endip`";
+fi
+if /usr/bin/[ "$LAN5" == "1" ]; then 
+    LAN5_MASK=`/bin/nvram get lan5_netmask`
+    LAN5_NUMBITS=$(mask2cidr $LAN5_MASK)
+    /bin/echo " LAN5: `/bin/nvram get lan5_ipaddr`/$LAN5_NUMBITS @ DHCP: `/bin/nvram get dhcpd5_startip` - `/bin/nvram get dhcpd5_endip`";
+fi
+if /usr/bin/[ "$LAN6" == "1" ]; then 
+    LAN6_MASK=`/bin/nvram get lan6_netmask`
+    LAN6_NUMBITS=$(mask2cidr $LAN6_MASK)
+    /bin/echo " LAN6: `/bin/nvram get lan6_ipaddr`/$LAN6_NUMBITS @ DHCP: `/bin/nvram get dhcpd6_startip` - `/bin/nvram get dhcpd6_endip`";
+fi
+if /usr/bin/[ "$LAN7" == "1" ]; then 
+    LAN7_MASK=`/bin/nvram get lan7_netmask`
+    LAN7_NUMBITS=$(mask2cidr $LAN7_MASK)
+    /bin/echo " LAN7: `/bin/nvram get lan7_ipaddr`/$LAN7_NUMBITS @ DHCP: `/bin/nvram get dhcpd7_startip` - `/bin/nvram get dhcpd7_endip`";
 fi
 GETCH24=`/bin/nvram get wl0_channel`
 if /usr/bin/[ "$GETCH24" == 0 ]; then CH24="auto"; else CH24=$GETCH24; fi

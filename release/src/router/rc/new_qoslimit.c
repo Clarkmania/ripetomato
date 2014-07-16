@@ -150,6 +150,66 @@ void ipt_qoslimit(int chain)
 				,lan3_ipaddr,lan3_mask
 				,lan3_ipaddr,lan3_mask);
 		}
+		//shibby br4
+		if (nvram_get_int("limit_br4_enable") == 1) {
+
+			char *lan4_ipaddr; //lan4 ip address
+			char *lan4_mask; //lan4 netmask
+
+			lan4_ipaddr = nvram_safe_get("lan4_ipaddr");
+			lan4_mask = nvram_safe_get("lan4_netmask");
+
+			ipt_write(
+				"-A POSTROUTING -d %s/%s -j MARK --set-mark 801\n"
+				"-A PREROUTING -s %s/%s -j MARK --set-mark 901\n"
+				,lan4_ipaddr,lan4_mask
+				,lan4_ipaddr,lan4_mask);
+		}
+		//shibby br5
+		if (nvram_get_int("limit_br5_enable") == 1) {
+
+			char *lan5_ipaddr; //lan5 ip address
+			char *lan5_mask; //lan5 netmask
+
+			lan5_ipaddr = nvram_safe_get("lan5_ipaddr");
+			lan5_mask = nvram_safe_get("lan5_netmask");
+
+			ipt_write(
+				"-A POSTROUTING -d %s/%s -j MARK --set-mark 801\n"
+				"-A PREROUTING -s %s/%s -j MARK --set-mark 901\n"
+				,lan5_ipaddr,lan5_mask
+				,lan5_ipaddr,lan5_mask);
+		}
+		//shibby br6
+		if (nvram_get_int("limit_br6_enable") == 1) {
+
+			char *lan6_ipaddr; //lan6 ip address
+			char *lan6_mask; //lan6 netmask
+
+			lan6_ipaddr = nvram_safe_get("lan6_ipaddr");
+			lan6_mask = nvram_safe_get("lan6_netmask");
+
+			ipt_write(
+				"-A POSTROUTING -d %s/%s -j MARK --set-mark 801\n"
+				"-A PREROUTING -s %s/%s -j MARK --set-mark 901\n"
+				,lan6_ipaddr,lan6_mask
+				,lan6_ipaddr,lan6_mask);
+		}
+		//shibby br7
+		if (nvram_get_int("limit_br7_enable") == 1) {
+
+			char *lan7_ipaddr; //lan7 ip address
+			char *lan7_mask; //lan7 netmask
+
+			lan7_ipaddr = nvram_safe_get("lan7_ipaddr");
+			lan7_mask = nvram_safe_get("lan7_netmask");
+
+			ipt_write(
+				"-A POSTROUTING -d %s/%s -j MARK --set-mark 801\n"
+				"-A PREROUTING -s %s/%s -j MARK --set-mark 901\n"
+				,lan7_ipaddr,lan7_mask
+				,lan7_ipaddr,lan7_mask);
+		}
 	}
 	
 	//NAT
@@ -540,6 +600,156 @@ void new_qoslimit_start(void)
 		,prio_3);
 	}
 
+/* shibby - limit br4 */
+	if (nvram_get_int("limit_br4_enable") == 1) {
+
+		char *dlr_4,*dlc_4,*ulr_4,*ulc_4,*prio_4;
+
+		dlr_4 = nvram_safe_get("limit_br4_dlr"); //Qos limit download rate
+		dlc_4 = nvram_safe_get("limit_br4_dlc"); //download ceiling
+		ulr_4 = nvram_safe_get("limit_br4_ulr"); //upload rate
+		ulc_4 = nvram_safe_get("limit_br4_ulc"); //upload ceiling
+		prio_4 = nvram_safe_get("limit_br4_prio"); //priority
+
+		if (!strcmp(dlc_4,"")) strcpy(dlc_4, dlr_4);
+		if (!strcmp(ulc_4,"")) strcpy(ulc_4, ulr_4);
+
+		//download for br4
+		fprintf(tc,
+		"TCA4=\"tc class add dev br4\"\n"
+		"TFA4=\"tc filter add dev br4\"\n"
+		"TQA4=\"tc qdisc add dev br4\"\n"
+		"tc qdisc del dev br4 root\n"
+		"tc qdisc add dev br4 root handle 8: htb\n"
+		"tc class add dev br4 parent 8: classid 8:1 htb rate %skbit\n"
+		"$TCA4 parent 8:1 classid 8:801 htb rate %skbit ceil %skbit prio %s\n"
+		"$TQA4 parent 8:801 handle 801: $SFQ\n"
+		"$TFA4 parent 8:0 prio %s protocol ip handle 801 fw flowid 8:801\n"
+		,ibw
+		,dlr_4,dlc_4,prio_4
+		,prio_4);
+
+		//upload from br4
+		fprintf(tc,
+		"$TCAU parent 2:1 classid 2:901 htb rate %skbit ceil %skbit prio %s\n"
+		"$TQAU parent 2:901 handle 901: $SFQ\n"
+		"$TFAU parent 2:0 prio %s protocol ip handle 901 fw flowid 2:901\n"
+		,ulr_4,ulc_4,prio_4
+		,prio_4);
+	}
+
+/* shibby - limit br5 */
+	if (nvram_get_int("limit_br5_enable") == 1) {
+
+		char *dlr_5,*dlc_5,*ulr_5,*ulc_5,*prio_5;
+
+		dlr_5 = nvram_safe_get("limit_br5_dlr"); //Qos limit download rate
+		dlc_5 = nvram_safe_get("limit_br5_dlc"); //download ceiling
+		ulr_5 = nvram_safe_get("limit_br5_ulr"); //upload rate
+		ulc_5 = nvram_safe_get("limit_br5_ulc"); //upload ceiling
+		prio_5 = nvram_safe_get("limit_br5_prio"); //priority
+
+		if (!strcmp(dlc_5,"")) strcpy(dlc_5, dlr_5);
+		if (!strcmp(ulc_5,"")) strcpy(ulc_5, ulr_5);
+
+		//download for br5
+		fprintf(tc,
+		"TCA5=\"tc class add dev br5\"\n"
+		"TFA5=\"tc filter add dev br5\"\n"
+		"TQA5=\"tc qdisc add dev br5\"\n"
+		"tc qdisc del dev br5 root\n"
+		"tc qdisc add dev br5 root handle 8: htb\n"
+		"tc class add dev br5 parent 8: classid 8:1 htb rate %skbit\n"
+		"$TCA5 parent 8:1 classid 8:801 htb rate %skbit ceil %skbit prio %s\n"
+		"$TQA5 parent 8:801 handle 801: $SFQ\n"
+		"$TFA5 parent 8:0 prio %s protocol ip handle 801 fw flowid 8:801\n"
+		,ibw
+		,dlr_5,dlc_5,prio_5
+		,prio_5);
+
+		//upload from br5
+		fprintf(tc,
+		"$TCAU parent 2:1 classid 2:901 htb rate %skbit ceil %skbit prio %s\n"
+		"$TQAU parent 2:901 handle 901: $SFQ\n"
+		"$TFAU parent 2:0 prio %s protocol ip handle 901 fw flowid 2:901\n"
+		,ulr_5,ulc_5,prio_5
+		,prio_5);
+	}
+/* shibby - limit br6 */
+	if (nvram_get_int("limit_br6_enable") == 1) {
+
+		char *dlr_6,*dlc_6,*ulr_6,*ulc_6,*prio_6;
+
+		dlr_6 = nvram_safe_get("limit_br6_dlr"); //Qos limit download rate
+		dlc_6 = nvram_safe_get("limit_br6_dlc"); //download ceiling
+		ulr_6 = nvram_safe_get("limit_br6_ulr"); //upload rate
+		ulc_6 = nvram_safe_get("limit_br6_ulc"); //upload ceiling
+		prio_6 = nvram_safe_get("limit_br6_prio"); //priority
+
+		if (!strcmp(dlc_6,"")) strcpy(dlc_6, dlr_6);
+		if (!strcmp(ulc_6,"")) strcpy(ulc_6, ulr_6);
+
+		//download for br6
+		fprintf(tc,
+		"TCA6=\"tc class add dev br6\"\n"
+		"TFA6=\"tc filter add dev br6\"\n"
+		"TQA6=\"tc qdisc add dev br6\"\n"
+		"tc qdisc del dev br6 root\n"
+		"tc qdisc add dev br6 root handle 8: htb\n"
+		"tc class add dev br6 parent 8: classid 8:1 htb rate %skbit\n"
+		"$TCA6 parent 8:1 classid 8:801 htb rate %skbit ceil %skbit prio %s\n"
+		"$TQA6 parent 8:801 handle 801: $SFQ\n"
+		"$TFA6 parent 8:0 prio %s protocol ip handle 801 fw flowid 8:801\n"
+		,ibw
+		,dlr_6,dlc_6,prio_6
+		,prio_6);
+
+		//upload from br6
+		fprintf(tc,
+		"$TCAU parent 2:1 classid 2:901 htb rate %skbit ceil %skbit prio %s\n"
+		"$TQAU parent 2:901 handle 901: $SFQ\n"
+		"$TFAU parent 2:0 prio %s protocol ip handle 901 fw flowid 2:901\n"
+		,ulr_6,ulc_6,prio_6
+		,prio_6);
+	}
+
+/* shibby - limit br7 */
+	if (nvram_get_int("limit_br7_enable") == 1) {
+
+		char *dlr_7,*dlc_7,*ulr_7,*ulc_7,*prio_7;
+
+		dlr_7 = nvram_safe_get("limit_br7_dlr"); //Qos limit download rate
+		dlc_7 = nvram_safe_get("limit_br7_dlc"); //download ceiling
+		ulr_7 = nvram_safe_get("limit_br7_ulr"); //upload rate
+		ulc_7 = nvram_safe_get("limit_br7_ulc"); //upload ceiling
+		prio_7 = nvram_safe_get("limit_br7_prio"); //priority
+
+		if (!strcmp(dlc_7,"")) strcpy(dlc_7, dlr_7);
+		if (!strcmp(ulc_7,"")) strcpy(ulc_7, ulr_7);
+
+		//download for br7
+		fprintf(tc,
+		"TCA7=\"tc class add dev br7\"\n"
+		"TFA7=\"tc filter add dev br7\"\n"
+		"TQA7=\"tc qdisc add dev br7\"\n"
+		"tc qdisc del dev br7 root\n"
+		"tc qdisc add dev br7 root handle 8: htb\n"
+		"tc class add dev br7 parent 8: classid 8:1 htb rate %skbit\n"
+		"$TCA7 parent 8:1 classid 8:801 htb rate %skbit ceil %skbit prio %s\n"
+		"$TQA7 parent 8:801 handle 801: $SFQ\n"
+		"$TFA7 parent 8:0 prio %s protocol ip handle 801 fw flowid 8:801\n"
+		,ibw
+		,dlr_7,dlc_7,prio_7
+		,prio_7);
+
+		//upload from br7
+		fprintf(tc,
+		"$TCAU parent 2:1 classid 2:901 htb rate %skbit ceil %skbit prio %s\n"
+		"$TQAU parent 2:901 handle 901: $SFQ\n"
+		"$TFAU parent 2:0 prio %s protocol ip handle 901 fw flowid 2:901\n"
+		,ulr_7,ulc_7,prio_7
+		,prio_7);
+	}
 
 	fclose(tc);
 	chmod(qoslimitfn, 0700);

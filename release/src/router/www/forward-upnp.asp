@@ -21,12 +21,13 @@ No part of this file may be used without permission.
 				width: 53%;
 			}
 		</style>
+	<script type="text/javascript" src="js/interfaces.js"></script>
 		<script type="text/javascript">
 
 			/* REMOVE-BEGIN
 			!!TB - additional miniupnp settings
 			REMOVE-END */
-			//	<% nvram("at_update,tomatoanon_answer,upnp_enable,upnp_mnp,upnp_clean,upnp_secure,upnp_clean_interval,upnp_clean_threshold,upnp_lan,upnp_lan1,upnp_lan2,upnp_lan3,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,"); %>
+			//	<% nvram("at_update,tomatoanon_answer,upnp_enable,upnp_mnp,upnp_clean,upnp_secure,upnp_clean_interval,upnp_clean_threshold,upnp_lan,upnp_lan1,upnp_lan2,upnp_lan3,upnp_lan4,upnp_lan5,upnp_lan6,upnp_lan7,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,lan4_ifname,lan5_ifname,lan6_ifname,lan7_ifname"); %>
 			// <% upnpinfo(); %>
 
 			nvram.upnp_enable = fixInt(nvram.upnp_enable, 0, 3, 0);
@@ -125,36 +126,33 @@ No part of this file may be used without permission.
 					ferror.clear(E('_upnp_clean_threshold'));
 				}
 				/* VLAN-BEGIN */
-				E('_f_upnp_lan').disabled = ((nvram.lan_ifname.length < 1) || (enable == 0));
-				if (E('_f_upnp_lan').disabled)
-					E('_f_upnp_lan').checked = false;
-				E('_f_upnp_lan1').disabled = ((nvram.lan1_ifname.length < 1) || (enable == 0));
-				if (E('_f_upnp_lan1').disabled)
-					E('_f_upnp_lan1').checked = false;
-				E('_f_upnp_lan2').disabled = ((nvram.lan2_ifname.length < 1) || (enable == 0));
-				if (E('_f_upnp_lan2').disabled)
-					E('_f_upnp_lan2').checked = false;
-				E('_f_upnp_lan3').disabled = ((nvram.lan3_ifname.length < 1) || (enable == 0));
-				if (E('_f_upnp_lan3').disabled)
-					E('_f_upnp_lan3').checked = false;
-				if ((enable) && (!E('_f_upnp_lan').checked) && (!E('_f_upnp_lan1').checked) && (!E('_f_upnp_lan2').checked) && (!E('_f_upnp_lan3').checked)) {
+				var vlan_checked = false;
+				for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+					var j = (i == 0) ? '' : i;
+					E('_f_upnp_lan'+j).disabled = ((nvram['lan'+j+'_ifname'].length < 1) || (enable == 0));
+					if (E('_f_upnp_lan'+j).disabled)
+						E('_f_upnp_lan'+j).checked = false;
+					else
+						vlan_checked = true;
+				}
+				if ((enable) && (!vlan_checked)) {
 					if ((E('_f_enable_natpmp').checked) || (E('_f_enable_upnp').checked)) {
 						var m = 'NAT-PMP or UPnP must be enabled in least one LAN bridge';
 						ferror.set('_f_enable_natpmp', m, quiet);
 						ferror.set('_f_enable_upnp', m, 1);
-						ferror.set('_f_upnp_lan', m, 1);
-						ferror.set('_f_upnp_lan1', m, 1);
-						ferror.set('_f_upnp_lan2', m, 1);
-						ferror.set('_f_upnp_lan3', m, 1);
+						for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+							var j = (i == 0) ? '' : i;
+							ferror.set('_f_upnp_lan'+j, m, 1);
+						}
 					}
 					return 0;
 				} else {
 					ferror.clear('_f_enable_natpmp');
 					ferror.clear('_f_enable_upnp');
-					ferror.clear('_f_upnp_lan');
-					ferror.clear('_f_upnp_lan1');
-					ferror.clear('_f_upnp_lan2');
-					ferror.clear('_f_upnp_lan3');
+					for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+						var j = (i == 0) ? '' : i;
+						ferror.clear('_f_upnp_lan'+j);
+					}
 				}
 				/* VLAN-END */
 				return 1;
@@ -180,10 +178,10 @@ No part of this file may be used without permission.
 				fom.upnp_secure.value = E('_f_upnp_secure').checked ? 1 : 0;
 
 				/* VLAN-BEGIN */
-				fom.upnp_lan.value = E('_f_upnp_lan').checked ? 1 : 0;
-				fom.upnp_lan1.value = E('_f_upnp_lan1').checked ? 1 : 0;
-				fom.upnp_lan2.value = E('_f_upnp_lan2').checked ? 1 : 0;
-				fom.upnp_lan3.value = E('_f_upnp_lan3').checked ? 1 : 0;
+				for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+					var j = (i == 0) ? '' : i;
+					fom['upnp_lan'+j].value = E('_f_upnp_lan'+j).checked ? 1 : 0;
+				}
 				/* VLAN-END */
 				form.submit(fom, 0);
 			}
@@ -215,6 +213,10 @@ No part of this file may be used without permission.
 				<input type="hidden" name="upnp_lan1">
 				<input type="hidden" name="upnp_lan2">
 				<input type="hidden" name="upnp_lan3">
+				<input type="hidden" name="upnp_lan4">
+				<input type="hidden" name="upnp_lan5">
+				<input type="hidden" name="upnp_lan6">
+				<input type="hidden" name="upnp_lan7">
 				<!-- VLAN-END -->
 
 				<div class="section">
@@ -226,7 +228,7 @@ No part of this file may be used without permission.
 				<h3><a href="javascript:toggleFiltersVisibility();">Settings <i class="icon-chevron-down"></i></a></h3>
 				<div class="section" id="upnpsettings" style="display:none">
 					<script type="text/javascript">
-						createFieldTable('', [
+						var f = [
 							{ title: 'Enable UPnP', name: 'f_enable_upnp', type: 'checkbox', value: (nvram.upnp_enable & 1) },
 							{ title: 'Enable NAT-PMP', name: 'f_enable_natpmp', type: 'checkbox', value: (nvram.upnp_enable & 2) },
 							/* REMOVE-BEGIN
@@ -240,15 +242,16 @@ No part of this file may be used without permission.
 							{ title: 'Secure Mode', name: 'f_upnp_secure', type: 'checkbox',
 								suffix: ' <small>(when enabled, UPnP clients are allowed to add mappings only to their IP)</small>',
 								value: (nvram.upnp_secure == '1') },
-							/* VLAN-BEGIN */
-							{ title: 'Listen on' },
-							{ title: 'LAN', indent: 2, name: 'f_upnp_lan', type: 'checkbox', value: (nvram.upnp_lan == '1') },
-							{ title: 'LAN1', indent: 2, name: 'f_upnp_lan1', type: 'checkbox', value: (nvram.upnp_lan1 == '1') },
-							{ title: 'LAN2', indent: 2, name: 'f_upnp_lan2', type: 'checkbox', value: (nvram.upnp_lan2 == '1') },
-							{ title: 'LAN3', indent: 2, name: 'f_upnp_lan3', type: 'checkbox', value: (nvram.upnp_lan3 == '1') },
-							/* VLAN-END */
-							{ title: 'Show In My Network Places',  name: 'f_upnp_mnp',  type: 'checkbox',  value: (nvram.upnp_mnp == '1')}
-						], '#upnpsettings', 'fields-table');
+						];
+						/* VLAN-BEGIN */
+						f.push.apply(f, [{ title: 'Listen on' }]);
+						for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+							var j = (i == 0) ? "" : i;
+							f.push.apply(f, [{ title: 'LAN'+j, indent: 2, name: 'f_upnp_lan'+j, type: 'checkbox', value: (nvram['upnp_lan'+j] == '1') }]);
+						}
+						/* VLAN-END */
+						f.push.apply(f, [{ title: 'Show In My Network Places',  name: 'f_upnp_mnp',  type: 'checkbox',  value: (nvram.upnp_mnp == '1') }]);
+						createFieldTable('', f, '#upnpsettings', 'fields-table');
 					</script>
 				</div>
 				

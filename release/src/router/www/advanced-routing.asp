@@ -7,8 +7,9 @@ For use with Tomato Firmware only.
 No part of this file may be used without permission.
 --><title>Routing</title>
 <content>
+	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript">
-		// <% nvram("at_update,tomatoanon_answer,wk_mode,dr_setting,lan_stp,routes_static,dhcp_routes,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,wan_ifname,wan_iface,emf_enable,dr_lan_rx,dr_lan1_rx,dr_lan2_rx,dr_lan3_rx,dr_wan_rx,wan_proto"); %>
+		// <% nvram("at_update,tomatoanon_answer,wk_mode,dr_setting,lan_stp,routes_static,dhcp_routes,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,lan4_ifname,lan5_ifname,lan6_ifname,lan7_ifname,wan_ifname,wan_iface,emf_enable,dr_lan_rx,dr_lan1_rx,dr_lan2_rx,dr_lan3_rx,dr_lan4_rx,dr_lan5_rx,dr_lan6_rx,dr_lan7_rx,dr_wan_rx,wan_proto"); %>
 		// <% activeroutes(); %>
 
 		var ara = new TomatoGrid();
@@ -19,12 +20,17 @@ No part of this file may be used without permission.
 			this.headerSet(['Destination', 'Gateway / Next Hop', 'Subnet Mask', 'Metric', 'Interface']);
 			for (i = 0; i < activeroutes.length; ++i) {
 				a = activeroutes[i];
-				if (a[0] == nvram.lan_ifname) a[0] += ' (LAN)';
-				else if (a[0] == nvram.lan1_ifname) a[0] += ' (LAN1)';
-					else if (a[0] == nvram.lan2_ifname) a[0] += ' (LAN2)';
-						else if (a[0] == nvram.lan3_ifname) a[0] += ' (LAN3)';
-							else if (a[0] == nvram.wan_iface) a[0] += ' (WAN)';
-								else if (a[0] == nvram.wan_ifname) a[0] += ' (MAN)';
+				if (a[0] == nvram.wan_iface) {
+					a[0] += ' (WAN)';
+				} else if (a[0] == nvram.wan_ifname) {
+					a[0] += ' (MAN)';
+				} else {
+					for (var x = 0; x <= MAX_BRIDGE_ID; x++) {
+						var j = (x == 0) ? "" : x;
+						if (a[0] == nvram['lan'+j+'_ifname'])
+							a[0] += ' (LAN'+j+')';
+					}
+				}
 				this.insertData(-1, [a[1],a[2],a[3],a[4],a[0]]);
 			}
 		}
@@ -35,14 +41,19 @@ No part of this file may be used without permission.
 			return v_ip(f[0], quiet) && v_ip(f[1], quiet) && v_netmask(f[2], quiet) && v_range(f[3], quiet, 0, 10) && v_nodelim(f[5], quiet, 'Description');
 		}
 		ars.setup = function() {
+			var arslanopts = [['WAN','WAN'],['MAN','MAN']];
+		        for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+				var ln = (i == 0) ? "" : i;
+				arslanopts.unshift.apply(arslanopts, [['LAN'+ln],['LAN'+ln]]);
+			}
 			this.init('ars-grid', '', 20, [
 				{ type: 'text', maxlen: 15 }, { type: 'text', maxlen: 15 }, { type: 'text', maxlen: 15 },
-				{ type: 'text', maxlen: 3 }, { type: 'select', options: [['LAN','LAN'],['LAN1','LAN1'],['LAN2','LAN2'],['LAN3','LAN3'],['WAN','WAN'],['MAN','MAN']] }, { type: 'text', maxlen: 32 }]);
+				{ type: 'text', maxlen: 3 }, { type: 'select', options: arslanopts }, { type: 'text', maxlen: 32 }]);
 			this.headerSet(['Destination', 'Gateway', 'Subnet Mask', 'Metric', 'Interface', 'Description']);
 			var routes = nvram.routes_static.split('>');
 			for (var i = 0; i < routes.length; ++i) {
 				var r;
-				if (r = routes[i].match(/^(.+)<(.+)<(.+)<(\d+)<(LAN|LAN1|LAN2|LAN3|WAN|MAN)<(.*)$/)) {
+				if (r = routes[i].match(/^(.+)<(.+)<(.+)<(\d+)<(LAN\d?|WAN|MAN)<(.*)$/)) {
 					this.insertData(-1, [r[1], r[2], r[3], r[4], r[5],r[6]]);
 				}
 			}
@@ -56,22 +67,13 @@ No part of this file may be used without permission.
 			e = fields.getAll(this.newEditor);
 
 			/* VLAN-BEGIN */
-			if(nvram.lan_ifname.length < 1)
-				e[4].options[0].disabled=true;
-			else
-				e[4].options[0].disabled=false;
-			if(nvram.lan1_ifname.length < 1)
-				e[4].options[1].disabled=true;
-			else
-				e[4].options[1].disabled=false;
-			if(nvram.lan2_ifname.length < 1)
-				e[4].options[2].disabled=true;
-			else
-				e[4].options[2].disabled=false;
-			if(nvram.lan3_ifname.length < 1)
-				e[4].options[3].disabled=true;
-			else
-				e[4].options[3].disabled=false;
+		        for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+				var ln = (i == 0) ? "" : i;
+				if (nvram['lan'+ln+'_ifname'].length < 1)
+					e[4].options[i].disabled = true;
+				else
+					e[4].options[i].disabled = false;
+			}
 			/* VLAN-END */
 
 			ferror.clearAll(e);
@@ -86,18 +88,12 @@ No part of this file may be used without permission.
 		function verifyFields(focused, quiet)
 		{
 			/* VLAN-BEGIN */
-			E('_f_dr_lan').disabled = (nvram.lan_ifname.length < 1);
-			if (E('_f_dr_lan').disabled)
-				E('_f_dr_lan').checked = false;
-			E('_f_dr_lan1').disabled = (nvram.lan1_ifname.length < 1);
-			if (E('_f_dr_lan1').disabled)
-				E('_f_dr_lan1').checked = false;
-			E('_f_dr_lan2').disabled = (nvram.lan2_ifname.length < 1);
-			if (E('_f_dr_lan2').disabled)
-				E('_f_dr_lan2').checked = false;
-			E('_f_dr_lan3').disabled = (nvram.lan3_ifname.length < 1);
-			if (E('_f_dr_lan3').disabled)
-				E('_f_dr_lan3').checked = false;
+		        for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+				var ln = (i == 0) ? "" : i;
+				E('_f_dr_lan'+ln).disabled = (nvram['lan'+ln+'_ifname'].length < 1);
+				if (E('_f_dr_lan'+ln).disabled)
+					E('_f_dr_lan'+ln).checked = false;
+			}
 			E('_f_dr_wan').disabled = (nvram.wan_proto.length == 'disabled');
 			if (E('_f_dr_wan') == null || E('_f_dr_wan').disabled)
 				E('_f_dr_wan').checked = false;
@@ -138,10 +134,10 @@ No part of this file may be used without permission.
 			/* NOVLAN-END */
 
 			/* VLAN-BEGIN */
-			fom.dr_lan_tx.value = fom.dr_lan_rx.value = (E('_f_dr_lan').checked) ? '1 2' : '0';
-			fom.dr_lan1_tx.value = fom.dr_lan1_rx.value = (E('_f_dr_lan1').checked) ? '1 2' : '0';
-			fom.dr_lan2_tx.value = fom.dr_lan2_rx.value = (E('_f_dr_lan2').checked) ? '1 2' : '0';
-			fom.dr_lan3_tx.value = fom.dr_lan3_rx.value = (E('_f_dr_lan3').checked) ? '1 2' : '0';
+		        for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+				var ln = (i == 0) ? "" : i;
+				fom['dr_lan'+ln+'_tx'].value = fom['dr_lan'+ln+'_rx'].value = (E('_f_dr_lan'+ln).checked) ? '1 2' : '0';
+			}
 			fom.dr_wan_tx.value = fom.dr_wan_rx.value = (E('_f_dr_wan').checked) ? '1 2' : '0';
 			/* VLAN-END */
 
@@ -200,6 +196,14 @@ No part of this file may be used without permission.
 		<input type="hidden" name="dr_lan2_rx">
 		<input type="hidden" name="dr_lan3_tx">
 		<input type="hidden" name="dr_lan3_rx">
+		<input type="hidden" name="dr_lan4_tx">
+		<input type="hidden" name="dr_lan4_rx">
+		<input type="hidden" name="dr_lan5_tx">
+		<input type="hidden" name="dr_lan5_rx">
+		<input type="hidden" name="dr_lan6_tx">
+		<input type="hidden" name="dr_lan6_rx">
+		<input type="hidden" name="dr_lan7_tx">
+		<input type="hidden" name="dr_lan7_rx">
 		<!-- VLAN-END -->
 		<input type="hidden" name="dr_wan_tx">
 		<input type="hidden" name="dr_wan_rx">
@@ -217,29 +221,30 @@ No part of this file may be used without permission.
 		<h3>Miscellaneous</h3>
 		<div class="section misc">
 			<script type="text/javascript">
-				createFieldTable('', [
-					{ title: 'Mode', name: 'wk_mode', type: 'select', options: [['gateway','Gateway'],['router','Router']], value: nvram.wk_mode },
-					/* ZEBRA-BEGIN */
-					/* VLAN-BEGIN */
-					{ title: 'RIPv1 &amp; v2' },
-					{ title: 'LAN', indent: 2, name: 'f_dr_lan', type: 'checkbox', value: ((nvram.dr_lan_rx != '0') && (nvram.dr_lan_rx != '')) },
-					{ title: 'LAN1', indent: 2, name: 'f_dr_lan1', type: 'checkbox', value: ((nvram.dr_lan1_rx != '0') && (nvram.dr_lan1_rx != '')) },
-					{ title: 'LAN2', indent: 2, name: 'f_dr_lan2', type: 'checkbox', value: ((nvram.dr_lan2_rx != '0') && (nvram.dr_lan2_rx != '')) },
-					{ title: 'LAN3', indent: 2, name: 'f_dr_lan3', type: 'checkbox', value: ((nvram.dr_lan3_rx != '0') && (nvram.dr_lan3_rx != '')) },
-					{ title: 'WAN', indent: 2, name: 'f_dr_wan', type: 'checkbox', value: ((nvram.dr_wan_rx != '0') && (nvram.dr_wan_rx != '')) },
-					/* VLAN-END */
-					/* NOVLAN-BEGIN */
-					{ title: 'RIPv1 &amp; v2', name: 'dr_setting', type: 'select',	options: [[0,'Disabled'],[1,'LAN'],[2,'WAN'],[3,'Both']], value:	nvram.dr_setting },
-					/* NOVLAN-END */
-					/* ZEBRA-END */
-					/* EMF-BEGIN */
-					{ title: 'Efficient Multicast Forwarding', name: 'f_emf', type: 'checkbox', value: nvram.emf_enable != '0' },
-					/* EMF-END */
-					{ title: 'DHCP Routes', name: 'f_dhcp_routes', type: 'checkbox', value: nvram.dhcp_routes != '0' },
-					/* NOVLAN-BEGIN */
-					{ title: 'Spanning-Tree Protocol', name: 'f_stp', type: 'checkbox', value: nvram.lan_stp != '0' }
-					/* NOVLAN-END */
-					], '.section.misc', 'fields-table');
+				var mto = [
+					{ title: 'Mode', name: 'wk_mode', type: 'select', options: [['gateway','Gateway'],['router','Router']], value: nvram.wk_mode }
+				];
+				/* ZEBRA-BEGIN */
+				/* VLAN-BEGIN */
+				mto.push.apply(mto, [{ title: 'RIPv1 &amp; v2' }]);
+				for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+					var ln = (i == 0) ? "" : i;
+					mto.push.apply(mto, [{ title: 'LAN'+ln, indent: 2, name: 'f_dr_lan'+ln, type: 'checkbox', value: ((nvram['dr_lan'+ln+'_rx'] != '0') && (nvram['dr_lan'+ln+'_rx'] != '')) }]);
+				}
+				mto.push.apply(mto, [{ title: 'WAN', indent: 2, name: 'f_dr_wan', type: 'checkbox', value: ((nvram.dr_wan_rx != '0') && (nvram.dr_wan_rx != '')) }]);
+				/* VLAN-END */
+				/* NOVLAN-BEGIN */
+				mto.push.apply(mto, [{ title: 'RIPv1 &amp; v2', name: 'dr_setting', type: 'select', options: [[0,'Disabled'],[1,'LAN'],[2,'WAN'],[3,'Both']], value: nvram.dr_setting }]);
+				/* NOVLAN-END */
+				/* ZEBRA-END */
+				/* EMF-BEGIN */
+				mto.push.apply(mto, [{ title: 'Efficient Multicast Forwarding', name: 'f_emf', type: 'checkbox', value: nvram.emf_enable != '0' }]);
+				/* EMF-END */
+				mto.push.apply(mto, [{ title: 'DHCP Routes', name: 'f_dhcp_routes', type: 'checkbox', value: nvram.dhcp_routes != '0' }]);
+				/* NOVLAN-BEGIN */
+				mto.push.apply(mto, [{ title: 'Spanning-Tree Protocol', name: 'f_stp', type: 'checkbox', value: nvram.lan_stp != '0' }]);
+				/* NOVLAN-END */
+				createFieldTable('', mto, '.section.misc', 'fields-table');
 			</script>
 		</div>
 

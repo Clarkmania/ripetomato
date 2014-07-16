@@ -549,7 +549,7 @@ static void calc(void) {
 
 	char name[] = "/proc/net/ipt_account/lanX";
 
-	for(br=0 ; br<=3 ; br++) {
+	for(br=0 ; br<=MAX_BRIDGE_ID ; br++) {
 
 		char bridge[2] = "0";
 		if (br!=0)
