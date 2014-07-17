@@ -2320,6 +2320,10 @@ void start_services(void)
 	start_bittorrent();
 #endif
 
+#ifdef TCONFIG_ARIA2
+	start_aria2();
+#endif
+
 #ifdef TCONFIG_NOCAT
 	start_splashd();
 #endif
@@ -2335,6 +2339,10 @@ void stop_services(void)
 
 #ifdef TCONFIG_BT
 	stop_bittorrent();
+#endif
+
+#ifdef TCONFIG_ARIA2
+	stop_aria2();
 #endif
 
 #ifdef TCONFIG_NOCAT
@@ -2825,6 +2833,19 @@ TOP:
 		stop_firewall(); start_firewall();		// always restarted
 		if (action & A_START) {
 			start_bittorrent();
+		}
+		goto CLEAR;
+	}
+#endif
+
+#ifdef TCONFIG_ARIA2
+	if (strcmp(service, "aria2") == 0) {
+		if (action & A_STOP) {
+			stop_aria2();
+		}
+		stop_firewall(); start_firewall();              // always restarted
+		if (action & A_START) {
+			start_aria2();
 		}
 		goto CLEAR;
 	}

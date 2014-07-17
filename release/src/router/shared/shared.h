@@ -362,7 +362,14 @@ extern int base64_decoded_len(int len);										// maximum possible, not actual
 extern const char *find_word(const char *buffer, const char *word);
 extern int remove_word(char *buffer, const char *word);
 
-//bwq518
+// Hyzoom bwq518
+#define MAX_PORTS 64
+#define PORT_SIZE 16
 extern char* trimstr(char *str);
+extern int is_port(char *str);
+extern char *filter_space(char *str);
+extern char* splitpath(char *str, char *pathname, char *filename);
+extern int splitport(char *in_ports, char out_port[MAX_PORTS][PORT_SIZE]);
+extern int is_number(char *);
 
 #endif

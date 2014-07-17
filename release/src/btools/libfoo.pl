@@ -181,6 +181,15 @@ sub fixDyn
 	fixDynDep("libjepg.so", "libc.so.0");
 	fixDynDep("libavcodec.so.52", "libpthread.so.0");
 
+#aria2 module, bwq518
+	fixDynDep("aria2c", "libcares.so.2.1.0");
+	fixDynDep("aria2c", "libexpat.so.1.6.0");
+	fixDynDep("aria2c", "libiconv.so.2.4.0");
+	fixDynDep("aria2c", "libstdc.so.6");
+	fixDynDep("aria2c", "libssl.so.1.0.0");
+	fixDynDep("aria2c", "libz.so.1");
+	fixDynDep("aria2c", "libsqlite3.so.0");
+
 #ipset modules
 	fixDynDep("libipset_iphash.so", "ipset");
 	fixDynDep("libipset_iptree.so", "ipset");

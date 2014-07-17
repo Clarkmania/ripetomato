@@ -97,3 +97,135 @@ char * trimstr(char *str)
 	*(str + count) = '\0';
 	return str;
 }
+
+char * splitpath( char *str, char *pathname, char *filename)
+{
+	char *rear;
+	int i, len;
+
+	len = strlen(str);
+	if (len == 0)
+	{
+		pathname[0] = '\0';
+		filename[0] = '\0';
+		return pathname;
+	}
+
+	i = 0;
+	rear = str + len - 1;
+	while(*rear != '/')
+	{
+		rear--;
+		i ++;
+		if (i >= len) break;
+	}
+	if (i == len)
+	{
+		pathname[0] = '\0';
+		strcpy(filename, str);
+	}
+	else
+	{
+		strncpy(pathname, str, len - i);
+		pathname[len - i ] = '\0';
+		strncpy(filename, str + len - i, i);
+		filename[i] = '\0';
+	}
+
+	return pathname;
+}
+
+int is_port(char *str)
+{
+	int i;
+
+	for(i=0; str[i]!='\0';i++)
+	{
+		if ((isdigit(str[i])==0) && (str[i] != ':') && (str[i] != '-') && (str[i] != ' '))
+			return 0;
+	}
+	return 1;
+}
+
+char *filter_space(char *str)
+{
+	int i = 0,j = 0;
+
+	while(str[i])
+	{
+		if(str[i]!=' ')
+			str[j++]=str[i];
+		i++;
+	}
+	str[j]='\0';
+	return str;
+}
+
+char* format_port(char *str)
+{
+	int i;
+
+	filter_space(str);
+	for (i = 0; i < strlen(str); i ++)
+	{
+		if ( str[i] == '-') str[i] = ':';
+	}
+	return str;
+}
+
+int splitport(char *in_ports, char out_port[MAX_PORTS][PORT_SIZE])
+{
+	int i, j = 0, k = 0, len;
+
+	trimstr(in_ports);
+	if ((len=strlen(in_ports)) == 0) return 0;
+	for (i = 0; i < len; i ++)
+	{
+		if ((in_ports[i] == ',') || (in_ports[i] == ' '))
+		{
+			out_port[j][k] = '\0';
+			trimstr(out_port[j]);
+
+			if ((strlen (out_port[j]) > 0)  && (is_port(out_port[j]) == 1)) 
+			{
+				format_port(out_port[j]);
+				j ++;
+			}
+			if (j >= MAX_PORTS) break;
+			k = 0;
+		}
+		else
+		{
+			//printf("%c\n",in_ports[i]);
+			out_port[j][k] = in_ports[i];
+			if (k < PORT_SIZE) k ++;
+		}
+	}
+	out_port[j][k] = '\0';
+	trimstr(out_port[j]);
+	if (strlen (out_port[j]) > 0)
+	{
+		format_port(out_port[j]);
+		j ++;
+	}
+	return j;
+
+}
+
+/*  Check a string whether all of number or not
+    return 1: all number
+0: NOT all numer
+*/
+int is_number(char *a)
+{
+	int len = strlen(a);
+	int i,j =0;
+	if(len == 0) return 0; //NULL string
+	for(i=0;i<len;i++)
+	{
+		if(a[i]<=57&&a[i]>=48)
+		{j++;}
+	}
+	if (j==len) return 1;
+	else return 0;
+}

@@ -210,6 +210,15 @@ obj-$(TCONFIG_BT) += btgui
 obj-$(TCONFIG_BBT) += zlib
 #obj-$(TCONFIG_BBT) += libiconv
 
+obj-$(TCONFIG_ARIA2) += openssl
+obj-$(TCONFIG_ARIA2) += libcurl
+obj-$(TCONFIG_ARIA2) += libiconv
+obj-$(TCONFIG_ARIA2) += libcares
+obj-$(TCONFIG_ARIA2) += zlib
+obj-$(TCONFIG_ARIA2) += libexpat
+obj-$(TCONFIG_ARIA2) += sqlite
+obj-$(TCONFIG_ARIA2) += aria2
+
 obj-$(CONFIG_LINUX26) += hotplug2
 obj-$(CONFIG_LINUX26) += udevtrigger
 
@@ -225,7 +234,11 @@ else
       ifeq ($(TCONFIG_TOR),y)
         export FULL_OPENSSL := y
       else
-        FULL_OPENSSL :=
+        ifeq ($(TCONFIG_ARIA2),y)
+          export FULL_OPENSSL := y
+        else
+          FULL_OPENSSL :=
+        endif
       endif
     endif
   endif
@@ -390,6 +403,11 @@ ifeq ($(TCONFIG_SSH),y)
 endif
 ifeq ($(TCONFIG_BBT),y)
 	install $(LIBDIR)/librt-0.9.30.1.so $(TARGETDIR)/lib/librt.so.0
+endif
+ifeq ($(TCONFIG_ARIA2),y)
+	install $(LIBDIR)/libstdc++.so.6 $(TARGETDIR)/lib/libstdc++.so.6
+	cd $(TARGETDIR)/lib && ln -sf libstdc++.so.6 libstdc++.so
+	$(STRIP) $(TARGETDIR)/lib/libstdc++.so.6
 endif
 ifneq ($(TCONFIG_OPTIMIZE_SHARED_LIBS),y)
 	install $(LIBDIR)/libresolv.so.0 $(TARGETDIR)/lib/
@@ -1312,6 +1330,12 @@ ifneq ($(MEDIA_SERVER_STATIC),y)
 	cd $(INSTALLDIR)/sqlite/usr/lib/ && \
 		ln -sf libsqlite3.so.0 libsqlite3.so
 endif
+ifeq ($(TCONFIG_ARIA2),y)
+	install -D sqlite/.libs/libsqlite3.so.0 $(INSTALLDIR)/sqlite/usr/lib/libsqlite3.so.0
+	$(STRIP) $(INSTALLDIR)/sqlite/usr/lib/libsqlite3.so.0
+	cd $(INSTALLDIR)/sqlite/usr/lib/ && \
+		ln -sf libsqlite3.so.0 libsqlite3.so
+endif
 
 FFMPEG_FILTER_CONFIG= $(foreach c, $(2), --$(1)="$(c)")
 
@@ -1475,6 +1499,11 @@ ifeq ($(TCONFIG_BT),y)
 	$(STRIP) $(INSTALLDIR)/zlib/usr/lib/libz.so.1
 endif
 ifeq ($(TCONFIG_TOR),y)
+	install -d $(INSTALLDIR)/zlib/usr/lib
+	install -D zlib/libz.so.1 $(INSTALLDIR)/zlib/usr/lib/
+	$(STRIP) $(INSTALLDIR)/zlib/usr/lib/libz.so.1
+endif
+ifeq ($(TCONFIG_ARIA2),y)
 	install -d $(INSTALLDIR)/zlib/usr/lib
 	install -D zlib/libz.so.1 $(INSTALLDIR)/zlib/usr/lib/
 	$(STRIP) $(INSTALLDIR)/zlib/usr/lib/libz.so.1
@@ -1953,6 +1982,54 @@ libiconv-install: libiconv
 		ln -sf libiconv.so.2.4.0 libiconv.so.2 && \
 		ln -sf libiconv.so.2.4.0 libiconv.so
 
+libexpat/stamp-h1:
+	cd libexpat && CC=$(CC) \
+	CFLAGS="-Os -Wall $(EXTRACFLAGS) -ffunction-sections -fdata-sections -fPIC" \
+	LDFLAGS="-ffunction-sections -fdata-sections -Wl,--gc-sections -fPIC" \
+	$(CONFIGURE) --prefix=/usr --disable-nls --enable-shared --enable-static
+	touch libexpat/stamp-h1
+
+libexpat: libexpat/stamp-h1
+	@$(SEP)
+	$(MAKE) -C libexpat $(PARALLEL_BUILD)
+
+libexpat-clean:
+	-@$(MAKE) -C libexpat clean
+	@rm -f libexpat/stamp-h1 libexpat/Makefile
+
+libexpat-install: libexpat
+	install -d $(INSTALLDIR)/libexpat/usr/lib
+	install libexpat/.libs/libexpat.so.1.6.0 $(INSTALLDIR)/libexpat/usr/lib/libexpat.so.1.6.0
+	$(STRIP) $(INSTALLDIR)/libexpat/usr/lib/libexpat.so.1.6.0
+	cd $(INSTALLDIR)/libexpat/usr/lib/ && \
+		ln -sf libexpat.so.1.6.0 libexpat.so.1 && \
+		ln -sf libexpat.so.1.6.0 libexpat.so
+
+libcares/stamp-h1:
+	# TODO: fix EXTRACFLAGS having CPPFLAGS so we can add EXTRACFLAGS back in.
+	cd libcares && CC=$(CC) STRIP='mipsel-uclibc-strip' \
+		autoreconf -i && \
+		CFLAGS="-Os -Wall -funit-at-a-time -ffunction-sections -fdata-sections -fPIC" \
+		LDFLAGS="-ffunction-sections -fdata-sections -Wl,--gc-sections -fPIC" \
+		$(CONFIGURE) --prefix=/usr --enable-shared --enable-static --disable-debug
+	touch libcares/stamp-h1
+
+libcares: libcares/stamp-h1
+	@$(SEP)
+	$(MAKE) -C libcares $(PARALLEL_BUILD)
+
+libcares-clean:
+	-@$(MAKE) -C libcares clean
+	@rm -f libcares/stamp-h1 libcares/Makefile
+
+libcares-install: libcares
+	install -d $(INSTALLDIR)/libcares/usr/lib
+	install libcares/.libs/libcares.so.2.1.0 $(INSTALLDIR)/libcares/usr/lib/libcares.so.2.1.0
+	$(STRIP) $(INSTALLDIR)/libcares/usr/lib/libcares.so.2.1.0
+	cd $(INSTALLDIR)/libcares/usr/lib/ && \
+		ln -sf libcares.so.2.1.0 libcares.so && \
+		ln -sf libcares.so.2.1.0 libcares.so.2
+
 transmission/stamp-h1: openssl libcurl libevent zlib
 	cd transmission && CC=$(CC) STRIP='mipsel-uclibc-strip' \
 		autoreconf && \
@@ -1999,6 +2076,63 @@ ifeq ($(TCONFIG_TR_EXTRAS),y)
 else
 	@rm -rf $(INSTALLDIR)/transmission/usr/bin/transmission-remote
 endif
+
+aria2/stamp-h1: openssl zlib libexpat sqlite libiconv libcares
+	cd aria2 && CC=$(CC) STRIP='mipsel-uclibc-strip' \
+		CFLAGS="-Os -Wall -fno-delete-null-pointer-checks -funit-at-a-time \
+			--param large-function-growth=800 --param max-inline-insns-single=3000 \
+			-ffunction-sections -fdata-sections" \
+		LDFLAGS="-L$(TOP)/libexpat/.libs -L$(TOP)/libiconv/lib/.libs -L$(TOP)/zlib -L$(TOP)/sqlite/.libs -L$(TOP)/libcares/.libs -L$(TOP)/openssl -ffunction-sections -fdata-sections -Wl,--gc-sections -fPIC" \
+		CPPFLAGS="-I$(TOP)/libexpat/lib -I$(TOP)/libiconv/include -I$(TOP)/sqlite -I$(TOP)/zlib -I$(TOP)/libcares -I$(TOP)/openssl/include" \
+		LIBS="-liconv -lstdc++ -lexpat -lz -lsqlite3 -lcares -lssl -lcrypto" \
+		$(CONFIGURE) --target=mipsel-linux --prefix=/usr --enable-nls --enable-shared --enable-static --without-libxml2 --without-gnutls --with-openssl \
+		LIBCURL_CFLAGS="-I$(TOP)/libcurl/include" \
+		LIBCURL_LDFLAGS="-L$(TOP)/libcurl/lib/.libs/" \
+		LIBCURL_LIBS="-lcurl" \
+		LIBEVENT_CFLAGS="-I$(TOP)/libevent/include" \
+		LIBEVENT_LDFLAGS="-L$(TOP)/libevent/.libs" \
+		LIBEVENT_LIBS="-levent" \
+		OPENSSL_CFLAGS="-I$(TOP)/openssl/include" \
+		OPENSSL_LDFLAGS="-L$(TOP)/openssl" \
+		OPENSSL_LIBS="-lcrypto -lssl" \
+		ZLIB_CFLAGS="-I$(TOP)/zlib" \
+		ZLIB_LDFLAGS="-L$(TOP)/zlib" \
+		ZLIB_LIBS="-lz"
+		touch aria2/stamp-h1
+
+aria2: aria2/stamp-h1
+	@$(SEP)
+	$(MAKE) -C aria2 $(PARALLEL_BUILD)
+
+aria2-clean:
+	-@$(MAKE) -C aria2 clean
+	@rm -f aria2/stamp-h1 aria2/Makefile
+
+aria2-install: aria2
+	install -d $(INSTALLDIR)/aria2/usr/bin
+	@rm -rf $(INSTALLDIR)/aria2/usr/share/man
+	@rm -rf $(INSTALLDIR)/aria2/usr/share/doc
+	install -D $(TOP)/aria2/src/.libs/aria2c $(INSTALLDIR)/aria2/usr/bin/aria2c
+	install -D $(TOP)/aria2/archeck $(INSTALLDIR)/aria2/usr/bin/archeck
+	$(STRIP) -s $(INSTALLDIR)/aria2/usr/bin/aria2c
+	install -d $(INSTALLDIR)/aria2/www/yaaw
+	install -d $(INSTALLDIR)/aria2/www/yaaw/css
+	install -d $(INSTALLDIR)/aria2/www/yaaw/js
+	install -d $(INSTALLDIR)/aria2/www/yaaw/img
+	install -D $(TOP)/aria2/yaaw/index.html $(INSTALLDIR)/aria2/www/yaaw/index.html
+	install -D $(TOP)/aria2/yaaw/css/bootstrap.min.css $(INSTALLDIR)/aria2/www/yaaw/css/bootstrap.min.css
+	install -D $(TOP)/aria2/yaaw/css/bootstrap-responsive.min.css $(INSTALLDIR)/aria2/www/yaaw/css/bootstrap-responsive.min.css
+	install -D $(TOP)/aria2/yaaw/css/main.css $(INSTALLDIR)/aria2/www/yaaw/css/main.css
+	install -D $(TOP)/aria2/yaaw/js/aria2.js $(INSTALLDIR)/aria2/www/yaaw/js/aria2.js
+	install -D $(TOP)/aria2/yaaw/js/bootstrap.min.js $(INSTALLDIR)/aria2/www/yaaw/js/bootstrap.min.js
+	install -D $(TOP)/aria2/yaaw/js/jquery.base64.min.js $(INSTALLDIR)/aria2/www/yaaw/js/jquery.base64.min.js
+	install -D $(TOP)/aria2/yaaw/js/jquery.jsonrpc.js $(INSTALLDIR)/aria2/www/yaaw/js/jquery.jsonrpc.js
+	install -D $(TOP)/aria2/yaaw/js/jquery.Storage.js $(INSTALLDIR)/aria2/www/yaaw/js/jquery.Storage.js
+	install -D $(TOP)/aria2/yaaw/js/jquery-1.7.2.min.js $(INSTALLDIR)/aria2/www/yaaw/js/jquery-1.7.2.min.js
+	install -D $(TOP)/aria2/yaaw/js/mustache.js $(INSTALLDIR)/aria2/www/yaaw/js/mustache.js
+	install -D $(TOP)/aria2/yaaw/js/yaaw.js $(INSTALLDIR)/aria2/www/yaaw/js/yaaw.js
+	install -D $(TOP)/aria2/yaaw/img/glyphicons-halflings.png $(INSTALLDIR)/aria2/www/yaaw/img/glyphicons-halflings.png
+	install -D $(TOP)/aria2/yaaw/img/glyphicons-halflings-white.png $(INSTALLDIR)/aria2/www/yaaw/img/glyphicons-halflings-white.png
 
 btgui:
 	@$(SEP)

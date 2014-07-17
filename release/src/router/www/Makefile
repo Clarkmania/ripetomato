@@ -151,6 +151,12 @@ ifneq ($(TCONFIG_BT),y)
 	sed -i $(INSTALLDIR)/www/about.asp -e "/BT-BEGIN/,/BT-END/d"
 endif
 
+# Only include the aria2 pages if aria2 is configured in.
+ifneq ($(TCONFIG_ARIA2),y)
+	rm -f $(INSTALLDIR)/www/nas-aria2.asp
+	sed -i $(INSTALLDIR)/www/tomato.js -e "/ARIA2-BEGIN/,/ARIA2-END/d"
+endif
+
 # Only include the UPS pages if apcupsd is configured in.
 ifneq ($(TCONFIG_UPS),y)
 	rm -f $(INSTALLDIR)/www/nas-ups.asp
@@ -288,6 +294,7 @@ else
 		-e "/CTF-BEGIN/d"	-e "/CTF-END/d" \
 		-e "/BBT-BEGIN/d"	-e "/BBT-END/d" \
 		-e "/BT-BEGIN/d"	-e "/BT-END/d" \
+		-e "/ARIA2-BEGIN/d"	-e "/ARIA2-END/d" \
 		-e "/NFS-BEGIN/d"	-e "/NFS-END/d" \
 		-e "/NOCAT-BEGIN/d"	-e "/NOCAT-END/d"\
         -e "/NGINX-BEGIN/d"	-e "/NGINX-END/d"\

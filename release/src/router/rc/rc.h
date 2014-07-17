@@ -535,10 +535,14 @@ extern void start_nginxfp();
 extern void stop_nginxfp();
 #endif
 
+// aria2.c
+#ifdef TCONFIG_ARIA2
+extern void start_aria2();
+extern void stop_aria2();
+#endif
+
 // tomatoanon.c
 extern void start_tomatoanon(); 
 extern void stop_tomatoanon(); 
 
 #endif
-
-

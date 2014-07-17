@@ -2426,6 +2426,9 @@ function navi()
 			/* BT-BEGIN */
 			,'BitTorrent Client':   'nas-bittorrent.asp'
 			/* BT-END */
+			/* ARIA2-BEGIN */
+			,'Aria2 Client':	'nas-aria2.asp'
+			/* ARIA2-END */
 			/* NGINX-BEGIN */
 			,'Web Server (NGINX)':	'nas-nginx.asp'
 			/* NGINX-END */

@@ -1,0 +1,3 @@
+[submodule "release/src/router/libcares"]
+	path = release/src/router/libcares
+	url = https://github.com/bagder/c-ares.git

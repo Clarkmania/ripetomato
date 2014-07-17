@@ -59,6 +59,10 @@ ifeq ($(TCONFIG_BT),y)
 OBJS += transmission.o
 endif
 
+ifeq ($(TCONFIG_ARIA2),y)
+OBJS += aria2.o
+endif
+
 ifeq ($(TCONFIG_NFS),y)
 OBJS += nfs.o
 endif

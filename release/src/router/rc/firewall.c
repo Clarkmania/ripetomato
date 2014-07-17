@@ -999,6 +999,8 @@ static void filter_input(void)
 	char *hit;
 	int n;
 	char *p, *c;
+	char outp[MAX_PORTS][PORT_SIZE];
+	int i, count;
 
 	if ((nvram_get_int("nf_loopback") != 0) && (wanup)) {	// 0 = all
 		for (n = 0; n < wanfaces.count; ++n) {
@@ -1218,6 +1220,27 @@ static void filter_input(void)
 			ipt_write( "-A INPUT -p tcp --dport %s -j ACCEPT\n", nvram_safe_get( "bt_port_gui" ) );
 		}
 	}
+#ifdef TCONFIG_ARIA2
+	//Aria2c ports for WAN interface, bwq518, Hyzoom
+	if (nvram_match("aria2_enable", "1"))
+	{
+		strcpy (t, nvram_safe_get("aria2_listen_port"));
+		count = splitport(t, outp);
+		for (i = 0; i < count; i ++) ipt_write( "-A INPUT -p tcp --dport %s -j ACCEPT\n", outp[i] );
+		if (nvram_match( "aria2_enable_rpc", "1") )
+		{
+			strcpy (t, nvram_safe_get("aria2_rpc_listen_port"));
+			count = splitport(t, outp);
+			for (i = 0; i < count; i ++) ipt_write( "-A INPUT -p tcp --dport %s -j ACCEPT\n", outp[i] );
+		}
+		if (nvram_match("aria2_enable_dht","1"))
+		{
+			strcpy (t, nvram_safe_get("aria2_dht_listen_port"));
+			count = splitport(t, outp);
+			for (i = 0; i < count; i ++) ipt_write( "-A INPUT -p udp --dport %s -j ACCEPT\n", outp[i] );
+		}
+	}
+#endif
 
 	// if logging
 	if (*chain_in_drop == 'l') {
