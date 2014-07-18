@@ -1850,7 +1850,7 @@ nginx/stamp-h1: openssl zlib pcre
 
 nginx: nginx/stamp-h1
 	@$(SEP)
-	@$(MAKE) -C nginx
+	@$(MAKE) -C nginx $(PARALLEL_BUILD)
 
 nginx-clean:
 	-@$(MAKE) -C nginx clean
