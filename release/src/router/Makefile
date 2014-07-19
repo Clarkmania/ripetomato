@@ -763,10 +763,11 @@ openssl/stamp-h1:
 	no-ec no-ecdh no-ecdsa no-err no-hw no-jpake no-threads \
 	no-zlib no-engines no-sse2 \
 	no-dtls1 no-store no-psk no-md2 no-mdc2 no-ts
+	@$(MAKE) -C openssl depend
 	@touch openssl/stamp-h1
 
 openssl: openssl/stamp-h1
-	@$(MAKE) -C openssl clean
+	@$(MAKE) -C openssl clean $(PARALLEL_BUILD)
 	@$(MAKE) -C openssl INSTALL_PREFIX=$(TOP)/openssl/staged install
 
 openssl-clean:
