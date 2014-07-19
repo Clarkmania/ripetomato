@@ -200,20 +200,20 @@ obj-$(TCONFIG_NGINX) += openssl
 obj-$(TCONFIG_NGINX) += spawn-fcgi
 obj-$(TCONFIG_NGINX) += pcre
 obj-$(TCONFIG_NGINX) += sqlite3
-obj-$(TCONFIG_NGINX) += libcurl
+obj-$(TCONFIG_NGINX) += curl
 obj-$(TCONFIG_NGINX) += php
 obj-$(TCONFIG_NGINX) += nginx
 
 obj-$(TCONFIG_BBT) += openssl
 obj-$(TCONFIG_BBT) += libevent
-obj-$(TCONFIG_BBT) += libcurl
+obj-$(TCONFIG_BBT) += curl
 obj-$(TCONFIG_BBT) += transmission
 obj-$(TCONFIG_BT) += btgui
 obj-$(TCONFIG_BBT) += zlib
 #obj-$(TCONFIG_BBT) += libiconv
 
 obj-$(TCONFIG_ARIA2) += openssl
-obj-$(TCONFIG_ARIA2) += libcurl
+obj-$(TCONFIG_ARIA2) += curl
 obj-$(TCONFIG_ARIA2) += libiconv
 obj-$(TCONFIG_ARIA2) += libcares
 obj-$(TCONFIG_ARIA2) += zlib
@@ -763,15 +763,16 @@ openssl/stamp-h1:
 	no-ec no-ecdh no-ecdsa no-err no-hw no-jpake no-threads \
 	no-zlib no-engines no-sse2 \
 	no-dtls1 no-store no-psk no-md2 no-mdc2 no-ts
-
-	@$(MAKE) -C openssl clean
 	@touch openssl/stamp-h1
 
 openssl: openssl/stamp-h1
+	@$(MAKE) -C openssl clean
+	@$(MAKE) -C openssl INSTALL_PREFIX=$(TOP)/openssl/staged install
 
 openssl-clean:
+	-@rm -rf openssl/staged
+	-@rm -f openssl/stamp-h1
 	-@$(MAKE) -C openssl clean
-	@rm -f openssl/stamp-h1
 
 openssl-install: openssl
 	install -D openssl/libcrypto.so.1.0.0 $(INSTALLDIR)/openssl/usr/lib/libcrypto.so.1.0.0
@@ -1749,7 +1750,7 @@ pcre-clean:
 		rm -rf pcre/stamp-h1; \
 	fi )
 
-php/stamp-h1: pcre zlib libcurl sqlite
+php/stamp-h1: pcre zlib curl sqlite
 	@$(SEP)
 	cd php && CC=$(CC) CXX=$(ARCH)-g++ AR=$(AR) RANLIB=$(RANLIB) LD=$(LD) \
 	CFLAGS="-Os -Wall -I $(TOP)/zlib -I $(TOP)/pcre -L $(TOP)/pcre/.libs/libpcre.so.1.2.3 -L $(TOP)/pcre/.libs/libpcreposix.so.0.0.2 $(EXTRACFLAGS)" \
@@ -1769,7 +1770,7 @@ php/stamp-h1: pcre zlib libcurl sqlite
 	--enable-cgi \
 	--disable-calendar \
 	--disable-ctype \
-	--with-curl=$(TOP)/libcurl/staged/usr \
+	--with-curl=$(TOP)/curl/staged/usr \
 	--disable-fileinfo \
 	--without-gettext \
 	--disable-dom \
@@ -1910,36 +1911,38 @@ openvpn-install: openvpn
 openvpn_plugin_auth_nvram:nvram
 
 #shibby
-libcurl/stamp-h1: zlib openssl
-	cd libcurl && CC=$(CC) STRIP='mipsel-uclibc-strip' \
+curl/stamp-h1: zlib openssl
+	cd curl && CC=$(CC) STRIP='mipsel-uclibc-strip' \
+		./buildconf && \
 		CPPFLAGS="-Os -Wall $(EXTRACFLAGS) -ffunction-sections -fdata-sections -I$(TOP)/zlib" \
 		LDFLAGS="-L$(TOP)/zlib -ffunction-sections -fdata-sections -Wl,--gc-sections -fPIC" \
 		$(CONFIGURE) --prefix=/usr --disable-thread --enable-shared --enable-static \
-		--enable-ares --enable-cookies --enable-crypto-auth --enable-nonblocking \
+		--enable-cookies --enable-crypto-auth --enable-nonblocking \
 		--enable-file --enable-ftp --enable-http --enable-ipv6 --enable-tftp \
 		--disable-nls --disable-ares --disable-dict --disable-debug --disable-gopher \
 		--disable-ldap --disable-manual --disable-telnet --disable-verbose \
+		--enable-optimize --disable-curldebug --enable-silent-rules --disable-proxy \
 		--with-random="/dev/urandom" --with-ssl="$(TOP)/openssl" \
 		--without-gnutls --without-krb4 --without-libidn \
 		--with-linux-headers=$(LINUXDIR)/include \
-		OPENSSL_CFLAGS="-I$(TOP)/openssl/include" \
-		OPENSSL_LIBS="-L$(TOP)/openssl -lcrypto -lssl"
-		touch libcurl/stamp-h1
+		SSL_LDFLAGS="-L$(TOP)/openssl" \
+		SSL_CPPFLAGS="-I$(TOP)/openssl/include"
+	touch curl/stamp-h1
 
-libcurl: libcurl/stamp-h1
-	@$(MAKE) -C libcurl $(PARALLEL_BUILD)
-	@$(MAKE) -C libcurl DESTDIR=$(TOP)/libcurl/staged install
+curl: curl/stamp-h1
+	@$(MAKE) -C curl $(PARALLEL_BUILD)
+	@$(MAKE) -C curl DESTDIR=$(TOP)/curl/staged install
 
-libcurl-clean:
-	-@$(MAKE) -C libcurl clean
-	@rm -f libcurl/stamp-h1 libcurl/Makefile
-	@rm -f libcurl/staged
+curl-clean:
+	-@$(MAKE) -C curl distclean
+	-@rm -f curl/stamp-h1
+	-@rm -f curl/staged
 
-libcurl-install: libcurl
-	install -d $(INSTALLDIR)/libcurl/usr/lib
-	install -D libcurl/lib/.libs/libcurl.so.4.3.0 $(INSTALLDIR)/libcurl/usr/lib/libcurl.so.4.3.0
-	$(STRIP) -s $(INSTALLDIR)/libcurl/usr/lib/libcurl.so.4.3.0
-	cd $(INSTALLDIR)/libcurl/usr/lib/ && \
+curl-install: curl
+	install -d $(INSTALLDIR)/curl/usr/lib
+	install -D curl/lib/.libs/libcurl.so.4.3.0 $(INSTALLDIR)/curl/usr/lib/libcurl.so.4.3.0
+	$(STRIP) -s $(INSTALLDIR)/curl/usr/lib/libcurl.so.4.3.0
+	cd $(INSTALLDIR)/curl/usr/lib/ && \
 		ln -sf libcurl.so.4.3.0 libcurl.so.4 && \
 		ln -sf libcurl.so.4.3.0 libcurl.so
 
@@ -2036,19 +2039,19 @@ libcares-install: libcares
 		ln -sf libcares.so.2.1.0 libcares.so && \
 		ln -sf libcares.so.2.1.0 libcares.so.2
 
-transmission/stamp-h1: openssl libcurl libevent zlib
+transmission/stamp-h1: openssl curl libevent zlib
 	cd transmission && CC=$(CC) STRIP='mipsel-uclibc-strip' \
 		autoreconf && \
 		CFLAGS="-Os -Wall -fno-delete-null-pointer-checks -funit-at-a-time \
 			--param large-function-growth=800 --param max-inline-insns-single=3000 \
 			-ffunction-sections -fdata-sections" \
 		LDFLAGS="-ffunction-sections -fdata-sections -Wl,--gc-sections -fPIC \
-			-L$(TOP)/zlib -L$(TOP)/openssl -L$(TOP)/libcurl/lib/.libs -L$(TOP)/libevent/.libs" \
+			-L$(TOP)/zlib -L$(TOP)/openssl -L$(TOP)/curl/lib/.libs -L$(TOP)/libevent/.libs" \
 		HAVE_CXX=yes \
 		$(CONFIGURE) --target=mipsel-linux --host=mipsel-linux --build=x86_64-linux-gnu --prefix=/usr --disable-nls \
 			--enable-lightweight --enable-largefile --enable-utp --without-gtk \
-			LIBCURL_CFLAGS="-I$(TOP)/libcurl/include" \
-			LIBCURL_LDFLAGS="-L$(TOP)/libcurl/lib/.libs/" \
+			LIBCURL_CFLAGS="-I$(TOP)/curl/include" \
+			LIBCURL_LDFLAGS="-L$(TOP)/curl/lib/.libs/" \
 			LIBCURL_LIBS="-lcurl" \
 			LIBEVENT_CFLAGS="-I$(TOP)/libevent/include" \
 			LIBEVENT_LDFLAGS="-L$(TOP)/libevent/.libs" \
@@ -2092,8 +2095,8 @@ aria2/stamp-h1: openssl zlib libexpat sqlite libiconv libcares
 		CPPFLAGS="-I$(TOP)/libexpat/lib -I$(TOP)/libiconv/include -I$(TOP)/sqlite -I$(TOP)/zlib -I$(TOP)/libcares -I$(TOP)/openssl/include" \
 		LIBS="-liconv -lstdc++ -lexpat -lz -lsqlite3 -lcares -lssl -lcrypto" \
 		$(CONFIGURE) --target=mipsel-linux --prefix=/usr --enable-nls --enable-shared --enable-static --without-libxml2 --without-gnutls --with-openssl \
-		LIBCURL_CFLAGS="-I$(TOP)/libcurl/include" \
-		LIBCURL_LDFLAGS="-L$(TOP)/libcurl/lib/.libs/" \
+		LIBCURL_CFLAGS="-I$(TOP)/curl/include" \
+		LIBCURL_LDFLAGS="-L$(TOP)/curl/lib/.libs/" \
 		LIBCURL_LIBS="-lcurl" \
 		LIBEVENT_CFLAGS="-I$(TOP)/libevent/include" \
 		LIBEVENT_LDFLAGS="-L$(TOP)/libevent/.libs" \
