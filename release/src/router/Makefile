@@ -199,6 +199,8 @@ endif
 obj-$(TCONFIG_NGINX) += openssl
 obj-$(TCONFIG_NGINX) += spawn-fcgi
 obj-$(TCONFIG_NGINX) += pcre
+obj-$(TCONFIG_NGINX) += sqlite3
+obj-$(TCONFIG_NGINX) += libcurl
 obj-$(TCONFIG_NGINX) += php
 obj-$(TCONFIG_NGINX) += nginx
 
@@ -1317,10 +1319,12 @@ sqlite/stamp-h1:
 
 sqlite: sqlite/stamp-h1
 	@$(MAKE) -C sqlite all $(PARALLEL_BUILD)
+	@$(MAKE) -C sqlite DESTDIR=$(TOP)/sqlite/staged install
 
 sqlite-clean:
 	-@$(MAKE) -C sqlite clean
 	@rm -f sqlite/stamp-h1
+	@rm -rf sqlite/staged
 
 sqlite-install: sqlite
 	@$(SEP)
@@ -1745,7 +1749,7 @@ pcre-clean:
 		rm -rf pcre/stamp-h1; \
 	fi )
 
-php/stamp-h1: pcre zlib
+php/stamp-h1: pcre zlib libcurl sqlite
 	@$(SEP)
 	cd php && CC=$(CC) CXX=$(ARCH)-g++ AR=$(AR) RANLIB=$(RANLIB) LD=$(LD) \
 	CFLAGS="-Os -Wall -I $(TOP)/zlib -I $(TOP)/pcre -L $(TOP)/pcre/.libs/libpcre.so.1.2.3 -L $(TOP)/pcre/.libs/libpcreposix.so.0.0.2 $(EXTRACFLAGS)" \
@@ -1765,7 +1769,7 @@ php/stamp-h1: pcre zlib
 	--enable-cgi \
 	--disable-calendar \
 	--disable-ctype \
-	--without-curl \
+	--with-curl=$(TOP)/libcurl/staged/usr \
 	--disable-fileinfo \
 	--without-gettext \
 	--disable-dom \
@@ -1792,7 +1796,7 @@ php/stamp-h1: pcre zlib
 	--disable-soap \
 	--disable-sockets \
 	--without-sqlite \
-	--without-sqlite3 \
+	--with-sqlite3="$(TOP)/sqlite/staged/usr" \
 	--disable-sysvmsg \
 	--disable-sysvsem \
 	--disable-sysvshm \
@@ -1810,7 +1814,7 @@ php/stamp-h1: pcre zlib
 
 php: php/stamp-h1
 	@$(SEP)
-	@$(MAKE) -C php
+	@$(MAKE) -C php $(PARALLEL_BUILD)
 
 php-clean:
 	-@$(MAKE) -C php clean
@@ -1924,10 +1928,12 @@ libcurl/stamp-h1: zlib openssl
 
 libcurl: libcurl/stamp-h1
 	@$(MAKE) -C libcurl $(PARALLEL_BUILD)
+	@$(MAKE) -C libcurl DESTDIR=$(TOP)/libcurl/staged install
 
 libcurl-clean:
 	-@$(MAKE) -C libcurl clean
 	@rm -f libcurl/stamp-h1 libcurl/Makefile
+	@rm -f libcurl/staged
 
 libcurl-install: libcurl
 	install -d $(INSTALLDIR)/libcurl/usr/lib

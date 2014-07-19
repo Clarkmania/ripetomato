@@ -190,6 +190,12 @@ sub fixDyn
 	fixDynDep("aria2c", "libz.so.1");
 	fixDynDep("aria2c", "libsqlite3.so.0");
 
+#php
+	fixDynDep("php-cgi", "libcurl.so.4.3.0");
+	fixDynDep("php-cgi", "libsqlite3.so.0");
+	fixDynDep("php-cli", "libcurl.so.4.3.0");
+	fixDynDep("php-cli", "libsqlite3.so.0");
+
 #ipset modules
 	fixDynDep("libipset_iphash.so", "ipset");
 	fixDynDep("libipset_iptree.so", "ipset");
