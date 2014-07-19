@@ -37,12 +37,6 @@ No part of this file may be used without permission.
 	</script>
 	<div id="afu-input">
 
-		<div class="alert">
-			<h5>Warning</h5>There has been many reports how AdvancedTomato did not flash well or it came with many bugs. Reason for that is bad image files which can sometimes get corupted at the download process.
-			This message is here to warn you to check MD5 checksum ( <a target="_blank" href="http://en.wikipedia.org/wiki/Checksum">HELP</a> ) before flashing any images to your router.
-			By using this process and learning if image is corupted or not, you will eliminate many issues with the upgrade process.
-		</div><br />
-
 		<div class="section">
 			<form name="form_upgrade" method="post" action="upgrade.cgi" encType="multipart/form-data">
 				<label>Select the file to use:</label>

@@ -28,7 +28,7 @@ if [ "$ANON_ANSWER" == "1" ]; then
     if [ "$ANON_ENABLED" == "1" ]; then
 
 ############################
-        MOD=AdvancedTomato
+        MOD=RipeTomato
 ############################
 
         #Detect Version and Buildtype
@@ -56,35 +56,34 @@ if [ "$ANON_ANSWER" == "1" ]; then
         if [ "$1" == "checkver" -a "$ANON_NOTIFY" == "1" ]; then
             # Tomato Update Notification Script
             #Change all spaces to %20
-            echo "http://at.prahec.com/update.php?v=$VER&mod=$MOD" > /tmp/AnonLink
-            sed -i "s/ /%20/g" /tmp/AnonLink
-            ANONSEND=`cat /tmp/AnonLink`
-            rm /tmp/AnonLink
-
-            RESULT="/tmp/anon.version"
-            wget -O $RESULT $ANONSEND
-
-            # save result into nvram
-            nvram set at_update=`cat /tmp/anon.version`
-
-            #Thanks. Now add cron job
-
-            ISCRU=`cru l | grep checkver | wc -l`
-            if [ "$ISCRU" == "0" ]; then
-
-                #random minutes 0..59
-                MINUTES=`awk 'BEGIN {srand(); printf "%d", 60*rand()}'`
-
-                #random hour 0..23
-                HOUR=`awk 'BEGIN {srand(); printf "%d", 23*rand()}'`
-
-                #checkver daily
-                cru a checkver "$MINUTES $HOUR * * * /usr/sbin/tomatoanon checkver"
-            fi
+#            echo "http://clarkmania.github.io/ripetomato/update.php?v=$VER&mod=$MOD" > /tmp/AnonLink
+#            sed -i "s/ /%20/g" /tmp/AnonLink
+#            ANONSEND=`cat /tmp/AnonLink`
+#            rm /tmp/AnonLink
+#
+#            RESULT="/tmp/anon.version"
+#            wget -O $RESULT $ANONSEND
+#
+#            # save result into nvram
+#            nvram set at_update=`cat /tmp/anon.version`
+#
+#            #Thanks. Now add cron job
+#
+#            ISCRU=`cru l | grep checkver | wc -l`
+#            if [ "$ISCRU" == "0" ]; then
+#
+#                #random minutes 0..59
+#                MINUTES=`awk 'BEGIN {srand(); printf "%d", 60*rand()}'`
+#
+#                #random hour 0..23
+#                HOUR=`awk 'BEGIN {srand(); printf "%d", 23*rand()}'`
+#
+#                #checkver daily
+#                cru a checkver "$MINUTES $HOUR * * * /usr/sbin/tomatoanon checkver"
+#            fi
 
         else #just update anon database
             #Collect datas
-            MOD=AdvancedTomato
             UPTIME=`uptime | cut -d "," -f1 | cut -d " " -f4,5`
             WANMAC=`nvram get wan_hwaddr`
             LANMAC=`nvram get lan_hwaddr`
@@ -134,10 +133,10 @@ if [ "$ANON_ANSWER" == "1" ]; then
             cru d anonupdate
         fi
 
-        ISCRU=`cru l | grep checkver | wc -l`
-        if [ "$ISCRU" == "0" ]; then
-            cru d checkver
-        fi
+        #ISCRU=`cru l | grep checkver | wc -l`
+        #if [ "$ISCRU" == "0" ]; then
+        #    cru d checkver
+        #fi
 
     fi #end ANON_ENABLE
 
@@ -148,9 +147,9 @@ else #if answer is not enabled or was disabled right now
         cru d anonupdate
     fi
 
-    ISCRU=`cru l | grep checkver | wc -l`
-    if [ "$ISCRU" == "0" ]; then
-        cru d checkver
-    fi
+    #ISCRU=`cru l | grep checkver | wc -l`
+    #if [ "$ISCRU" == "0" ]; then
+    #    cru d checkver
+    #fi
 
 fi #end ANON_ANSWER

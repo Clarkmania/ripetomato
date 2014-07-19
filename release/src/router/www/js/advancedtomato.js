@@ -13,7 +13,7 @@ function notifications () {
 
         if (n < lastUpdate || n == null) {
             $(".content").prepend('<div class="alert info"><a href="#" class="close" data-update="' + nvram.at_update.replace('.','') + '">×</a>\
-AdvancedTomato (<b>' + nvram.at_update + '</b>) is now available. <a target="_blank" href="http://at.prahec.com/changelog/">Click here to find out more</a>.</div>');
+RipeTomato (<b>' + nvram.at_update + '</b>) is now available. <a target="_blank" href="https://github.com/Clarkmania/ripetomato/releases">Click here to find out more</a>.</div>');
         }
     }
 
@@ -221,7 +221,7 @@ function loadPage(Page) {
         $('h2.currentpage').text('/ ERROR occured!');
         $('.content .ajaxwrap').hide().html('<h2>ERROR occured!<i class="icon-cancel" style="font-size: 20px; color: red; vertical-align: top;"></i></h2>\
 <span style="font-size: 14px;">There has been error while loading a page, please review debug data bellow if this is isolated issue.<br />\
-Otherwise please contact AdvancedTomato developer <a target="_blank" href="http://at.prahec.com/contact/">Jacky</a>. <br /><br /><pre class="debug">' + x + '</pre><br /><a href="/">Refreshing</a> browser window might help.</span>').fadeIn(200);
+Otherwise file a bug report on <a target="_blank" href="https://github.com/Clarkmania/ripetomato/issues">Github</a>. <br /><br /><pre class="debug">' + x + '</pre><br /><a href="/">Refreshing</a> browser window might help.</span>').fadeIn(200);
 
         preloader('stop');
         // Loaded, clear state

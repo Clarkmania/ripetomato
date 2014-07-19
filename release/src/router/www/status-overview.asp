@@ -107,7 +107,7 @@
                     </div>
 
                     <div class="footer">
-                        <div class="copyright"><a href="#" onclick="loadPage('about.asp'); return false;">&copy; AdvancedTomato 2014</a></div>
+                        <div class="copyright"><a href="#" onclick="loadPage('about.asp'); return false;">Copyright &copy; 2014</a></div>
                         <div class="version">Version: <% version(1); %> &nbsp; <a href="#" class="sticky scrollup"><i class="icon-chevron-up"></i></a></div>
                         </div>
                     </div>
