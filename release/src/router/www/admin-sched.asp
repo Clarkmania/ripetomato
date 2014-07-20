@@ -97,7 +97,7 @@ No part of this file may be used without permission.
 				a.push({ title: 'Command', name: 'sch_' + key + 'cmd', type: 'textarea', value: nvram['sch_' + key + 'cmd' ] });
 			}
 
-			createFieldTable('', a, '.section.' + orgkey, 'fields-table');
+			$('.content.' + orgkey).forms(a);
 		}
 
 		function verifySched(focused, quiet, key)
@@ -228,42 +228,47 @@ No part of this file may be used without permission.
 		<input type="hidden" name="sch_c2" value="">
 		<input type="hidden" name="sch_c3" value="">
 
-		<h3>Reboot</h3>
-		<div class="section rboot">
-			<script type="text/javascript">
-				makeSched("rboot");
-			</script>
+		<div class="box" data-box="sched-reboot">
+			<div class="heading">Reboot</div>
+			<div class="content rboot"></div>
 		</div>
+		<script type="text/javascript">
+			makeSched("rboot");
+		</script>
 
-		<h3>Reconnect</h3>
-		<div class="section rcon">
+
+		<div class="box" data-box="sched-reconnect">
+			<div class="heading">Reconnect</div>
+			<div class="content rcon"></div>
 			<script type="text/javascript">
 				makeSched("rcon");
 			</script>
 		</div>
 
-		<h3>Custom 1</h3>
-		<div class="section c1">
+		<div class="box" data-box="sched-cust1">
+			<div class="heading">Custom 1</div>
+			<div class="content c1"></div>
 			<script type="text/javascript">
 				makeSched("c1", 1);
 			</script>
 		</div>
 
-		<h3>Custom 2</h3>
-		<div class="section c2">
+		<div class="box" data-box="sched-cust2">
+			<div class="heading">Custom 2</div>
+			<div class="content c2"></div>
 			<script type="text/javascript">
 				makeSched("c2", 1);
 			</script>
 		</div>
 
-		<h3>Custom 3</h3>
-		<div class="section c3">
+		<div class="box" data-box="sched-cust3">
+			<div class="heading">Custom 3</div>
+			<div class="content c3"></div>
 			<script type="text/javascript">
 				makeSched("c3", 1);
 			</script>
 		</div>
 
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>

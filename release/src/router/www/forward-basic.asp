@@ -39,10 +39,10 @@ No part of this file may be used without permission.
 		}
 
 		fog.dataToView = function(data) {
-			
+
 			return [
-				(data[0] != '0') ? '<i class="icon-check icon-green"></i>' : '<i class="icon-cancel icon-red"></i>', 
-				['TCP', 'UDP', 'Both'][data[1] - 1], 
+				(data[0] != '0') ? '<i class="icon-check icon-green"></i>' : '<i class="icon-cancel icon-red"></i>',
+				['TCP', 'UDP', 'Both'][data[1] - 1],
 				(data[2].match(/(.+)-(.+)/)) ? (RegExp.$1 + ' -<br>' + RegExp.$2) : data[2],
 				data[3],
 				data[4],
@@ -165,32 +165,33 @@ No part of this file may be used without permission.
 	</script>
 
 	<form id="_fom" method="post" action="javascript:{}">
-	<input type="hidden" name="_nextpage" value="/#forward-basic.asp">
-	<input type="hidden" name="_service" value="firewall-restart">
-	<input type="hidden" name="portforward">
+		<input type="hidden" name="_nextpage" value="/#forward-basic.asp">
+		<input type="hidden" name="_service" value="firewall-restart">
+		<input type="hidden" name="portforward">
 
-	<div class="section">
-		<table class="line-table" id="fo-grid"></table>
-		<script type="text/javascript">fog.setup();</script>
-	</div>
+		<div class="box">
+			<div class="heading">Basic Port-forwarding</div>
+			<div class="content">
 
-	<h3>Notes</h3>
-	<div class="section" id="sesdiv_notes">
-		<ul>
-			<li><b>Src Address</b> <i>(optional)</i> - Forward only if from this address. Ex: "1.2.3.4", "1.2.3.4 - 2.3.4.5", "1.2.3.0/24", "me.example.com".
-			<li><b>Ext Ports</b> - The ports to be forwarded, as seen from the WAN. Ex: "2345", "200,300", "200-300,400".
-			<li><b>Int Port</b> <i>(optional)</i> - The destination port inside the LAN. If blank, the destination port
-			is the same as <i>Ext Ports</i>. Only one port per entry is supported when forwarding to a different internal
-			port.
-			<li><b>Int Address</b> - The destination address inside the LAN.
-		</ul>
-	</div>
+				<script type="text/javascript">show_notice1('<% notice("iptables"); %>');</script>
+				<table class="line-table" id="fo-grid"></table><br /><hr>
 
-	<br><script type="text/javascript">show_notice1('<% notice("iptables"); %>');</script>
+				<h4>Notes</h4>
+				<ul>
+					<li><b>Src Address</b> <i>(optional)</i> - Forward only if from this address. Ex: "1.2.3.4", "1.2.3.4 - 2.3.4.5", "1.2.3.0/24", "me.example.com".
+					<li><b>Ext Ports</b> - The ports to be forwarded, as seen from the WAN. Ex: "2345", "200,300", "200-300,400".
+					<li><b>Int Port</b> <i>(optional)</i> - The destination port inside the LAN. If blank, the destination port
+					is the same as <i>Ext Ports</i>. Only one port per entry is supported when forwarding to a different internal
+					port.
+					<li><b>Int Address</b> - The destination address inside the LAN.
+				</ul>
+			</div>
+		</div>
 
-	<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
-	<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
-	&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
+		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
+		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
+		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
+	</form>
 
-	<script type="text/javascript">init();</script>
+	<script type="text/javascript">fog.setup(); init();</script>
 </content>

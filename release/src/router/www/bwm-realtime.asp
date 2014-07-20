@@ -10,10 +10,6 @@ No part of this file may be used without permission.
 	<style type="text/css">
 		table tr td:nth-child(even) { width: 25%; }
 		table tr td:nth-child(odd) { width: 5%; }
-		#bwm-controls {
-			margin-right: 5px;
-			margin-top: 5px;
-		}
 	</style>
 	<script type="text/javascript" src="js/wireless.jsx?_http_id=<% nv(http_id); %>"></script>
 	<script type="text/javascript" src="js/bwm-common.js"></script>
@@ -126,63 +122,68 @@ No part of this file may be used without permission.
 		<li><a class="ajaxload" href="bwm-monthly.asp"><i class="icon-month"></i> Monthly</a></li>
 	</ul>
 
-	<div id="rstats">
-		<div id="tab-area" class="btn-toolbar"></div>
+	<div class="box">
+		<div class="heading">Real Time Bandwidth &nbsp;  <div class="spinner" id="refresh-spinner" onclick="javascript:debugTime=1"></div></div>
+		<div class="content">
+			<div id="rstats">
+				<div id="tab-area" class="btn-toolbar"></div>
 
-		<script type="text/javascript">
-			if (nvram.web_svg != '0') {
-				$('#tab-area').after('<object id="graph" type="image/svg+xml" data="img/bwm-graph.svg?<% version(); %>" style="height: 300px; width:100%;"></object>');
-			}
-		</script>
+				<script type="text/javascript">
+					if (nvram.web_svg != '0') {
+						$('#tab-area').after('<embed id="graph" type="image/svg+xml" src="img/bwm-graph.svg?<% version(); %>" style="height: 300px; width:100%;"></embed>');
+					}
+				</script>
 
-		<div id="bwm-controls">
-			<small>(<span class="updatetime"></span> minute window, <span class="interval"></span> second interval)</small> - 
-			<b>Avg</b>: 
-			<a href="javascript:switchAvg(1)" id="avg1">Off</a>,
-			<a href="javascript:switchAvg(2)" id="avg2">2x</a>,
-			<a href="javascript:switchAvg(4)" id="avg4">4x</a>,
-			<a href="javascript:switchAvg(6)" id="avg6">6x</a>,
-			<a href="javascript:switchAvg(8)" id="avg8">8x</a>
-			| <b>Max</b>:
-			<a href="javascript:switchScale(0)" id="scale0">Uniform</a> or
-			<a href="javascript:switchScale(1)" id="scale1">Per IF</a>
-			| <b>Display</b>:
-			<a href="javascript:switchDraw(0)" id="draw0">Solid</a> or
-			<a href="javascript:switchDraw(1)" id="draw1">Line</a>
-			| <b>Color</b>: <a href="javascript:switchColor()" id="drawcolor">-</a>
-			<small><a href="javascript:switchColor(1)" id="drawrev">[reverse]</a></small>
-			| <a class="ajaxload" href="admin-bwm.asp"><b>Configure</b></a>
+				<div id="bwm-controls">
+					<small>(<span class="updatetime"></span> minute window, <span class="interval"></span> second interval)</small> -
+					<b>Avg</b>:
+					<a href="javascript:switchAvg(1)" id="avg1">Off</a>,
+					<a href="javascript:switchAvg(2)" id="avg2">2x</a>,
+					<a href="javascript:switchAvg(4)" id="avg4">4x</a>,
+					<a href="javascript:switchAvg(6)" id="avg6">6x</a>,
+					<a href="javascript:switchAvg(8)" id="avg8">8x</a>
+					| <b>Max</b>:
+					<a href="javascript:switchScale(0)" id="scale0">Uniform</a> or
+					<a href="javascript:switchScale(1)" id="scale1">Per IF</a>
+					| <b>Display</b>:
+					<a href="javascript:switchDraw(0)" id="draw0">Solid</a> or
+					<a href="javascript:switchDraw(1)" id="draw1">Line</a>
+					| <b>Color</b>: <a href="javascript:switchColor()" id="drawcolor">-</a>
+					<small><a href="javascript:switchColor(1)" id="drawrev">[reverse]</a></small>
+					| <a class="ajaxload" href="admin-bwm.asp"><b>Configure</b></a>
+				</div><br />
+
+				<table id="txt" class="data-table">
+					<tr>
+						<td><b style="border-bottom:blue 1px solid" id="rx-name">RX</b>
+							<i class="icon-arrow-down"></i></td>
+						<td><span id="rx-current"></span></td>
+						<td><b>Avg</b></td>
+						<td id="rx-avg"></td>
+						<td><b>Peak</b></td>
+						<td id="rx-max"></td>
+						<td><b>Total</b></td>
+						<td id="rx-total"></td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td><b style="border-bottom:blue 1px solid" id="tx-name">TX</b>
+							<i class="icon-arrow-up"></i></td>
+						<td><span id="tx-current"></span></td>
+						<td><b>Avg</b></td>
+						<td id="tx-avg"></td>
+						<td><b>Peak</b></td>
+						<td id="tx-max"></td>
+						<td><b>Total</b></td>
+						<td id="tx-total"></td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+
+			<span id="dtime"></span>
+			<div id="warnwd" class="alert warning" style="display:none">Warning: 10 second session timeout, restarting...&nbsp;</div>
 		</div>
-		<br>
-		<table id="txt" class="data-table">
-			<tr>
-				<td><b style="border-bottom:blue 1px solid" id="rx-name">RX</b>
-					<i class="icon-arrow-down"></i></td>
-				<td><span id="rx-current"></span></td>
-				<td><b>Avg</b></td>
-				<td id="rx-avg"></td>
-				<td><b>Peak</b></td>
-				<td id="rx-max"></td>
-				<td><b>Total</b></td>
-				<td id="rx-total"></td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><b style="border-bottom:blue 1px solid" id="tx-name">TX</b>
-					<i class="icon-arrow-up"></i></td>
-				<td><span id="tx-current"></span></td>
-				<td><b>Avg</b></td>
-				<td id="tx-avg"></td>
-				<td><b>Peak</b></td>
-				<td id="tx-max"></td>
-				<td><b>Total</b></td>
-				<td id="tx-total"></td>
-				<td>&nbsp;</td>
-			</tr>
-		</table>
 	</div>
-
-	<div class="spinner" id="refresh-spinner" onclick="javascript:debugTime=1"></div><span id="dtime"></span><br /><br />
-	<span id="warnwd" class="alert" style="display:none">Warning: 10 second session timeout, restarting...&nbsp;</span>
 	<script type="text/javascript">init();</script>
 </content>

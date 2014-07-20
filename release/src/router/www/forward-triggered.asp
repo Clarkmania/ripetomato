@@ -132,25 +132,26 @@ No part of this file may be used without permission.
 	<input type="hidden" name="_service" value="firewall-restart">
 	<input type="hidden" name="trigforward">
 
-	<div class="section">
-		<table class="line-table" id="tg-grid"></table>
-		<script type="text/javascript">tg.setup();</script>
+	<div class="box">
+		<div class="heading">Triggered Port-Forwarding</div>
+		<div class="content">
+			<table class="line-table" id="tg-grid"></table><br /><hr>
+
+			<h4>Notes</h4>
+			<div class="section" id="sesdiv_notes" >
+				<ul>
+					<li>Use "-" to specify a range of ports (200-300).
+					<li>Trigger Ports are the initial LAN to WAN "trigger".
+					<li>Forwarded Ports are the WAN to LAN ports that are opened if the "trigger" is activated.
+					<li>These ports are automatically closed after a few minutes of inactivity.
+				</ul>
+			</div>
+		</div>
 	</div>
 
-	<h3>Notes</h3>
-	<div class="section" id="sesdiv_notes" >
-		<ul>
-			<li>Use "-" to specify a range of ports (200-300).
-			<li>Trigger Ports are the initial LAN to WAN "trigger".
-			<li>Forwarded Ports are the WAN to LAN ports that are opened if the "trigger" is activated.
-			<li>These ports are automatically closed after a few minutes of inactivity.
-		</ul>
-	</div>
-
-	<br />
 	<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 	<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 	&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
 
-	<script type="text/javascript">init();</script>
+	<script type="text/javascript">tg.setup(); init();</script>
 </content>

@@ -174,7 +174,7 @@ No part of this file may be used without permission.
 
 		dg.setup = function() {
 			this.init('dev-grid', 'sort');
-			this.headerSet(['<b>Interface</b>', '<b>Username</b>', '<b>Online Since</b>', '<b>VPN IP Address</b>', '<b>Source IP Address</b>', '<b>Action</b>']);
+			this.headerSet(['Interface', '<b>Username', 'Online Since', 'VPN IP Address', 'Source IP Address', 'Action']);
 			this.populate();
 			this.sort(1);
 		}
@@ -218,9 +218,11 @@ No part of this file may be used without permission.
 		}
 	</script>
 
-	<h3>PPTP Users Online</h3>
-	<div class="section">
-		<table id="dev-grid" class="line-table"></table>
+	<div class="box">
+		<div class="heading">PPTP Users Online</div>
+		<div class="content">
+			<table id="dev-grid" class="line-table"></table><br />
+		</div>
 	</div>
 
 	<a href="vpn-pptp-server.asp" class="btn btn-danger ajaxload"><i class="icon-tools"></i>&nbsp; Configure</a>

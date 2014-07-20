@@ -12,7 +12,7 @@ No part of this file may be used without permission.
 	<script type="text/javascript">
 		//	<% nvram("at_update,tomatoanon_answer,wan_ifname,lan_ifname,rstats_enable"); %>
 
-		try {                                                                              
+		try {
 			//	<% bandwidth("monthly"); %>
 		}
 		catch (ex) {
@@ -73,7 +73,7 @@ No part of this file may be used without permission.
 		{
 			var s;
 
-			if (nvram.rstats_enable != '1') return;
+			if (nvram.rstats_enable != '1') { $('#rstats').before('<div class="alert">Bandwidth monitoring disabled.</b> <a href="/#admin-bwm.asp">Enable &raquo;</a></div>'); return; }
 
 			if ((s = cookie.get('monthly')) != null) {
 				if (s.match(/^([0-2])$/)) {
@@ -87,8 +87,6 @@ No part of this file may be used without permission.
 		}
 	</script>
 
-	</head>
-
 	<ul class="nav-tabs">
 		<li><a class="ajaxload" href="bwm-realtime.asp"><i class="icon-hourglass"></i> Real-Time</a></li>
 		<li><a class="ajaxload" href="bwm-24.asp"><i class="icon-graphs"></i> Last 24 Hours</a></li>
@@ -97,19 +95,18 @@ No part of this file may be used without permission.
 		<li><a class="active"><i class="icon-month"></i> Monthly</a></li>
 	</ul>
 
-	<div id="rstats">
-		<div id="bwm-monthly-grid"></div>
-		
-		<a class="btn" style="float: right;" onclick="reloadPage()">Refresh <i class="icon-reboot"></i></a>
-		<a href="javascript:genData()" class="btn btn-primary">Data <i class="icon-drive"></i></a> 
-		<a href="admin-bwm.asp" class="btn btn-danger ajaxload">Configure <i class="icon-tools"></i></a>
-
-		<b>Date</b> <select onchange="changeDate(this, 'ym')" id="dafm"><option value=0>yyyy-mm</option><option value=1>mm-yyyy</option><option value=2>mmm yyyy</option><option value=3>mm.yyyy</option></select> &nbsp; 
-		<b>Scale</b> <select onchange="changeScale(this)" id="scale"><option value=0>KB</option><option value=1>MB</option><option value=2 selected>GB</option></select>
-		<br />
+	<div id="rstats" class="box">
+		<div class="heading">Monthly Bandwidth <a class="pull-right" href="#" data-toggle="tooltip" title="Reload Information" onclick="reloadPage(); return false;"><i class="icon-reboot"></i></a></div>
+		<div class="content">
+			<div id="bwm-monthly-grid"></div>
+		</div>
 	</div>
 
-	<div class="clearfix"></div>
+	<a href="javascript:genData()" class="btn btn-primary">Data <i class="icon-drive"></i></a>
+	<a href="admin-bwm.asp" class="btn btn-danger ajaxload">Configure <i class="icon-tools"></i></a> &nbsp;
+
+	<b>Date</b> <select onchange="changeDate(this, 'ym')" id="dafm"><option value=0>yyyy-mm</option><option value=1>mm-yyyy</option><option value=2>mmm yyyy</option><option value=3>mm.yyyy</option></select> &nbsp;
+	<b>Scale</b> <select onchange="changeScale(this)" id="scale"><option value=0>KB</option><option value=1>MB</option><option value=2 selected>GB</option></select>
 
 	<script type="text/javascript">init();</script>
 </content>

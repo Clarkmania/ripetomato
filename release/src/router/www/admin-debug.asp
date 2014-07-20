@@ -50,56 +50,15 @@ No part of this file may be used without permission.
 	</script>
 
 	<form id="_fom" method="post" action="tomato.cgi">
-	<input type="hidden" name="_nextpage" value="/#admin-misc.asp">
+		<input type="hidden" name="_nextpage" value="/#admin-misc.asp">
 
-	<input type="hidden" name="debug_nocommit">
-	<input type="hidden" name="debug_cprintf">
-	<input type="hidden" name="debug_cprintf_file">
-	<input type="hidden" name="debug_ddns">
-	<input type="hidden" name="debug_norestart">
-	<input type="hidden" name="t_cafree">
-	<input type="hidden" name="t_hidelr">
-
-	<div class="section">
-		<div id="debug"></div>
-		<script type="text/javascript">
-			a = [];
-			for (i = 1; i <= 8; ++i) a.push([i, i]);
-			createFieldTable('', [
-				{ title: 'Avoid performing an NVRAM commit', name: 'f_debug_nocommit', type: 'checkbox', value: nvram.debug_nocommit != '0' },
-				{ title: 'Enable cprintf output to console', name: 'f_debug_cprintf', type: 'checkbox', value: nvram.debug_cprintf != '0' },
-				{ title: 'Enable cprintf output to /tmp/cprintf', name: 'f_debug_cprintf_file', type: 'checkbox', value: nvram.debug_cprintf_file != '0' },
-				{ title: 'Enable DDNS output to /tmp/mdu-*', name: 'f_debug_ddns', type: 'checkbox', value: nvram.debug_ddns != '0' },
-				{ title: 'Count cache memory and buffers as free memory', name: 'f_cafree', type: 'checkbox', value: nvram.t_cafree == '1' },
-				{ title: 'Avoid displaying LAN to router connections', name: 'f_hidelr', type: 'checkbox', value: nvram.t_hidelr == '1' },
-				{ title: 'Console log level', name: 'console_loglevel', type: 'select', options: a, value: fixInt(nvram.console_loglevel, 1, 8, 1) },
-				{ title: 'Do not restart the following process if they die', multi: [
-					{ name: 'f_nr_crond', type: 'checkbox', suffix: ' crond<br>', value: (nvram.debug_norestart.indexOf('crond') != -1) },
-					{ name: 'f_nr_dnsmasq', type: 'checkbox', suffix: ' dnsmasq<br>', value: (nvram.debug_norestart.indexOf('dnsmasq') != -1) },
-					/* LINUX26-BEGIN */
-					{ name: 'f_nr_hotplug2', type: 'checkbox', suffix: ' hotplug2<br>', value: (nvram.debug_norestart.indexOf('hotplug2') != -1) },
-					/* LINUX26-END */
-					/* IPV6-BEGIN */
-					{ name: 'f_nr_radvd', type: 'checkbox', suffix: ' radvd<br>', value: (nvram.debug_norestart.indexOf('radvd') != -1) },
-					/* IPV6-END */
-					{ name: 'f_nr_igmprt', type: 'checkbox', suffix: ' igmprt<br>', value: (nvram.debug_norestart.indexOf('igmprt') != -1) }
-				] }
-				], '#debug', 'fields-table');
-		</script>
-		<hr>
-
-		&raquo; <a href="clearcookies.asp?_http_id=<% nv(http_id); %>">Clear Cookies</a><br>
-		&raquo; <a href="javascript:nvramCommit()">NVRAM Commit</a><br>
-		<br>
-
-		&raquo; <a href="/cfe/cfe.bin?_http_id=<% nv(http_id); %>">Download CFE</a><br>
-		&raquo; <a href="/ipt/iptables.txt?_http_id=<% nv(http_id); %>">Download Iptables Dump</a><br>
-		<!-- IPV6-BEGIN -->
-		&raquo; <a href="/ip6t/ip6tables.txt?_http_id=<% nv(http_id); %>">Download Ip6tables Dump</a><br>
-		<!-- IPV6-END -->
-		&raquo; <a href="/logs/syslog.txt?_http_id=<% nv(http_id); %>">Download Logs</a><br>
-		&raquo; <a href="/nvram/nvram.txt?_http_id=<% nv(http_id); %>">Download NVRAM Dump</a><br>
-		<br>
+		<input type="hidden" name="debug_nocommit">
+		<input type="hidden" name="debug_cprintf">
+		<input type="hidden" name="debug_cprintf_file">
+		<input type="hidden" name="debug_ddns">
+		<input type="hidden" name="debug_norestart">
+		<input type="hidden" name="t_cafree">
+		<input type="hidden" name="t_hidelr">
 
 		<div class="alert">
 			<b>Warning</b> The NVRAM Dump text file may contain information like wireless
@@ -107,11 +66,54 @@ No part of this file may be used without permission.
 			review &amp; edit this file before sharing it with
 			anyone.
 		</div>
-		<br />
-	</div>
 
-	<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
-	<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
-	&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
+		<div class="box">
+			<div class="heading">Debugging Settings & Information</div>
+			<div class="content">
 
+				<div id="debug"></div>
+				<script type="text/javascript">
+					a = [];
+					for (i = 1; i <= 8; ++i) a.push([i, i]);
+					$('#debug').forms([
+						{ title: 'Avoid performing an NVRAM commit', name: 'f_debug_nocommit', type: 'checkbox', value: nvram.debug_nocommit != '0' },
+						{ title: 'Enable cprintf output to console', name: 'f_debug_cprintf', type: 'checkbox', value: nvram.debug_cprintf != '0' },
+						{ title: 'Enable cprintf output to /tmp/cprintf', name: 'f_debug_cprintf_file', type: 'checkbox', value: nvram.debug_cprintf_file != '0' },
+						{ title: 'Enable DDNS output to /tmp/mdu-*', name: 'f_debug_ddns', type: 'checkbox', value: nvram.debug_ddns != '0' },
+						{ title: 'Count cache memory and buffers as free memory', name: 'f_cafree', type: 'checkbox', value: nvram.t_cafree == '1' },
+						{ title: 'Avoid displaying LAN to router connections', name: 'f_hidelr', type: 'checkbox', value: nvram.t_hidelr == '1' },
+						{ title: 'Console log level', name: 'console_loglevel', type: 'select', options: a, value: fixInt(nvram.console_loglevel, 1, 8, 1) },
+						{ title: 'Do not restart the following process if they die', multi: [
+							{ name: 'f_nr_crond', type: 'checkbox', suffix: ' crond<br>', value: (nvram.debug_norestart.indexOf('crond') != -1) },
+							{ name: 'f_nr_dnsmasq', type: 'checkbox', suffix: ' dnsmasq<br>', value: (nvram.debug_norestart.indexOf('dnsmasq') != -1) },
+							/* LINUX26-BEGIN */
+							{ name: 'f_nr_hotplug2', type: 'checkbox', suffix: ' hotplug2<br>', value: (nvram.debug_norestart.indexOf('hotplug2') != -1) },
+							/* LINUX26-END */
+							/* IPV6-BEGIN */
+							{ name: 'f_nr_radvd', type: 'checkbox', suffix: ' radvd<br>', value: (nvram.debug_norestart.indexOf('radvd') != -1) },
+							/* IPV6-END */
+							{ name: 'f_nr_igmprt', type: 'checkbox', suffix: ' igmprt<br>', value: (nvram.debug_norestart.indexOf('igmprt') != -1) }
+						] }
+					]);
+				</script>
+				<hr>
+
+				&raquo; <a href="clearcookies.asp?_http_id=<% nv(http_id); %>">Clear Cookies</a><br>
+				&raquo; <a href="javascript:nvramCommit()">NVRAM Commit</a><br>
+				<br>
+
+				&raquo; <a href="/cfe/cfe.bin?_http_id=<% nv(http_id); %>">Download CFE</a><br>
+				&raquo; <a href="/ipt/iptables.txt?_http_id=<% nv(http_id); %>">Download Iptables Dump</a><br>
+				<!-- IPV6-BEGIN -->
+				&raquo; <a href="/ip6t/ip6tables.txt?_http_id=<% nv(http_id); %>">Download Ip6tables Dump</a><br>
+				<!-- IPV6-END -->
+				&raquo; <a href="/logs/syslog.txt?_http_id=<% nv(http_id); %>">Download Logs</a><br>
+				&raquo; <a href="/nvram/nvram.txt?_http_id=<% nv(http_id); %>">Download NVRAM Dump</a>
+			</div>
+		</div>
+
+		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
+		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
+		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
+	</form>
 </content>

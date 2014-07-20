@@ -23,26 +23,30 @@ No part of this file may be used without permission.
 		}
 	</script>
 
+
 	<form id="_fom" method="post" action="tomato.cgi">
 
 		<input type="hidden" name="_nextpage" value="/#basic.asp">
 		<input type="hidden" name="_service" value="*">
 
-		<div id="identification" class="section">
-			<script type="text/javascript">
-				createFieldTable('', [
-					{ title: 'Router Name', name: 'router_name', type: 'text', maxlen: 32, size: 34, value: nvram.router_name },
-					{ title: 'Hostname', name: 'wan_hostname', type: 'text', maxlen: 63, size: 34, value: nvram.wan_hostname },
-					{ title: 'Domain Name', name: 'wan_domain', type: 'text', maxlen: 32, size: 34, value: nvram.wan_domain }
-					], '#identification');
-			</script>
+		<div class="box">
+			<div class="heading">Router Indentification</div>
+			<div class="content">
+				<div id="identification" class="section"></div>
+				<script type="text/javascript">
+					$('#identification').forms([
+						{ title: 'Router Name', name: 'router_name', type: 'text', maxlen: 32, size: 34, value: nvram.router_name },
+						{ title: 'Hostname', name: 'wan_hostname', type: 'text', maxlen: 63, size: 34, value: nvram.wan_hostname },
+						{ title: 'Domain Name', name: 'wan_domain', type: 'text', maxlen: 32, size: 34, value: nvram.wan_domain }
+					]);
+				</script>
+			</div>
 		</div>
-
-		<br />
-		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
-		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
-		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
 	</form>
+
+	<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
+	<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
+	&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
 
 	<script type="text/javascript">verifyFields(null, true);</script>
 </content>

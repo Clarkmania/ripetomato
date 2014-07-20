@@ -256,49 +256,51 @@ No part of this file may be used without permission.
 		<input type="hidden" name="ipv6_rtr_addr">
 		<input type="hidden" name="ipv6_accept_ra">
 
-		<div class="section ipv6-config">
-			<script type="text/javascript">
-				dns = nvram.ipv6_dns.split(/\s+/);
+		<div class="box" id="section-ipv6">
+			<div class="heading">Basic IPv6 Configuration</div>
 
-				createFieldTable('', [
-					{ title: 'IPv6 Service Type', name: 'ipv6_service', type: 'select', 
-						options: [['', 'Disabled'],['native','Native IPv6 from ISP'],['native-pd','DHCPv6 with Prefix Delegation'],['6to4','6to4 Anycast Relay'],['sit','6in4 Static Tunnel'],['other','Other (Manual Configuration)']],
-						value: nvram.ipv6_service },
-					{ title: 'IPv6 WAN Interface', name: 'ipv6_ifname', type: 'text', maxlen: 8, size: 10, value: nvram.ipv6_ifname },
-					null,
-					{ title: 'Assigned / Routed Prefix', name: 'f_ipv6_prefix', type: 'text', maxlen: 46, size: 48, value: nvram.ipv6_prefix },
-					{ title: 'Prefix Length', name: 'f_ipv6_prefix_length', type: 'text', maxlen: 3, size: 5, value: nvram.ipv6_prefix_length },
-					{ title: 'Router IPv6 Address', multi: [
-						{ name: 'f_ipv6_rtr_addr_auto', type: 'select', options: [['0', 'Default'],['1','Manual']], value: (nvram.ipv6_rtr_addr == '' ? '0' : '1') },
-						{ name: 'f_ipv6_rtr_addr', type: 'text', maxlen: 46, size: 48, value: nvram.ipv6_rtr_addr }
-					] },
-					{ title: 'Static DNS', name: 'f_ipv6_dns_1', type: 'text', maxlen: 46, size: 48, value: dns[0] || '' },
-					{ title: '',           name: 'f_ipv6_dns_2', type: 'text', maxlen: 46, size: 48, value: dns[1] || '' },
-					{ title: '',           name: 'f_ipv6_dns_3', type: 'text', maxlen: 46, size: 48, value: dns[2] || '' },
-					{ title: 'Enable Router Advertisements', name: 'f_ipv6_radvd', type: 'checkbox', value: nvram.ipv6_radvd == '1' },
-					{ title: 'Accept RA from', multi: [
-						{ suffix: '&nbsp; WAN &nbsp;&nbsp;&nbsp;', name: 'f_ipv6_accept_ra_wan', type: 'checkbox', value: (nvram.ipv6_accept_ra & 1) },
-						{ suffix: '&nbsp; LAN &nbsp;',	name: 'f_ipv6_accept_ra_lan', type: 'checkbox', value: (nvram.ipv6_accept_ra & 2) }
-					] },
-					null,
-					{ title: 'Tunnel Remote Endpoint (IPv4 Address)', name: 'ipv6_tun_v4end', type: 'text', maxlen: 15, size: 17, value: nvram.ipv6_tun_v4end },
-					{ title: 'Relay Anycast Address', name: 'ipv6_relay', type: 'text', maxlen: 3, size: 5, prefix: '192.88.99.&nbsp&nbsp', value: nvram.ipv6_relay },
-					{ title: 'Tunnel Client IPv6 Address', multi: [
-						{ name: 'ipv6_tun_addr', type: 'text', maxlen: 46, size: 48, value: nvram.ipv6_tun_addr, suffix: ' / ' },
-						{ name: 'ipv6_tun_addrlen', type: 'text', maxlen: 3, size: 5, value: nvram.ipv6_tun_addrlen }
-					] },
-					{ title: 'Tunnel MTU', name: 'ipv6_tun_mtu', type: 'text', maxlen: 4, size: 8, value: nvram.ipv6_tun_mtu, suffix: ' <small>(0 for default)</small>' },
-					{ title: 'Tunnel TTL', name: 'ipv6_tun_ttl', type: 'text', maxlen: 3, size: 8, value: nvram.ipv6_tun_ttl }
-				], '.section.ipv6-config', 'fields-table');
-			</script>
+			<div class="content">
+				<script type="text/javascript">show_notice1('<% notice("ip6tables"); %>');</script>
+
+				<div class="formfields"></div>
+				<script type="text/javascript">
+					dns = nvram.ipv6_dns.split(/\s+/);
+
+					$('#section-ipv6 .formfields').forms([
+						{ title: 'IPv6 Service Type', name: 'ipv6_service', type: 'select',
+							options: [['', 'Disabled'],['native','Native IPv6 from ISP'],['native-pd','DHCPv6 with Prefix Delegation'],['6to4','6to4 Anycast Relay'],['sit','6in4 Static Tunnel'],['other','Other (Manual Configuration)']],
+							value: nvram.ipv6_service },
+						{ title: 'IPv6 WAN Interface', name: 'ipv6_ifname', type: 'text', maxlen: 8, size: 10, value: nvram.ipv6_ifname },
+						{ title: 'Assigned / Routed Prefix', name: 'f_ipv6_prefix', type: 'text', maxlen: 46, size: 48, value: nvram.ipv6_prefix },
+						{ title: 'Prefix Length', name: 'f_ipv6_prefix_length', type: 'text', maxlen: 3, size: 5, value: nvram.ipv6_prefix_length },
+						{ title: 'Router IPv6 Address', multi: [
+							{ name: 'f_ipv6_rtr_addr_auto', type: 'select', options: [['0', 'Default'],['1','Manual']], value: (nvram.ipv6_rtr_addr == '' ? '0' : '1') },
+							{ name: 'f_ipv6_rtr_addr', type: 'text', maxlen: 46, size: 48, value: nvram.ipv6_rtr_addr }
+						] },
+						{ title: 'Static DNS', name: 'f_ipv6_dns_1', type: 'text', maxlen: 46, size: 48, value: dns[0] || '' },
+						{ title: '',           name: 'f_ipv6_dns_2', type: 'text', maxlen: 46, size: 48, value: dns[1] || '' },
+						{ title: '',           name: 'f_ipv6_dns_3', type: 'text', maxlen: 46, size: 48, value: dns[2] || '' },
+						{ title: 'Enable Router Advertisements', name: 'f_ipv6_radvd', type: 'checkbox', value: nvram.ipv6_radvd == '1' },
+						{ title: 'Accept RA from', multi: [
+							{ suffix: '&nbsp; WAN &nbsp;&nbsp;&nbsp;', name: 'f_ipv6_accept_ra_wan', type: 'checkbox', value: (nvram.ipv6_accept_ra & 1) },
+							{ suffix: '&nbsp; LAN &nbsp;',	name: 'f_ipv6_accept_ra_lan', type: 'checkbox', value: (nvram.ipv6_accept_ra & 2) }
+						] },
+						{ title: 'Tunnel Remote Endpoint (IPv4 Address)', name: 'ipv6_tun_v4end', type: 'text', maxlen: 15, size: 17, value: nvram.ipv6_tun_v4end },
+						{ title: 'Relay Anycast Address', name: 'ipv6_relay', type: 'text', maxlen: 3, size: 5, prefix: '192.88.99.&nbsp&nbsp', value: nvram.ipv6_relay },
+						{ title: 'Tunnel Client IPv6 Address', multi: [
+							{ name: 'ipv6_tun_addr', type: 'text', maxlen: 46, size: 48, value: nvram.ipv6_tun_addr, suffix: ' / ' },
+							{ name: 'ipv6_tun_addrlen', type: 'text', maxlen: 3, size: 5, value: nvram.ipv6_tun_addrlen }
+						] },
+						{ title: 'Tunnel MTU', name: 'ipv6_tun_mtu', type: 'text', maxlen: 4, size: 8, value: nvram.ipv6_tun_mtu, suffix: ' <small>(0 for default)</small>' },
+						{ title: 'Tunnel TTL', name: 'ipv6_tun_ttl', type: 'text', maxlen: 3, size: 8, value: nvram.ipv6_tun_ttl }
+					]);
+				</script>
+			</div>
 		</div>
-
-		<br><script type="text/javascript">show_notice1('<% notice("ip6tables"); %>');</script>
 
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		<span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
-
 	</form>
 
 	<script type="text/javascript">earlyInit()</script>

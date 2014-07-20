@@ -14,7 +14,7 @@ No part of this file may be used without permission.
 	<script type="text/javascript">
 		//	<% nvram("at_update,tomatoanon_answer,vpn_client_eas,vpn_client1_poll,vpn_client1_if,vpn_client1_bridge,vpn_client1_nat,vpn_client1_proto,vpn_client1_addr,vpn_client1_port,vpn_client1_retry,vpn_client1_firewall,vpn_client1_crypt,vpn_client1_comp,vpn_client1_cipher,vpn_client1_local,vpn_client1_remote,vpn_client1_nm,vpn_client1_reneg,vpn_client1_hmac,vpn_client1_adns,vpn_client1_rgw,vpn_client1_gw,vpn_client1_custom,vpn_client1_static,vpn_client1_ca,vpn_client1_crt,vpn_client1_key,vpn_client1_userauth,vpn_client1_username,vpn_client1_password,vpn_client1_useronly,vpn_client1_tlsremote,vpn_client1_cn,vpn_client2_poll,vpn_client2_if,vpn_client2_bridge,vpn_client2_nat,vpn_client2_proto,vpn_client2_addr,vpn_client2_port,vpn_client2_retry,vpn_client2_firewall,vpn_client2_crypt,vpn_client2_comp,vpn_client2_cipher,vpn_client2_local,vpn_client2_remote,vpn_client2_nm,vpn_client2_reneg,vpn_client2_hmac,vpn_client2_adns,vpn_client2_rgw,vpn_client2_gw,vpn_client2_custom,vpn_client2_static,vpn_client2_ca,vpn_client2_crt,vpn_client2_key,vpn_client2_userauth,vpn_client2_username,vpn_client2_password,vpn_client2_useronly,vpn_client2_tlsremote,vpn_client2_cn"); %>
 
-		tabs = [['client1', 'Client 1'],['client2', 'Client 2']];
+		tabs = [['client1', '<i class="icon-tools"></i>&nbsp; VPN Client 1'],['client2', '<i class="icon-tools"></i>&nbsp; VPN Client 2']];
 		sections = [['basic', 'Basic'],['advanced', 'Advanced'],['keys','Keys'],['status','Status']];
 		statusUpdaters = [];
 		for (i = 0; i < tabs.length; ++i) statusUpdaters.push(new StatusUpdater());
@@ -51,7 +51,13 @@ No part of this file may be used without permission.
 			for (var i = 0; i < tabs.length; ++i)
 			{
 				var on = (name == tabs[i][0]);
-				elem.display(tabs[i][0] + '-tab', on);
+
+				if (on) {
+					$('#' + tabs[i][0] + '-tab').fadeIn();
+				} else {
+					$('#' + tabs[i][0] + '-tab').hide();
+				}
+
 			}
 
 			cookie.set('vpn_client_tab', name);
@@ -249,105 +255,108 @@ No part of this file may be used without permission.
 		<input type="hidden" name="_service" value="">
 		<input type="hidden" name="vpn_client_eas" id="vpn_client_eas" value="">
 
-		<div class="section">
-			<script type="text/javascript">
-				var htmlOut = tabCreate.apply(this, tabs);
+		<div id="vpn-client"></div>
+		<script type="text/javascript">
+			var htmlOut = tabCreate.apply(this, tabs);
 
-				for (i = 0; i < tabs.length; ++i) {
+			for (i = 0; i < tabs.length; ++i) {
 
-					t = tabs[i][0];
-					htmlOut += ('<div id=\''+t+'-tab\'>');
-					htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_bridge\' name=\'vpn_'+t+'_bridge\'>');
-					htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_nat\' name=\'vpn_'+t+'_nat\'>');
-					htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_rgw\' name=\'vpn_'+t+'_rgw\'>');
-					htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_userauth\' name=\'vpn_'+t+'_userauth\'>');
-					htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_useronly\' name=\'vpn_'+t+'_useronly\'>');
-					htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_tlsremote\' name=\'vpn_'+t+'_tlsremote\'>');
+				t = tabs[i][0];
+				htmlOut += ('<div id=\''+t+'-tab\'>');
+				htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_bridge\' name=\'vpn_'+t+'_bridge\'>');
+				htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_nat\' name=\'vpn_'+t+'_nat\'>');
+				htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_rgw\' name=\'vpn_'+t+'_rgw\'>');
+				htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_userauth\' name=\'vpn_'+t+'_userauth\'>');
+				htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_useronly\' name=\'vpn_'+t+'_useronly\'>');
+				htmlOut += ('<input type=\'hidden\' id=\'vpn_'+t+'_tlsremote\' name=\'vpn_'+t+'_tlsremote\'>');
 
-					htmlOut += ('<br /><ul class="nav nav-tabs">');
-					for (j = 0; j < sections.length; j++)
-					{
-						htmlOut += ('<li><a href="javascript:sectSelect('+i+', \''+sections[j][0]+'\')" id="'+t+'-'+sections[j][0]+'-tab">'+sections[j][1]+'</a></li>');
-					}
-					htmlOut += ('</ul><div class=\'tabs-bottom\'></div>');
-
-					htmlOut += ('<div id=\''+t+'-basic\'>');
-					htmlOut += createFieldTable('', [
-						{ title: 'Start with WAN', name: 'f_vpn_'+t+'_eas', type: 'checkbox', value: nvram.vpn_client_eas.indexOf(''+(i+1)) >= 0 },
-						{ title: 'Interface Type', name: 'vpn_'+t+'_if', type: 'select', options: [ ['tap','TAP'], ['tun','TUN'] ], value: eval( 'nvram.vpn_'+t+'_if' ) },
-						{ title: 'Protocol', name: 'vpn_'+t+'_proto', type: 'select', options: [ ['udp','UDP'], ['tcp-client','TCP'] ], value: eval( 'nvram.vpn_'+t+'_proto' ) },
-						{ title: 'Server Address/Port', multi: [
-							{ name: 'vpn_'+t+'_addr', type: 'text', size: 17, value: eval( 'nvram.vpn_'+t+'_addr' ) },
-							{ name: 'vpn_'+t+'_port', type: 'text', maxlen: 5, size: 7, value: eval( 'nvram.vpn_'+t+'_port' ) } ] },
-						{ title: 'Firewall', name: 'vpn_'+t+'_firewall', type: 'select', options: [ ['auto', 'Automatic'], ['custom', 'Custom'] ], value: eval( 'nvram.vpn_'+t+'_firewall' ) },
-						{ title: 'Authorization Mode', name: 'vpn_'+t+'_crypt', type: 'select', options: [ ['tls', 'TLS'], ['secret', 'Static Key'], ['custom', 'Custom'] ], value: eval( 'nvram.vpn_'+t+'_crypt' ),
-							suffix: '<span id=\''+t+'_custom_crypto_text\'>&nbsp;<small>(must configure manually...)</small></span>' },
-						{ title: 'Username/Password Authentication', name: 'f_vpn_'+t+'_userauth', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_userauth' ) != 0 },
-						{ title: 'Username: ', indent: 2, name: 'vpn_'+t+'_username', type: 'text', maxlen: 50, size: 54, value: eval( 'nvram.vpn_'+t+'_username' ) },
-						{ title: 'Password: ', indent: 2, name: 'vpn_'+t+'_password', type: 'password', maxlen: 50, size: 54, value: eval( 'nvram.vpn_'+t+'_password' ) },
-						{ title: 'Username Authen. Only', indent: 2, name: 'f_vpn_'+t+'_useronly', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_useronly' ) != 0,
-							suffix: '<span style="color: red" id=\''+t+'_ca_warn_text\'>&nbsp<small>Warning: Must define Certificate Authority.<small></span>' },
-						{ title: 'Extra HMAC authorization (tls-auth)', name: 'vpn_'+t+'_hmac', type: 'select', options: [ [-1, 'Disabled'], [2, 'Bi-directional'], [0, 'Incoming (0)'], [1, 'Outgoing (1)'] ], value: eval( 'nvram.vpn_'+t+'_hmac' ) },
-						{ title: 'Server is on the same subnet', name: 'f_vpn_'+t+'_bridge', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_bridge' ) != 0,
-							suffix: '<span style="color: red" id=\''+t+'_bridge_warn_text\'>&nbsp<small>Warning: Cannot bridge distinct subnets. Defaulting to routed mode.<small></span>' },
-						{ title: 'Create NAT on tunnel', name: 'f_vpn_'+t+'_nat', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_nat' ) != 0,
-							suffix: '<span style="font-style: italic" id=\''+t+'_nat_warn_text\'>&nbsp<small>Routes must be configured manually.<small></span>' },
-						{ title: 'Local/remote endpoint addresses', multi: [
-							{ name: 'vpn_'+t+'_local', type: 'text', maxlen: 15, size: 17, value: eval( 'nvram.vpn_'+t+'_local' ) },
-							{ name: 'vpn_'+t+'_remote', type: 'text', maxlen: 15, size: 17, value: eval( 'nvram.vpn_'+t+'_remote' ) } ] },
-						{ title: 'Tunnel address/netmask', multi: [
-							{ name: 'f_vpn_'+t+'_local', type: 'text', maxlen: 15, size: 17, value: eval( 'nvram.vpn_'+t+'_local' ) },
-							{ name: 'vpn_'+t+'_nm', type: 'text', maxlen: 15, size: 17, value: eval( 'nvram.vpn_'+t+'_nm' ) } ] }
-						], null, 'fields-table');
-					htmlOut += ('</div>');
-					htmlOut += ('<div id=\''+t+'-advanced\'>');
-					htmlOut += createFieldTable('', [
-						{ title: 'Poll Interval', name: 'vpn_'+t+'_poll', type: 'text', maxlen: 4, size: 5, value: eval( 'nvram.vpn_'+t+'_poll' ), suffix: '&nbsp;<small>(in minutes, 0 to disable)</small>' }, 
-						{ title: 'Redirect Internet traffic', multi: [
-							{ name: 'f_vpn_'+t+'_rgw', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_rgw' ) != 0 },
-							{ name: 'vpn_'+t+'_gw', type: 'text', maxlen: 15, size: 17, value: eval( 'nvram.vpn_'+t+'_gw' ), prefix: '<span id=\''+t+'_gateway\'> Gateway:&nbsp', suffix: '</span>'} ] },
-						{ title: 'Accept DNS configuration', name: 'vpn_'+t+'_adns', type: 'select', options: [[0, 'Disabled'],[1, 'Relaxed'],[2, 'Strict'],[3, 'Exclusive']], value: eval( 'nvram.vpn_'+t+'_adns' ) },
-						{ title: 'Encryption cipher', name: 'vpn_'+t+'_cipher', type: 'select', options: ciphers, value: eval( 'nvram.vpn_'+t+'_cipher' ) },
-						{ title: 'Compression', name: 'vpn_'+t+'_comp', type: 'select', options: [ ['-1', 'Disabled'], ['no', 'None'], ['yes', 'Enabled'], ['adaptive', 'Adaptive'] ], value: eval( 'nvram.vpn_'+t+'_comp' ) },
-						{ title: 'TLS Renegotiation Time', name: 'vpn_'+t+'_reneg', type: 'text', maxlen: 10, size: 7, value: eval( 'nvram.vpn_'+t+'_reneg' ),
-							suffix: '&nbsp;<small>(in seconds, -1 for default)</small>' },
-						{ title: 'Connection retry', name: 'vpn_'+t+'_retry', type: 'text', maxlen: 5, size: 7, value: eval( 'nvram.vpn_'+t+'_retry' ),
-							suffix: '&nbsp;<small>(in seconds; -1 for infinite)</small>' },
-						{ title: 'Verify server certificate (tls-remote)', multi: [
-							{ name: 'f_vpn_'+t+'_tlsremote', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_tlsremote' ) != 0 },
-							{ name: 'vpn_'+t+'_cn', type: 'text', maxlen: 64, size: 54,
-								value: eval( 'nvram.vpn_'+t+'_cn' ), prefix: '<span id=\''+t+'_cn\'> Common Name:&nbsp', suffix: '</span>'} ] },
-						{ title: 'Custom Configuration', name: 'vpn_'+t+'_custom', type: 'textarea', value: eval( 'nvram.vpn_'+t+'_custom' ), style: 'width: 100%; height: 80px;' }
-						], null, 'fields-table');
-					htmlOut += ('</div>');
-					htmlOut += ('<div id=\''+t+'-keys\' class="langrid">');
-					htmlOut += ('<p class=\'keyhelp\'>For help generating keys, refer to the OpenVPN <a id=\''+t+'-keyhelp\'>HOWTO</a>.</p>');
-					htmlOut += createFieldTable('', [
-						{ title: 'Static Key', name: 'vpn_'+t+'_static', type: 'textarea', value: eval( 'nvram.vpn_'+t+'_static' ), style: 'width: 100%; height: 80px;' },
-						{ title: 'Certificate Authority', name: 'vpn_'+t+'_ca', type: 'textarea', value: eval( 'nvram.vpn_'+t+'_ca' ), style: 'width: 100%; height: 80px;' },
-						{ title: 'Client Certificate', name: 'vpn_'+t+'_crt', type: 'textarea', value: eval( 'nvram.vpn_'+t+'_crt' ), style: 'width: 100%; height: 80px;' },
-						{ title: 'Client Key', name: 'vpn_'+t+'_key', type: 'textarea', value: eval( 'nvram.vpn_'+t+'_key' ), style: 'width: 100%; height: 80px;' },
-						], null, 'fields-table');
-					htmlOut += ('</div>');
-					htmlOut += ('<div id=\''+t+'-status\'>');
-					htmlOut += ('<div id=\''+t+'-no-status\'><p>Client is not running or status could not be read.</p></div>');
-					htmlOut += ('<div id=\''+t+'-status-content\' style=\'display:none\' class=\'status-content\'>');
-					htmlOut += ('<div id=\''+t+'-status-header\' class=\'status-header\'><p>Data current as of <span id=\''+t+'-status-time\'></span>.</p></div>');
-					htmlOut += ('<div id=\''+t+'-status-stats\'><div class=\'section-title\'>General Statistics</div><table class=\'line-table\' id=\''+t+'-status-stats-table\'></table><br></div>');
-					htmlOut += ('<div id=\''+t+'-status-errors\' class=\'error\'></div>');
-					htmlOut += ('</div>');
-					htmlOut += ('<div style=\'text-align:right\'><a href=\'javascript:updateStatus('+i+')\'>Refresh Status</a></div>');
-					htmlOut += ('</div>');
-					htmlOut += ('<button type="button" value="toggle" onclick="toggle(\'vpn'+t+'\', vpn'+(i+1)+'up)" id="_vpn'+t+'_button" class="btn">' + (eval('vpn'+(i+1)+'up') ? '<i class="icon-stop"></i> Stop' : '<i class="icon-play"></i> Start ') + ' Now</button>');
-					htmlOut += ('</div>');
+				htmlOut += ('<br /><ul class="nav nav-tabs">');
+				for (j = 0; j < sections.length; j++)
+				{
+					htmlOut += ('<li><a href="javascript:sectSelect('+i+', \''+sections[j][0]+'\')" id="'+t+'-'+sections[j][0]+'-tab">'+sections[j][1]+'</a></li>');
 				}
 
-				
-				$('.section').append(htmlOut);
-			</script>
-		</div>
+				var action = (eval('vpn'+(i+1)+'up') ? 'title="Stop VPN Client ' + (i+1) + '"><i class="icon-stop"></i>' : 'title="Start VPN Client ' + (i+1) + '"><i class="icon-play"></i>');
+				var status = (!eval('vpn'+(i+1)+'up') ? '<small style="color: red">(Stopped)</small>' : '<small style="color: green;">(Running)</small>');
 
-		<br />
+				htmlOut += '</ul>'
+				+ '<div class="box"><div class="heading">VPN Client #'+(i+1) + status + ' <a id="_vpn' + t + '_button" class="pull-right" href="#" data-toggle="tooltip"' +
+				'onclick="toggle(\'vpn'+t+'\', vpn'+(i+1)+'up); return false;"' + action + '</a></div><div class="content">';
+
+				htmlOut += ('<div id=\''+t+'-basic\'>');
+				htmlOut += createFormFields([
+					{ title: 'Start with WAN', name: 'f_vpn_'+t+'_eas', type: 'checkbox', value: nvram.vpn_client_eas.indexOf(''+(i+1)) >= 0 },
+					{ title: 'Interface Type', name: 'vpn_'+t+'_if', type: 'select', options: [ ['tap','TAP'], ['tun','TUN'] ], value: eval( 'nvram.vpn_'+t+'_if' ) },
+					{ title: 'Protocol', name: 'vpn_'+t+'_proto', type: 'select', options: [ ['udp','UDP'], ['tcp-client','TCP'] ], value: eval( 'nvram.vpn_'+t+'_proto' ) },
+					{ title: 'Server Address/Port', multi: [
+						{ name: 'vpn_'+t+'_addr', type: 'text', size: 17, value: eval( 'nvram.vpn_'+t+'_addr' ) },
+						{ name: 'vpn_'+t+'_port', type: 'text', maxlen: 5, size: 7, value: eval( 'nvram.vpn_'+t+'_port' ) } ] },
+					{ title: 'Firewall', name: 'vpn_'+t+'_firewall', type: 'select', options: [ ['auto', 'Automatic'], ['custom', 'Custom'] ], value: eval( 'nvram.vpn_'+t+'_firewall' ) },
+					{ title: 'Authorization Mode', name: 'vpn_'+t+'_crypt', type: 'select', options: [ ['tls', 'TLS'], ['secret', 'Static Key'], ['custom', 'Custom'] ], value: eval( 'nvram.vpn_'+t+'_crypt' ),
+						suffix: '<span id=\''+t+'_custom_crypto_text\'>&nbsp;<small>(must configure manually...)</small></span>' },
+					{ title: 'Username/Password Authentication', name: 'f_vpn_'+t+'_userauth', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_userauth' ) != 0 },
+					{ title: 'Username: ', indent: 2, name: 'vpn_'+t+'_username', type: 'text', maxlen: 50, size: 54, value: eval( 'nvram.vpn_'+t+'_username' ) },
+					{ title: 'Password: ', indent: 2, name: 'vpn_'+t+'_password', type: 'password', maxlen: 50, size: 54, value: eval( 'nvram.vpn_'+t+'_password' ) },
+					{ title: 'Username Authen. Only', indent: 2, name: 'f_vpn_'+t+'_useronly', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_useronly' ) != 0,
+						suffix: '<span style="color: red" id=\''+t+'_ca_warn_text\'>&nbsp<small>Warning: Must define Certificate Authority.</small></span>' },
+					{ title: 'Extra HMAC authorization (tls-auth)', name: 'vpn_'+t+'_hmac', type: 'select', options: [ [-1, 'Disabled'], [2, 'Bi-directional'], [0, 'Incoming (0)'], [1, 'Outgoing (1)'] ], value: eval( 'nvram.vpn_'+t+'_hmac' ) },
+					{ title: 'Server is on the same subnet', name: 'f_vpn_'+t+'_bridge', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_bridge' ) != 0,
+						suffix: '<span style="color: red" id=\''+t+'_bridge_warn_text\'>&nbsp<small>Warning: Cannot bridge distinct subnets. Defaulting to routed mode.</small></span>' },
+					{ title: 'Create NAT on tunnel', name: 'f_vpn_'+t+'_nat', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_nat' ) != 0,
+						suffix: '<span style="font-style: italic" id=\''+t+'_nat_warn_text\'>&nbsp<small>Routes must be configured manually.</small></span>' },
+					{ title: 'Local/remote endpoint addresses', multi: [
+						{ name: 'vpn_'+t+'_local', type: 'text', maxlen: 15, size: 17, value: eval( 'nvram.vpn_'+t+'_local' ) },
+						{ name: 'vpn_'+t+'_remote', type: 'text', maxlen: 15, size: 17, value: eval( 'nvram.vpn_'+t+'_remote' ) } ] },
+					{ title: 'Tunnel address/netmask', multi: [
+						{ name: 'f_vpn_'+t+'_local', type: 'text', maxlen: 15, size: 17, value: eval( 'nvram.vpn_'+t+'_local' ) },
+						{ name: 'vpn_'+t+'_nm', type: 'text', maxlen: 15, size: 17, value: eval( 'nvram.vpn_'+t+'_nm' ) } ] }
+				]);
+				htmlOut += ('</div>');
+				htmlOut += ('<div id=\''+t+'-advanced\'>');
+				htmlOut += createFormFields([
+					{ title: 'Poll Interval', name: 'vpn_'+t+'_poll', type: 'text', maxlen: 4, size: 5, value: eval( 'nvram.vpn_'+t+'_poll' ), suffix: '&nbsp;<small>(in minutes, 0 to disable)</small>' },
+					{ title: 'Redirect Internet traffic', multi: [
+						{ name: 'f_vpn_'+t+'_rgw', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_rgw' ) != 0 },
+						{ name: 'vpn_'+t+'_gw', type: 'text', maxlen: 15, size: 17, value: eval( 'nvram.vpn_'+t+'_gw' ), prefix: '<span id=\''+t+'_gateway\'> Gateway:&nbsp', suffix: '</span>'} ] },
+					{ title: 'Accept DNS configuration', name: 'vpn_'+t+'_adns', type: 'select', options: [[0, 'Disabled'],[1, 'Relaxed'],[2, 'Strict'],[3, 'Exclusive']], value: eval( 'nvram.vpn_'+t+'_adns' ) },
+					{ title: 'Encryption cipher', name: 'vpn_'+t+'_cipher', type: 'select', options: ciphers, value: eval( 'nvram.vpn_'+t+'_cipher' ) },
+					{ title: 'Compression', name: 'vpn_'+t+'_comp', type: 'select', options: [ ['-1', 'Disabled'], ['no', 'None'], ['yes', 'Enabled'], ['adaptive', 'Adaptive'] ], value: eval( 'nvram.vpn_'+t+'_comp' ) },
+					{ title: 'TLS Renegotiation Time', name: 'vpn_'+t+'_reneg', type: 'text', maxlen: 10, size: 7, value: eval( 'nvram.vpn_'+t+'_reneg' ),
+						suffix: '&nbsp;<small>(in seconds, -1 for default)</small>' },
+					{ title: 'Connection retry', name: 'vpn_'+t+'_retry', type: 'text', maxlen: 5, size: 7, value: eval( 'nvram.vpn_'+t+'_retry' ),
+						suffix: '&nbsp;<small>(in seconds; -1 for infinite)</small>' },
+					{ title: 'Verify server certificate (tls-remote)', multi: [
+						{ name: 'f_vpn_'+t+'_tlsremote', type: 'checkbox', value: eval( 'nvram.vpn_'+t+'_tlsremote' ) != 0 },
+						{ name: 'vpn_'+t+'_cn', type: 'text', maxlen: 64, size: 54,
+							value: eval( 'nvram.vpn_'+t+'_cn' ), prefix: '<span id=\''+t+'_cn\'> Common Name:&nbsp', suffix: '</span>'} ] },
+					{ title: 'Custom Configuration', name: 'vpn_'+t+'_custom', type: 'textarea', value: eval( 'nvram.vpn_'+t+'_custom' ), style: 'width: 100%; height: 80px;' }
+				]);
+				htmlOut += ('</div>');
+				htmlOut += ('<div id=\''+t+'-keys\' class="langrid">');
+				htmlOut += ('<p class=\'keyhelp\'>For help generating keys, refer to the OpenVPN <a id=\''+t+'-keyhelp\'>HOWTO</a>.</p>');
+				htmlOut += createFormFields([
+					{ title: 'Static Key', name: 'vpn_'+t+'_static', type: 'textarea', value: eval( 'nvram.vpn_'+t+'_static' ), style: 'width: 100%; height: 80px;' },
+					{ title: 'Certificate Authority', name: 'vpn_'+t+'_ca', type: 'textarea', value: eval( 'nvram.vpn_'+t+'_ca' ), style: 'width: 100%; height: 80px;' },
+					{ title: 'Client Certificate', name: 'vpn_'+t+'_crt', type: 'textarea', value: eval( 'nvram.vpn_'+t+'_crt' ), style: 'width: 100%; height: 80px;' },
+					{ title: 'Client Key', name: 'vpn_'+t+'_key', type: 'textarea', value: eval( 'nvram.vpn_'+t+'_key' ), style: 'width: 100%; height: 80px;' },
+				]);
+				htmlOut += ('</div>');
+				htmlOut += ('<div id=\''+t+'-status\'>');
+				htmlOut += ('<div id=\''+t+'-no-status\'><p>Client is not running or status could not be read.</p></div>');
+				htmlOut += ('<div id=\''+t+'-status-content\' style=\'display:none\' class=\'status-content\'>');
+				htmlOut += ('<div id=\''+t+'-status-header\' class=\'status-header\'><p>Data current as of <span id=\''+t+'-status-time\'></span>.</p></div>');
+				htmlOut += ('<div id=\''+t+'-status-stats\'><div class=\'section-title\'>General Statistics</div><table class=\'line-table\' id=\''+t+'-status-stats-table\'></table><br></div>');
+				htmlOut += ('<div id=\''+t+'-status-errors\' class=\'error\'></div>');
+				htmlOut += ('</div>');
+				htmlOut += ('<div style=\'text-align:right\'><a href=\'javascript:updateStatus('+i+')\'>Refresh Status</a></div>');
+				htmlOut += ('</div>');
+				htmlOut += ('</div></div></div>');
+			}
+
+
+			$('#vpn-client').append(htmlOut);
+		</script>
+
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>

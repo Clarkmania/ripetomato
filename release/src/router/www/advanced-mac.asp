@@ -133,43 +133,46 @@ No part of this file may be used without permission.
 			}
 		</script>
 
-		<div class="section">
-			<div class="macaddr"></div>
-			<script type="text/javascript">
+		<div class="box">
+			<div class="heading">Advanced MAC Settings</div>
+			<div class="content">
+				<div class="macaddr"></div><hr>
+				<script type="text/javascript">
 
-				f = [
-					{ title: 'WAN Port', indent: 1, name: 'f_wan_hwaddr', type: 'text', maxlen: 17, size: 20,
-						suffix: ' <button type="button" value="Default" onclick="bdefault(\'wan\')" class="btn">Default</button>\
-						<button type="button" value="Random" onclick="brand(\'wan\')" class="btn">Random</button>\
-						<button type="button" value="Clone PC" onclick="bclone(\'wan\')" class="btn">Clone PC</button>',
-						value: nvram.mac_wan || defmac('wan') }
-				];
+					f = [
+						{ title: 'WAN Port', indent: 1, name: 'f_wan_hwaddr', type: 'text', maxlen: 17, size: 20,
+							suffix: ' <button type="button" value="Default" onclick="bdefault(\'wan\')" class="btn btn-small">Default</button> \
+							<button type="button" value="Random" onclick="brand(\'wan\')" class="btn btn-small">Random</button> \
+							<button type="button" value="Clone PC" onclick="bclone(\'wan\')" class="btn btn-small">Clone PC</button>',
+							value: nvram.mac_wan || defmac('wan') }
+					];
 
-				for (var uidx = 0; uidx < wl_ifaces.length; ++uidx) {
-					var u = wl_fface(uidx);
-					f.push(
-						{ title: 'Wireless Interface ' + ((wl_ifaces.length > 1) ? wl_ifaces[uidx][0] : ''), indent: 1, name: 'f_wl'+u+'_hwaddr', type: 'text', maxlen: 17, size: 20,
-							suffix:' <button type="button" value="Default" onclick="bdefault(\'wl'+u+'\')" class="btn">Default</button> <button type="button" value="Random" onclick="brand(\'wl'+u+'\')" class="btn">Random</button>\
-							<button type="button" value="Clone PC" onclick="bclone(\'wl'+u+'\')" class="btn">Clone PC</button>',
-							value: nvram['wl'+u+'_hwaddr'] || defmac('wl' + u) }
-					);
-				}
+					for (var uidx = 0; uidx < wl_ifaces.length; ++uidx) {
+						var u = wl_fface(uidx);
+						f.push(
+							{ title: 'Wireless Interface ' + ((wl_ifaces.length > 1) ? wl_ifaces[uidx][0] : ''), indent: 1, name: 'f_wl'+u+'_hwaddr', type: 'text', maxlen: 17, size: 20,
+								suffix:' <button type="button" value="Default" onclick="bdefault(\'wl'+u+'\')" class="btn btn-small">Default</button> \
+								<button type="button" value="Random" onclick="brand(\'wl'+u+'\')" class="btn btn-small">Random</button> \
+								<button type="button" value="Clone PC" onclick="bclone(\'wl'+u+'\')" class="btn btn-small">Clone PC</button>',
+								value: nvram['wl'+u+'_hwaddr'] || defmac('wl' + u) }
+						);
+					}
 
-				createFieldTable('', f, '.section .macaddr', 'fields-table');
+					$('.macaddr').forms(f);
 
-			</script>
-			<br>
-			<table class="line-table">
-				<tr><td>Router"s LAN MAC Address:</td><td id="routermac"><b></b></td></tr>
-				<tr><td>Computer"s MAC Address:</td><td id="compmac"><b></b></td></tr>
-			</table>
+				</script>
+
+				<table class="line-table">
+					<tr><td>Router"s LAN MAC Address:</td><td id="routermac"><b></b></td></tr>
+					<tr><td>Computer"s MAC Address:</td><td id="compmac"><b></b></td></tr>
+				</table><br />
+
+			</div>
 		</div>
 
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
-
 	</form>
 
 	<script type="text/javascript">

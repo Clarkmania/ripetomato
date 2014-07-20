@@ -120,83 +120,83 @@ No part of this file may be used without permission.
 	</script>
 
 	<form id="_fom" method="post" action="tomato.cgi">
-	<input type="hidden" name="_nextpage" value="/#admin-log.asp">
-	<input type="hidden" name="_service" value="logging-restart">
+		<input type="hidden" name="_nextpage" value="/#admin-log.asp">
+		<input type="hidden" name="_service" value="logging-restart">
 
-	<input type="hidden" name="log_remote">
-	<input type="hidden" name="log_file">
-	<input type="hidden" name="log_file_custom">
-	<input type="hidden" name="log_events">
+		<input type="hidden" name="log_remote">
+		<input type="hidden" name="log_file">
+		<input type="hidden" name="log_file_custom">
+		<input type="hidden" name="log_events">
 
-	<input type="hidden" name="log_wm">
-	<input type="hidden" name="log_wmip">
-	<input type="hidden" name="webmon_bkp">
-	<input type="hidden" name="webmon_shrink">
+		<input type="hidden" name="log_wm">
+		<input type="hidden" name="log_wmip">
+		<input type="hidden" name="webmon_bkp">
+		<input type="hidden" name="webmon_shrink">
 
-	<script type="text/javascript">
-	</script>
+		<div class="box" data-box="router-log">
+			<div class="heading">Router Logging</div>
+			<div class="content" id="router-log"></div>
+			<script type="text/javascript">
 
-	<div class="section settings">
-		<script type="text/javascript">
+				/* REMOVE-BEGIN
+				// adjust (>=1.22)
+				nvram.log_mark *= 1;
+				if (nvram.log_mark >= 120) nvram.log_mark = 120;
+				else if (nvram.log_mark >= 60) nvram.log_mark = 60;
+				else if (nvram.log_mark > 0) nvram.log_mark = 30;
+				else nvram.log_mark = 0;
+				REMOVE-END */
 
-			/* REMOVE-BEGIN
-			// adjust (>=1.22)
-			nvram.log_mark *= 1;
-			if (nvram.log_mark >= 120) nvram.log_mark = 120;
-			else if (nvram.log_mark >= 60) nvram.log_mark = 60;
-			else if (nvram.log_mark > 0) nvram.log_mark = 30;
-			else nvram.log_mark = 0;
-			REMOVE-END */
+				$('#router-log').forms([
+					{ title: 'Log Internally', name: 'f_log_file', type: 'checkbox', value: nvram.log_file == 1 },
+					{ title: 'Max size before rotate', name: 'log_file_size', type: 'text', maxlen: 5, size: 6, value: nvram.log_file_size || 50, suffix: ' <small>KB</small>' },
+					{ title: 'Number of rotated logs to keep', name: 'log_file_keep', type: 'text', maxlen: 2, size: 3, value: nvram.log_file_keep || 1 },
+					{ title: 'Custom Log File Path', multi: [
+						{ name: 'f_log_file_custom', type: 'checkbox', value: nvram.log_file_custom == 1, suffix: '  ' },
+						{ name: 'log_file_path', type: 'text', maxlen: 50, size: 30, value: nvram.log_file_path, suffix: ' <small>(make sure the directory exists and is writable)</small>' }
+					] },
+					{ title: 'Log To Remote System', name: 'f_log_remote', type: 'checkbox', value: nvram.log_remote == 1 },
+					{ title: 'Host or IP Address / Port', indent: 2, multi: [
+						{ name: 'log_remoteip', type: 'text', maxlen: 15, size: 17, value: nvram.log_remoteip, suffix: ':' },
+						{ name: 'log_remoteport', type: 'text', maxlen: 5, size: 7, value: nvram.log_remoteport } ]},
+					{ title: 'Generate Marker', name: 'log_mark', type: 'select', options: [[0,'Disabled'],[30,'Every 30 Minutes'],[60,'Every 1 Hour'],[120,'Every 2 Hours'],[360,'Every 6 Hours'],[720,'Every 12 Hours'],[1440,'Every 1 Day'],[10080,'Every 7 Days']], value: nvram.log_mark },
+					{ title: 'Events Logged', text: '<small>(some of the changes will take effect after a restart)</small>' },
+					{ title: 'Access Restriction', indent: 2, name: 'f_log_acre', type: 'checkbox', value: (nvram.log_events.indexOf('acre') != -1) },
+					{ title: 'Cron', indent: 2, name: 'f_log_crond', type: 'checkbox', value: (nvram.log_events.indexOf('crond') != -1) },
+					{ title: 'DHCP Client', indent: 2, name: 'f_log_dhcpc', type: 'checkbox', value: (nvram.log_events.indexOf('dhcpc') != -1) },
+					{ title: 'NTP', indent: 2, name: 'f_log_ntp', type: 'checkbox', value: (nvram.log_events.indexOf('ntp') != -1) },
+					{ title: 'Scheduler', indent: 2, name: 'f_log_sched', type: 'checkbox', value: (nvram.log_events.indexOf('sched') != -1) },
+					{ title: 'Connection Logging' },
+					{ title: 'Inbound', indent: 2, name: 'log_in', type: 'select', options: [[0,'Disabled (recommended)'],[1,'If Blocked By Firewall'],[2,'If Allowed By Firewall'],[3,'Both']], value: nvram.log_in },
+					{ title: 'Outbound', indent: 2, name: 'log_out', type: 'select', options: [[0,'Disabled (recommended)'],[1,'If Blocked By Firewall'],[2,'If Allowed By Firewall'],[3,'Both']], value: nvram.log_out },
+					{ title: 'Limit', indent: 2, name: 'log_limit', type: 'text', maxlen: 4, size: 5, value: nvram.log_limit, suffix: ' <small>(messages per minute / 0 for unlimited)</small>' }
+				]);
+			</script>
+		</div>
 
-			createFieldTable('', [
-				{ title: 'Log Internally', name: 'f_log_file', type: 'checkbox', value: nvram.log_file == 1 },
-				{ title: 'Max size before rotate', name: 'log_file_size', type: 'text', maxlen: 5, size: 6, value: nvram.log_file_size || 50, suffix: ' <small>KB</small>' },
-				{ title: 'Number of rotated logs to keep', name: 'log_file_keep', type: 'text', maxlen: 2, size: 3, value: nvram.log_file_keep || 1 },
-				{ title: 'Custom Log File Path', multi: [
-					{ name: 'f_log_file_custom', type: 'checkbox', value: nvram.log_file_custom == 1, suffix: '  ' },
-					{ name: 'log_file_path', type: 'text', maxlen: 50, size: 30, value: nvram.log_file_path, suffix: ' <small>(make sure the directory exists and is writable)</small>' }
-				] },
-				{ title: 'Log To Remote System', name: 'f_log_remote', type: 'checkbox', value: nvram.log_remote == 1 },
-				{ title: 'Host or IP Address / Port', indent: 2, multi: [
-					{ name: 'log_remoteip', type: 'text', maxlen: 15, size: 17, value: nvram.log_remoteip, suffix: ':' },
-					{ name: 'log_remoteport', type: 'text', maxlen: 5, size: 7, value: nvram.log_remoteport } ]},
-				{ title: 'Generate Marker', name: 'log_mark', type: 'select', options: [[0,'Disabled'],[30,'Every 30 Minutes'],[60,'Every 1 Hour'],[120,'Every 2 Hours'],[360,'Every 6 Hours'],[720,'Every 12 Hours'],[1440,'Every 1 Day'],[10080,'Every 7 Days']], value: nvram.log_mark },
-				{ title: 'Events Logged', text: '<small>(some of the changes will take effect after a restart)</small>' },
-				{ title: 'Access Restriction', indent: 2, name: 'f_log_acre', type: 'checkbox', value: (nvram.log_events.indexOf('acre') != -1) },
-				{ title: 'Cron', indent: 2, name: 'f_log_crond', type: 'checkbox', value: (nvram.log_events.indexOf('crond') != -1) },
-				{ title: 'DHCP Client', indent: 2, name: 'f_log_dhcpc', type: 'checkbox', value: (nvram.log_events.indexOf('dhcpc') != -1) },
-				{ title: 'NTP', indent: 2, name: 'f_log_ntp', type: 'checkbox', value: (nvram.log_events.indexOf('ntp') != -1) },
-				{ title: 'Scheduler', indent: 2, name: 'f_log_sched', type: 'checkbox', value: (nvram.log_events.indexOf('sched') != -1) },
-				{ title: 'Connection Logging' },
-				{ title: 'Inbound', indent: 2, name: 'log_in', type: 'select', options: [[0,'Disabled (recommended)'],[1,'If Blocked By Firewall'],[2,'If Allowed By Firewall'],[3,'Both']], value: nvram.log_in },
-				{ title: 'Outbound', indent: 2, name: 'log_out', type: 'select', options: [[0,'Disabled (recommended)'],[1,'If Blocked By Firewall'],[2,'If Allowed By Firewall'],[3,'Both']], value: nvram.log_out },
-				{ title: 'Limit', indent: 2, name: 'log_limit', type: 'text', maxlen: 4, size: 5, value: nvram.log_limit, suffix: ' <small>(messages per minute / 0 for unlimited)</small>' }
-				], '.section.settings', 'fields-table');
-		</script>
-	</div>
+		<div class="box" data-box="webmon-settings">
+			<div class="heading">Web Monitor</div>
+			<div class="content" id="webmon"></div>
+			<script type='text/javascript'>
+				$('#webmon').forms([
+					{ title: 'Monitor Web Usage', name: 'f_log_wm', type: 'checkbox', value: nvram.log_wm == 1 },
+					{ title: 'Monitor', name: 'log_wmtype', type: 'select', options: [[0,'All Computers / Devices'],[1,'The Following...'],[2,'All Except...']], value: nvram.log_wmtype },
+					{ title: 'IP Address(es)', indent: 2,  name: 'f_log_wmip', type: 'text', maxlen: 512, size: 64, value: nvram.log_wmip,
+						suffix: '<small>(ex: "1.1.1.1", "1.1.1.0/24" or "1.1.1.1 - 2.2.2.2")</small>' },
+					{ title: 'Number of Entries to remember' },
+					{ title: 'Domains', indent: 2,  name: 'log_wmdmax', type: 'text', maxlen: 4, size: 6, value: nvram.log_wmdmax, suffix: ' <small>(0 to disable)</small>' },
+					{ title: 'Searches', indent: 2, name: 'log_wmsmax', type: 'text', maxlen: 4, size: 6, value: nvram.log_wmsmax, suffix: ' <small>(0 to disable)</small>' },
+					{ title: 'Daily Backup', name: 'f_webmon_bkp', type: 'checkbox', value: nvram.webmon_bkp == 1, suffix: ' <small>(every day at midnight)</small>' },
+					{ title: 'Clear Data After Backup', indent: 2, name: 'f_webmon_shrink', type: 'checkbox', value: nvram.webmon_shrink == 1 },
+					{ title: 'Backup Directory', indent: 2,  name: 'webmon_dir', type: 'text', maxlen: 128, size: 30, value: nvram.webmon_dir, suffix: ' <small>(make sure the directory exists and is writable)</small>' }
+				]);
+			</script>
+		</div>
 
-	<h3>Web Monitor</h3>
-	<div class="section webmon">
-		<script type='text/javascript'>
-			createFieldTable('', [
-				{ title: 'Monitor Web Usage', name: 'f_log_wm', type: 'checkbox', value: nvram.log_wm == 1 },
-				{ title: 'Monitor', name: 'log_wmtype', type: 'select', options: [[0,'All Computers / Devices'],[1,'The Following...'],[2,'All Except...']], value: nvram.log_wmtype },
-				{ title: 'IP Address(es)', indent: 2,  name: 'f_log_wmip', type: 'text', maxlen: 512, size: 64, value: nvram.log_wmip,
-					suffix: '<br><small>(ex: "1.1.1.1", "1.1.1.0/24" or "1.1.1.1 - 2.2.2.2")</small>' },
-				{ title: 'Number of Entries to remember' },
-				{ title: 'Domains', indent: 2,  name: 'log_wmdmax', type: 'text', maxlen: 4, size: 6, value: nvram.log_wmdmax, suffix: ' <small>(0 to disable)</small>' },
-				{ title: 'Searches', indent: 2, name: 'log_wmsmax', type: 'text', maxlen: 4, size: 6, value: nvram.log_wmsmax, suffix: ' <small>(0 to disable)</small>' },
-				{ title: 'Daily Backup', name: 'f_webmon_bkp', type: 'checkbox', value: nvram.webmon_bkp == 1, suffix: ' <small>(every day at midnight)</small>' },
-				{ title: 'Clear Data After Backup', indent: 2, name: 'f_webmon_shrink', type: 'checkbox', value: nvram.webmon_shrink == 1 },
-				{ title: 'Backup Directory', indent: 2,  name: 'webmon_dir', type: 'text', maxlen: 128, size: 30, value: nvram.webmon_dir, suffix: ' <small>(make sure the directory exists and is writable)</small>' }
-				], '.section.webmon', 'fields-table');
-		</script>
-	</div>
-
-	<br />
-	<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
-	<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
-	&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
+		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
+		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
+		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
+	</form>
 
 	<script type="text/javascript">verifyFields(null, 1);</script>
 </content>

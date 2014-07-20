@@ -203,7 +203,7 @@ No part of this file may be used without permission.
 		{
 			var s;
 
-			if (nvram.rstats_enable != '1') return;
+			if (nvram.rstats_enable != '1') { $('#rstats').before('<div class="alert">Bandwidth monitoring disabled.</b> <a href="/#admin-bwm.asp">Enable &raquo;</a></div>'); return; }
 
 			if ((s = cookie.get('weekly')) != null) {
 				if (s.match(/^([0-2]),([0-6]),([0-1])$/)) {
@@ -227,18 +227,20 @@ No part of this file may be used without permission.
 		<li><a class="ajaxload" href="bwm-monthly.asp"><i class="icon-month"></i> Monthly</a></li>
 	</ul>
 
-	<div id="rstats">
-		<div id="bwm-weekly-grid"></div>
-		
-		<a style="float: right;" class="btn" onclick="reloadPage()">Refresh <i class="icon-reboot"></i></a>
-		<a href="admin-bwm.asp" class="btn btn-danger ajaxload">Configure <i class="icon-tools"></i></a>
-		<b>Show</b> <select onchange="changeMode(this)" id="shmode"><option value=1 selected>Summary<option value=0>Full</select> &nbsp;
-		<b>Date</b> <select onchange="changeDate(this, 'ymd')" id="dafm"><option value=0>yyyy-mm-dd</option><option value=1>mm-dd-yyyy</option><option value=2>mmm dd, yyyy</option><option value=3>dd.mm.yyyy</option></select>  &nbsp;
-		<b>Start</b> <select onchange="changeStart(this)" id="startwk"><option value=0 selected>Sun<option value=1>Mon<option value=2>Tue<option value=3>Wed<option value=4>Thu<option value=5>Fri<option value=6>Sat</select>  &nbsp;
-		<b>Scale</b> <select onchange="changeScale(this)" id="scale"><option value=0>KB</option><option value=1>MB</option><option value=2 selected>GB</option></select> &nbsp;
-		<br />
-	</div>	
+	<div id="rstats" class="box">
+		<div class="heading">Weekly Bandwidth <a class="pull-right" href="#" data-toggle="tooltip" title="Reload Information" onclick="reloadPage(); return false;"><i class="icon-reboot"></i></a></div>
+		<div class="content">
+			<div id="bwm-weekly-grid"></div>
 
-	<div class="clearfix"></div>
+		</div>
+	</div>
+
+	<a href="admin-bwm.asp" class="btn btn-danger ajaxload">Configure <i class="icon-tools"></i></a> &nbsp;
+	<b>Show</b> <select onchange="changeMode(this)" id="shmode"><option value=1 selected>Summary<option value=0>Full</select> &nbsp;
+	<b>Date</b> <select onchange="changeDate(this, 'ymd')" id="dafm"><option value=0>yyyy-mm-dd</option><option value=1>mm-dd-yyyy</option><option value=2>mmm dd, yyyy</option><option value=3>dd.mm.yyyy</option></select>  &nbsp;
+	<b>Start</b> <select onchange="changeStart(this)" id="startwk"><option value=0 selected>Sun<option value=1>Mon<option value=2>Tue<option value=3>Wed<option value=4>Thu<option value=5>Fri<option value=6>Sat</select>  &nbsp;
+	<b>Scale</b> <select onchange="changeScale(this)" id="scale"><option value=0>KB</option><option value=1>MB</option><option value=2 selected>GB</option></select> &nbsp;
+
+
 	<script type="text/javascript">init()</script>
 </content>

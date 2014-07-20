@@ -21,7 +21,7 @@ No part of this file may be used without permission.
 			if (changed) {
 				if (!confirm("Unsaved changes will be lost. Continue anyway?")) return;
 			}
-			E('_' + service + '_button').disabled = true;
+			$('#_' + service + '_button').html('<div class="spinner spinner-small"></div>');
 			form.submitHidden('/service.cgi', {
 				_redirect: '/#vpn-pptp.asp',
 				_service: service + (isup ? '-stop' : '-start')
@@ -83,9 +83,11 @@ No part of this file may be used without permission.
 		<input type="hidden" id="pptp_client_dfltroute" name="pptp_client_dfltroute">
 		<input type="hidden" id="pptp_client_stateless" name="pptp_client_stateless">
 
-		<div class="section pptp-conf">
+		<div class="box" id="pptp-client">
+			<div class="heading">PPTP Client Configuration <span class="pptp-client-status"></span></div>
+			<div class="content"></div>
 			<script type="text/javascript">
-				createFieldTable('', [
+				$('#pptp-client').forms([
 					{ title: 'Start with WAN', name: 'f_pptp_client_enable', type: 'checkbox', value: nvram.pptp_client_enable != 0 },
 					{ title: 'Server Address', name: 'pptp_client_srvip', type: 'text', size: 17, value: nvram.pptp_client_srvip },
 					{ title: 'Username: ', name: 'pptp_client_username', type: 'text', maxlen: 50, size: 54, value: nvram.pptp_client_username },
@@ -105,13 +107,16 @@ No part of this file may be used without permission.
 					{ title: 'MRU', multi: [
 						{ name: 'pptp_client_mruenable', type: 'select', options: [['0', 'Default'],['1','Manual']], value: nvram.pptp_client_mruenable },
 						{ name: 'pptp_client_mru', type: 'text', maxlen: 4, size: 6, value: nvram.pptp_client_mru } ] },
-					{ title: 'Custom Configuration', name: 'pptp_client_custom', type: 'textarea', value: nvram.pptp_client_custom }
-					], '.pptp-conf', 'fields-table');
-				$('.pptp-conf').append('<button type="button" value="' + (pptpup ? 'Stop' : 'Start') + ' Now" onclick="toggle(\'pptpclient\', pptpup)" id="_pptpclient_button" class="btn">' + (pptpup ? 'Stop' : 'Start') + ' Now</button><br /><br />');
+					{ title: 'Custom Configuration', name: 'pptp_client_custom', type: 'textarea', value: nvram.pptp_client_custom, style: "width: 100%; height: 80px;" }
+				]);
+
+				$('#pptp-client .pptp-client-status').html((!pptpup ? '<small style="color: red;">(Stopped)</small>' : '<small style="color: green;">(Running)</small>'));
+				$('#pptp-client .pptp-client-status').after('<a href="#" data-toggle="tooltip" class="pull-right pptp-client-control" title="' +
+					(pptpup ? 'Stop PPTP Client' : 'Start PPTP Client') + '" onclick="toggle(\'pptpclient\', pptpup); return false;" id="_pptpclient_button">' + (pptpup ? '<i class="icon-stop"></i>' : '<i class="icon-play"></i>') + '</a>');
+
 			</script>
 		</div>
 
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>

@@ -97,13 +97,15 @@ No part of this file may be used without permission.
 		<input type="hidden" name="_commit" value="0">
 		<input type="hidden" name="rruleN" id="_rruleN" value="">
 
-		<h3>Access Restriction Overview</h3>
-		<div class="section">
-			<table class="line-table" id="res-over-grid"></table>
-		</div>
+		<div class="box">
+			<div class="heading">Access Restriction Overview</div>
+			<div class="content">
+				<table class="line-table" id="res-over-grid"></table>
 
-		<br><script type="text/javascript">show_notice1('<% notice("iptables"); %>');</script>
-		<br><script type="text/javascript">show_notice1('<% notice("ip6tables"); %>');</script>
+				<br><script type="text/javascript">show_notice1('<% notice("iptables"); %>');</script>
+				<br><script type="text/javascript">show_notice1('<% notice("ip6tables"); %>');</script>
+			</div>
+		</div>
 	</form>
 
 	<script text="text/javascript">init();</script>

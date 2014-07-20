@@ -94,14 +94,14 @@ No part of this file may be used without permission.
 				htmlOut += ('<input type=\'hidden\' id=\'_wl'+u+'_country\' name=\'wl'+u+'_country\'>');
 				htmlOut += ('<input type=\'hidden\' id=\'_wl'+u+'_nmode_protection\' name=\'wl'+u+'_nmode_protection\'>');
 
-				htmlOut += ('<br /><h3>Wireless Settings ');
+				htmlOut += ('<div class="box"><div class="heading">Wireless Settings ');
 				//if (wl_ifaces.length > 1)
 				htmlOut += ('(' + wl_display_ifname(uidx) + ') ');
 				//W('');
-				htmlOut += ('</h3><div class=\'section\'>');
+				htmlOut += ('</div><div class="content">');
 
 				at = ((nvram['wl'+u+'_security_mode'] != "wep") && (nvram['wl'+u+'_security_mode'] != "radius") && (nvram['wl'+u+'_security_mode'] != "disabled"));
-				htmlOut += createFieldTable('', [
+				htmlOut += createFormFields([
 					{ title: 'Afterburner', name: 'wl'+u+'_afterburner', type: 'select', options: [['auto','Auto'],['on','Enable'],['off','Disable *']],
 						value: nvram['wl'+u+'_afterburner'] },
 					{ title: 'AP Isolation', name: 'wl'+u+'_ap_isolate', type: 'select', options: [['0','Disable *'],['1','Enable']],
@@ -172,16 +172,14 @@ No part of this file may be used without permission.
 						value: nvram['wl'+u+'_wme_apsd'] },
 					{ title: 'Wireless Multicast Forwarding', name: 'wl'+u+'_wmf_bss_enable', type: 'select', options: [['0','Disable *'],['1','Enable']],
 						value: nvram['wl'+u+'_wmf_bss_enable'] }
-					], null, 'fields-table');
-				htmlOut += ('</div>');
+					]);
+				htmlOut += ('<small>The default settings are indicated with an asterisk <b style="font-size: 1.5em">*</b> symbol.</small></div></div>');
 			}
 
 		}
 
 		$('#formfields').append(htmlOut);
 	</script>
-
-	<small>The default settings are indicated with an asterisk <b style="font-size: 1.5em">*</b> symbol.</small><br /><br />
 
 	<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 	<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>

@@ -170,10 +170,11 @@ No part of this file may be used without permission.
 		<input type="hidden" name="smbd_wins">
 		<input type="hidden" name="smbd_shares">
 
-		<h3>Samba File Sharing</h3>
-		<div class="section fileshare">
+		<div class="box">
+			<div class="heading">Samba File Sharing</div>
+			<div class="content fileshare"></div>
 			<script type="text/javascript">
-				createFieldTable('', [
+				$('.content.fileshare').forms([
 					{ title: 'Enable File Sharing', name: 'smbd_enable', type: 'select',
 						options: [['0', 'No'],['1', 'Yes, no Authentication'],['2', 'Yes, Authentication required']],
 						value: nvram.smbd_enable },
@@ -181,7 +182,6 @@ No part of this file may be used without permission.
 						value: nvram.smbd_user },
 					{ title: 'Password', indent: 2, name: 'smbd_passwd', type: 'password', maxlen: 50, size: 32, peekaboo: 1,
 						value: nvram.smbd_passwd },
-					null,
 					{ title: 'Workgroup Name', name: 'smbd_wgroup', type: 'text', maxlen: 20, size: 32,
 						value: nvram.smbd_wgroup },
 					{ title: 'Client Codepage', name: 'smbd_cpage', type: 'select',
@@ -192,7 +192,7 @@ No part of this file may be used without permission.
 						],
 						suffix: ' <small> (start cmd.exe and type chcp to see the current code page)</small>',
 						value: nvram.smbd_cpage },
-					{ title: 'Samba<br>Custom Configuration', name: 'smbd_custom', type: 'textarea', value: nvram.smbd_custom, style: 'width: 100%; height: 80px;' },
+					{ title: 'Samba Custom Configuration', name: 'smbd_custom', type: 'textarea', value: nvram.smbd_custom, style: 'width: 100%; height: 80px;' },
 					{ title: 'Auto-share all USB Partitions', name: 'smbd_autoshare', type: 'select',
 						options: [['0', 'Disabled'],['1', 'Read Only'],['2', 'Read / Write'],['3', 'Hidden Read / Write']],
 						value: nvram.smbd_autoshare },
@@ -200,16 +200,16 @@ No part of this file may be used without permission.
 						{ suffix: '&nbsp; Master Browser &nbsp;&nbsp;&nbsp;', name: 'f_smbd_master', type: 'checkbox', value: nvram.smbd_master == 1 },
 						{ suffix: '&nbsp; WINS Server (if not defined on Basic/Network page) &nbsp;',	name: 'f_smbd_wins', type: 'checkbox', value: (nvram.smbd_wins == 1) && (nvram.wan_wins == '' || nvram.wan_wins == '0.0.0.0') }
 					] }
-				], '.section.fileshare', 'fields-table');
+				]);
 			</script>
 		</div>
 
-		<h3>Additional Shares List</h3>
-		<div class="section">
-			<table class="line-table" id="ss-grid"></table>
-			<script type="text/javascript">ssg.setup();</script>
-			<small>When no shares are specified and auto-sharing is disabled, <i>/mnt</i> directory is shared in Read Only mode.</small>
-			<br /><br />
+		<div class="box">
+			<div class="heading">Additional Shares List</div>
+			<div class="content">
+				<table class="line-table" id="ss-grid"></table><br />
+				<small>When no shares are specified and auto-sharing is disabled, <i>/mnt</i> directory is shared in Read Only mode.</small>
+			</div>
 		</div>
 
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
@@ -218,5 +218,5 @@ No part of this file may be used without permission.
 
 	</form>
 
-	<script type="text/javascript">verifyFields(null, 1);</script>
+	<script type="text/javascript">ssg.setup(); verifyFields(null, 1);</script>
 </content>

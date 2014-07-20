@@ -10,7 +10,7 @@ LAN Access admin module by Augusto Bott
 	<script type="text/javascript" src="js/wireless.jsx?_http_id=<% nv(http_id); %>"></script>
 	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript">
-		//<% nvram ("at_update,tomatoanon_answer,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,lan4_ifname,lan5_ifname,lan6_ifname,lan7_ifname,lan_access");%> 
+		//<% nvram ("at_update,tomatoanon_answer,lan_ifname,lan1_ifname,lan2_ifname,lan3_ifname,lan4_ifname,lan5_ifname,lan6_ifname,lan7_ifname,lan_access");%>
 
 		var la = new TomatoGrid();
 		var lans = [];
@@ -198,26 +198,26 @@ LAN Access admin module by Augusto Bott
 	<input type="hidden" name="_service" value="firewall-restart">
 	<input type="hidden" name="lan_access">
 
-	<h3>LAN Access</h3>
-	<div class="section">
-		<table class="line-table" id="la-grid"></table>
-	</div>
+	<div class="box">
+		<div class="heading">LAN Access Settings</div>
+		<div class="content">
+			<table class="line-table" id="la-grid"></table><br /><hr>
 
-	<h3><a href="javascript:toggleVisibility('notes');">Notes <span id="sesdiv_notes_showhide"><i class="icon-chevron-up"></i></span></a></h3>
-	<div class="section" id="sesdiv_notes" style="display:none">
-		<ul>
-			<li><b>Src</b> - Source LAN bridge.</li>
-			<li><b>Src Address</b> <i>(optional)</i> - Source address allowed. Ex: "1.2.3.4", "1.2.3.4 - 2.3.4.5", "1.2.3.0/24".</li>
-			<li><b>Dst</b> - Destination LAN bridge.</li>
-			<li><b>Dst Address</b> <i>(optional)</i> - Destination address inside the LAN.</li>
-		</ul>
-		<br />
+			<h4>Notes <a href="javascript:toggleVisibility('notes');"><span id="sesdiv_notes_showhide"><i class="icon-chevron-up"></i></span></a></h4>
+			<div class="section" id="sesdiv_notes" style="display:none">
+				<ul>
+					<li><b>Src</b> - Source LAN bridge.</li>
+					<li><b>Src Address</b> <i>(optional)</i> - Source address allowed. Ex: "1.2.3.4", "1.2.3.4 - 2.3.4.5", "1.2.3.0/24".</li>
+					<li><b>Dst</b> - Destination LAN bridge.</li>
+					<li><b>Dst Address</b> <i>(optional)</i> - Destination address inside the LAN.</li>
+				</ul>
+			</div>
+		</div>
 	</div>
 
 	<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 	<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 	&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
-
 
 	<script type="text/javascript">init();</script>
 </content>

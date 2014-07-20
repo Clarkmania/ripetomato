@@ -18,6 +18,8 @@
 	}
 </script>
 
+<h3>View Router Logs</h3>
+
 <div id="logging">
 	<div class="section">
 		<a href="logs/view.cgi?which=25&_http_id=<% nv(http_id) %>">View Last 25 Lines</a><br>

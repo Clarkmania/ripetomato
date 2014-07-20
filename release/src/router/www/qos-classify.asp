@@ -11,9 +11,9 @@ No part of this file may be used without permission.
 		.co5 { width: 240px; display: block; }
 		.x1b, .x2a, .x2b, .x2c, .x3a, .x3b, .x4a, .x4b, .x5a, .x5b, .x5c {
 			display: inline-block;
-			padding: 0 2px; 
+			padding: 0 2px;
 		}
-	</style> 
+	</style>
 	<script type="text/javascript" src="js/protocols.js"></script>
 	<script type="text/javascript">
 		//    <% nvram("at_update,tomatoanon_answer,qos_classnames,qos_enable,qos_orules"); %>
@@ -272,7 +272,7 @@ No part of this file may be used without permission.
 				{ type: 'text', maxlen: 32, vtop: 1, class:'input-medium' }
 			]);
 
-			this.headerSet(['<b>Match Rule</b>', '<b>Class</b>', '<b>Description</b>', '<b>#</b>', '<b>Controls</b>']);
+			this.headerSet(['Match Rule', 'Class', 'Description', '#', 'Controls']);
 
 			// addr_type < addr < proto < port_type < port < ipp2p < L7 < bcount < dscp < class < desc
 
@@ -360,7 +360,7 @@ No part of this file may be used without permission.
 
 	<script type="text/javascript">
 		if (nvram.qos_enable != '1') {
-			$('.content .ajaxwrap').prepend('<div class="note-disabled alert alert-info"><b>QoS is disabled.</b>&nbsp; <a class="ajaxload" href="qos-settings.asp">Enable &raquo;</a></div>');
+			$('.container .ajaxwrap').prepend('<div class="alert alert-info"><b>QoS is disabled.</b>&nbsp; <a class="ajaxload" href="qos-settings.asp">Enable &raquo;</a> <a class="close"><i class="icon-cancel"></i></a></div>');
 		}
 	</script>
 
@@ -369,11 +369,14 @@ No part of this file may be used without permission.
 		<input type="hidden" name="_service" value="qos-restart">
 		<input type="hidden" name="qos_orules">
 
-		<div class="section">
-			<table class="line-table" id="qg"></table>
+		<div class="box">
+			<div class="heading">QOS Classification Rules</div>
+			<div class="content">
+				<table class="line-table" id="qg"></table>
+			</div>
 		</div>
 
-		<br><script type="text/javascript">
+		<script type="text/javascript">
 			if (nvram.qos_enable == '1') {
 				show_notice1('<% notice("iptables"); %>');
 			}

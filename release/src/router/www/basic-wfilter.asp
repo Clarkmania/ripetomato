@@ -143,24 +143,24 @@ No part of this file may be used without permission.
 			}
 		</script>
 
-		<div class="section">
-			<label class="radio">
-				<input type="radio" name="f_type" id="_f_disable" value="disabled"> Disable filter</label>
-			&nbsp;
-			<label class="radio">
-				<input type="radio" name="f_type" id="_f_allow" value="allow"> Permit only the following clients</label>
-			&nbsp;
-			<label class="radio">
-				<input type="radio" name="f_type" id="_f_deny" value="deny"> Block the following clients</label>
-			<hr/>
-			<table id="sm-grid" class="line-table"></table>
+		<div class="box">
+			<div class="heading">Wireless Filter</div>
+			<div class="content">
+				<div class="radio c-radio"><label><input type="radio" name="f_type" id="_f_disable" value="disabled"><span class="icon-check"></span> Disable filter</label></div>
+				&nbsp;
+				<div class="radio c-radio"><label><input type="radio" name="f_type" id="_f_allow" value="allow"><span class="icon-check"></span> Permit only the following clients</label></div>
+				&nbsp;
+				<div class="radio c-radio"><label><input type="radio" name="f_type" id="_f_deny" value="deny"><span class="icon-check"></span> Block the following clients</label></div>
+
+				<br /><br />
+				<table id="sm-grid" class="line-table"></table>
+
+			</div>
 		</div>
 
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		<span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
-
 	</form>
 
 	<script type="text/javascript">earlyInit()</script>

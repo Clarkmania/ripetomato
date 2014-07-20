@@ -12,7 +12,7 @@ No part of this file may be used without permission.
 		#res-comp-grid {
 			width: 60%;
 		}
-		
+
 		input, select {
 			display: inline-block;
 			width: auto !important;
@@ -404,49 +404,52 @@ No part of this file may be used without permission.
 		<input type="hidden" name="_service" value="restrict-restart">
 		<input type="hidden" name="rruleNN" id="_rrule" value="">
 
-		<div class="section restriction">
-			<script type="text/javascript">
-				$('.section.restriction').prepend('<b>'+ 'ID: #' + rruleN.pad(2) + '</b><br>');
-				tm = [];
-				for (i = 0; i < 1440; i += 15) tm.push([i, timeString(i)]);
+		<div class="box">
+			<div class="heading">Access Restriction &nbsp; (<span class="restrict-id"></span>)</div>
+			<div class="content">
+				<div id="restriction"></div><br />
+				<script type="text/javascript">
+					$('.restrict-id').html('ID: #' + rruleN.pad(2));
+					tm = [];
+					for (i = 0; i < 1440; i += 15) tm.push([i, timeString(i)]);
 
-				createFieldTable('', [
-					{ title: 'Enabled', name: 'f_enabled', type: 'checkbox', value: rule[1] == '1' },
-					{ title: 'Description', name: 'f_desc', type: 'text', maxlen: 32, size: 35, value: rule[9] },
-					{ title: 'Schedule', multi: [
-						{ name: 'f_sched_allday', type: 'checkbox', suffix: ' All Day &nbsp; ', value: (rule[2] < 0) || (rule[3] < 0) },
-						{ name: 'f_sched_everyday', type: 'checkbox', suffix: ' Everyday', value: (rule[4] & 0x7F) == 0x7F } ] },
-					{ title: 'Time', indent: 2, multi: [
-						{ name: 'f_sched_begin', type: 'select', options: tm, value: (rule[2] < 0) ? 0 : rule[2], suffix: ' - ' },
-						{ name: 'f_sched_end', type: 'select', options: tm, value: (rule[3] < 0) ? 0 : rule[3] } ] },
-					{ title: 'Days', indent: 2, multi: [
-						{ name: 'f_sched_sun', type: 'checkbox', suffix: ' Sun &nbsp; ', value: (rule[4] & 1) },
-						{ name: 'f_sched_mon', type: 'checkbox', suffix: ' Mon &nbsp; ', value: (rule[4] & (1 << 1)) },
-						{ name: 'f_sched_tue', type: 'checkbox', suffix: ' Tue &nbsp; ', value: (rule[4] & (1 << 2)) },
-						{ name: 'f_sched_wed', type: 'checkbox', suffix: ' Wed &nbsp; ', value: (rule[4] & (1 << 3)) },
-						{ name: 'f_sched_thu', type: 'checkbox', suffix: ' Thu &nbsp; ', value: (rule[4] & (1 << 4)) },
-						{ name: 'f_sched_fri', type: 'checkbox', suffix: ' Fri &nbsp; ', value: (rule[4] & (1 << 5)) },
-						{ name: 'f_sched_sat', type: 'checkbox', suffix: ' Sat', value: (rule[4] & (1 << 6)) } ] },
-					{ title: 'Type', name: 'f_type', id: 'rt_norm', type: 'radio', suffix: ' Normal Access Restriction', value: (rule[5] != '~') },
-					{ title: '', name: 'f_type', id: 'rt_wl', type: 'radio', suffix: ' Disable Wireless', value: (rule[5] == '~') },
-					{ title: 'Applies To', name: 'f_comp_all', type: 'select', options: [[0,'All Computers / Devices'],[1,'The Following...'],[2,'All Except...']], value: 0 },
-					{ title: '&nbsp;', text: '<table class="line-table" id="res-comp-grid"></table>' },
-					{ title: 'Blocked Resources', name: 'f_block_all', type: 'checkbox', suffix: ' Block All Internet Access', value: 0 },
-					{ title: 'Port /<br>Application', indent: 2, text: '<table class="line-table" id="res-bp-grid"></table>' },
-					{ title: 'HTTP Request', indent: 2, name: 'f_block_http', type: 'textarea', value: rule[7] },
-					{ title: 'HTTP Requested Files', indent: 2, multi: [
-						{ name: 'f_activex', type: 'checkbox', suffix: ' ActiveX (ocx, cab) &nbsp;&nbsp;', value: (rule[8] & 1) },
-						{ name: 'f_flash', type: 'checkbox', suffix: ' Flash (swf) &nbsp;&nbsp;', value: (rule[8] & 2) },
-						{ name: 'f_java', type: 'checkbox', suffix: ' Java (class, jar) &nbsp;&nbsp;', value: (rule[8] & 4) } ] }
-					], '.section.restriction', 'fields-table');
-			</script>
+					$('#restriction').forms([
+						{ title: 'Enabled', name: 'f_enabled', type: 'checkbox', value: rule[1] == '1' },
+						{ title: 'Description', name: 'f_desc', type: 'text', maxlen: 32, size: 35, value: rule[9] },
+						{ title: 'Schedule', multi: [
+							{ name: 'f_sched_allday', type: 'checkbox', suffix: ' All Day &nbsp; ', value: (rule[2] < 0) || (rule[3] < 0) },
+							{ name: 'f_sched_everyday', type: 'checkbox', suffix: ' Everyday', value: (rule[4] & 0x7F) == 0x7F } ] },
+						{ title: 'Time', indent: 2, multi: [
+							{ name: 'f_sched_begin', type: 'select', options: tm, value: (rule[2] < 0) ? 0 : rule[2], suffix: ' - ' },
+							{ name: 'f_sched_end', type: 'select', options: tm, value: (rule[3] < 0) ? 0 : rule[3] } ] },
+						{ title: 'Days', indent: 2, multi: [
+							{ name: 'f_sched_sun', type: 'checkbox', suffix: ' Sun &nbsp; ', value: (rule[4] & 1) },
+							{ name: 'f_sched_mon', type: 'checkbox', suffix: ' Mon &nbsp; ', value: (rule[4] & (1 << 1)) },
+							{ name: 'f_sched_tue', type: 'checkbox', suffix: ' Tue &nbsp; ', value: (rule[4] & (1 << 2)) },
+							{ name: 'f_sched_wed', type: 'checkbox', suffix: ' Wed &nbsp; ', value: (rule[4] & (1 << 3)) },
+							{ name: 'f_sched_thu', type: 'checkbox', suffix: ' Thu &nbsp; ', value: (rule[4] & (1 << 4)) },
+							{ name: 'f_sched_fri', type: 'checkbox', suffix: ' Fri &nbsp; ', value: (rule[4] & (1 << 5)) },
+							{ name: 'f_sched_sat', type: 'checkbox', suffix: ' Sat', value: (rule[4] & (1 << 6)) } ] },
+						{ title: 'Type', name: 'f_type', id: 'rt_norm', type: 'radio', suffix: ' Normal Access Restriction', value: (rule[5] != '~') },
+						{ title: '', name: 'f_type', id: 'rt_wl', type: 'radio', suffix: ' Disable Wireless', value: (rule[5] == '~') },
+						{ title: 'Applies To', name: 'f_comp_all', type: 'select', options: [[0,'All Computers / Devices'],[1,'The Following...'],[2,'All Except...']], value: 0 },
+						{ title: '&nbsp;', text: '<table class="line-table col-sm-9" id="res-comp-grid"></table>' },
+						{ title: 'Blocked Resources', name: 'f_block_all', type: 'checkbox', suffix: ' Block All Internet Access', value: 0 },
+						{ title: 'Port / Application', indent: 2, text: '<table class="line-table col-sm-9" id="res-bp-grid"></table>' },
+						{ title: 'HTTP Request', indent: 2, name: 'f_block_http', type: 'textarea', value: rule[7] },
+						{ title: 'HTTP Requested Files', indent: 2, multi: [
+							{ name: 'f_activex', type: 'checkbox', suffix: ' ActiveX (ocx, cab) &nbsp;&nbsp;', value: (rule[8] & 1) },
+							{ name: 'f_flash', type: 'checkbox', suffix: ' Flash (swf) &nbsp;&nbsp;', value: (rule[8] & 2) },
+							{ name: 'f_java', type: 'checkbox', suffix: ' Java (class, jar) &nbsp;&nbsp;', value: (rule[8] & 4) } ] }
+					]);
+				</script>
+
+				<button type="button" value="Delete..." id="delete-button" onclick="delRULE();" class="btn btn-danger"><i class="icon-cancel"></i> Delete</button> &nbsp;
+				<button type="button" value="Save" id="save-button" onclick="save();" class="btn btn-primary">Save <i class="icon-check"></i></button>
+				<button type="button" value="Cancel" id="cancel-button" onclick="cancel();" class="btn">Cancel <i class="icon-disable"></i></button>
+				&nbsp; <span id="footer-msg"></span>
+			</div>
 		</div>
-
-		<button type="button" value="Delete..." id="delete-button" onclick="delRULE();" class="btn btn-danger"><i class="icon-cancel"></i> Delete</button> &nbsp;
-		<button type="button" value="Save" id="save-button" onclick="save();" class="btn btn-primary">Save <i class="icon-check"></i></button>
-		<button type="button" value="Cancel" id="cancel-button" onclick="cancel();" class="btn">Cancel <i class="icon-disable"></i></button>
-		&nbsp; <span id="footer-msg"></span>
-
 	</form>
 
 	<script type="text/javascript">init();</script>

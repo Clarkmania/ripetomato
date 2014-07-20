@@ -300,9 +300,9 @@ No part of this file may be used without permission.
 		}
 
 		function init() {
+
 			if (nvram.cstats_enable != '1') {
-				E('refresh-time').disabled = 1;
-				E('refresh-button').disabled = 1;
+				$('.cstats').before('<div class="alert info">IP Traffic monitoring disabled.</b> <a href="/#admin-iptraffic.asp">Enable &raquo;</a>');
 				return;
 			}
 
@@ -434,36 +434,33 @@ No part of this file may be used without permission.
 		<li><a class="ajaxload" href="bwm-ipt-monthly.asp"><i class="icon-month"></i> Monthly</a></li>
 	</ul>
 
-	<div id="cstats">
-		<div class="section">
-			<table id="grid" class="line-table"></table>
-
+	<div id="cstats" class="box">
+		<div class="heading">IP Traffic Details</div>
+		<div class="content">
+			<table id="grid" class="line-table"></table><br />
 			<div id="loading"><br><b>Loading... </b></div>
+
+			<h4><a href="javascript:toggleVisibility('options');">Options <span id="sesdivoptionsshowhide"><i class="icon-chevron-up"></i></span></a></h4>
+			<div class="section" id="sesdivoptions" style="display:none"></div>
 		</div>
-
-		<div class="pull-right refreshier">
-			<script type="text/javascript">$('.refreshier').html(genStdRefresh(1,1,'ref.toggle()'));</script>
-		</div>
-		<a href="admin-iptraffic.asp" class="btn btn-danger ajaxload">Configure <i class="icon-tools"></i></a>
-		<br /><br />
-
-		<h4><a href="javascript:toggleVisibility('options');">Options <span id="sesdivoptionsshowhide"><i class="icon-chevron-up"></i></span></a></h4>
-		<div class="section" id="sesdivoptions" style="display:none">
-			<script type="text/javascript">
-				var c;
-				c = [];
-				c.push({ title: 'Only these IPs', name: 'f_filter_ip', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
-				c.push({ title: 'Exclude these IPs', name: 'f_filter_ipe', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
-				c.push({ title: 'Scale', name: 'f_scale', type: 'select', options: [['0', 'KB'], ['1', 'MB'], ['2', 'GB']] });
-				c.push({ title: 'Ignore inactive hosts', name: 'f_onlyactive', type: 'checkbox' });
-				c.push({ title: 'Show hostnames', name: 'f_hostnames', type: 'checkbox' });
-				c.push({ title: 'Show shortcuts', name: 'f_shortcuts', type: 'checkbox' });
-				createFieldTable('',c, '#sesdivoptions');
-			</script>
-
-		</div>
-
 	</div>
+
+	<div class="pull-right refreshier">
+		<script type="text/javascript">$('.refreshier').html(genStdRefresh(1,1,'ref.toggle()'));</script>
+	</div>
+	<a href="admin-iptraffic.asp" class="btn btn-danger ajaxload">Configure <i class="icon-tools"></i></a>
+
+	<script type="text/javascript">
+		var c;
+		c = [];
+		c.push({ title: 'Only these IPs', name: 'f_filter_ip', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
+		c.push({ title: 'Exclude these IPs', name: 'f_filter_ipe', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
+		c.push({ title: 'Scale', name: 'f_scale', type: 'select', options: [['0', 'KB'], ['1', 'MB'], ['2', 'GB']] });
+		c.push({ title: 'Ignore inactive hosts', name: 'f_onlyactive', type: 'checkbox' });
+		c.push({ title: 'Show hostnames', name: 'f_hostnames', type: 'checkbox' });
+		c.push({ title: 'Show shortcuts', name: 'f_shortcuts', type: 'checkbox' });
+		$('#sesdivoptions').forms(c);
+	</script>
 
 	<script type="text/javascript">checkCstats(); init();</script>
 </content>

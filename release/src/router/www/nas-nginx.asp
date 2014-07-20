@@ -23,6 +23,9 @@ No part of this file may be used without permission.
 			if (changed) {
 				if (!confirm("Unsaved changes will be lost. Continue anyway?")) return;
 			}
+
+			$('.nginx-control').html('<div class="spinner spinner-small"></div>');
+
 			E('_' + service + '_button').disabled = true;
 			form.submitHidden('/service.cgi', {
 				_redirect: '/#nas-nginx.asp',
@@ -92,71 +95,70 @@ No part of this file may be used without permission.
 		function init()
 		{
 			verifyFields(null, 1);
-			$('p.status').html('NGINX is currently '+(!nginxup ? 'stopped' : 'running') +
-				'<br /><br /><button class="btn btn-primary" type="button" value="start-stop" onclick="toggle(\'nginxfp\', nginxup)" id="_nginxfp_button">' + (nginxup ? 'Stop' : 'Start') + ' Now</button>');
+			$('.nginx-status').html((!nginxup ? '<small style="color: red;">(Stopped)</small>' : '<small style="color: green;">(Running)</small>'));
+			$('.nginx-status').after('<a href="#" data-toggle="tooltip" class="pull-right nginx-control" title="' +
+			(nginxup ? 'Stop NGINX Server' : 'Start NGINX Server') + '" onclick="toggle(\'nginxfp\', nginxup); return false;" id="_nginxfp_button">' + (nginxup ? '<i class="icon-stop"></i>' : '<i class="icon-play"></i>') + '</a>');
 		}
 	</script>
 
-	<h3>Status</h3>
-	<p class="status"></p><br />
+	<form id="_fom" method="post" action="tomato.cgi">
+		<input type="hidden" name="_nextpage" value="/#nas-nginx.asp">
+		<input type="hidden" name="_service" value="enginex-restart">
+		<input type="hidden" name="_nextwait" value="10">
+		<input type="hidden" name="_reboot" value="0">
 
-	<h3>Web Server Settings</h3>
-	<div class="section" id="config-section">
-		<form id="_fom" method="post" action="tomato.cgi">
-			<input type="hidden" name="_nextpage" value="/#nas-nginx.asp">
-			<input type="hidden" name="_service" value="enginex-restart">
-			<input type="hidden" name="_nextwait" value="10">
-			<input type="hidden" name="_reboot" value="0">
+		<input type="hidden" name="nginx_enable">
+		<input type="hidden" name="nginx_php">
+		<input type="hidden" name="nginx_keepconf">
+		<input type="hidden" name="nginx_port">
+		<input type="hidden" name="nginx_fqdn">
+		<input type="hidden" name="nginx_docroot">
+		<input type="hidden" name="nginx_priority">
+		<input type="hidden" name="nginx_custom">
 
-			<input type="hidden" name="nginx_enable">
-			<input type="hidden" name="nginx_php">
-			<input type="hidden" name="nginx_keepconf">
-			<input type="hidden" name="nginx_port">
-			<input type="hidden" name="nginx_fqdn">
-			<input type="hidden" name="nginx_docroot">
-			<input type="hidden" name="nginx_priority">
-			<input type="hidden" name="nginx_custom">
+		<div class="box">
+			<div class="heading">NGINX Web Server <span class="nginx-status"></span></div>
+			<div class="content">
 
-			<script type="text/javascript">
-				createFieldTable('', [
-					{ title: 'Enable Server on Start', name: 'f_nginx_enable', type: 'checkbox', value: nvram.nginx_enable == '1'},
-					{ title: 'Enable PHP support', name: 'f_nginx_php', type: 'checkbox', value: (nvram.nginx_php != '0') },
-					{ title: 'Keep Config Files', name: 'f_nginx_keepconf', type: 'checkbox', value: (nvram.nginx_keepconf != '0') },
-					{ title: 'Web Server Port', name: 'f_nginx_port', type: 'text', maxlen: 5, size: 7, value: fixPort(nvram.nginx_port, 85), suffix: '<small> default: 85</small>' },
-					{ title: 'Web Server Name', name: 'f_nginx_fqdn', type: 'text', maxlen: 255, size: 20, value: nvram.nginx_fqdn },
-					{ title: 'Server Root Path', name: 'f_nginx_docroot', type: 'text', maxlen: 255, size: 40, value: nvram.nginx_docroot, suffix: '<span>&nbsp;/index.html / index.htm / index.php</span>' },
-					{ title: 'Server Priority', name: 'f_nginx_priority', type: 'text', maxlen: 8, size:3, value: nvram.nginx_priority, suffix:'<small> Max. Perfor: -20, Min.Perfor: 19, default: 10</small>' },
-					{ title: '<a href="http://wiki.nginx.org/Configuration" target="_new">NGINX</a><br>Custom configuration', name: 'f_nginx_custom', type: 'textarea', value: nvram.nginx_custom, style: 'width: 100%; height: 100px;' }
-					], '#config-section', 'fields-table');
-			</script>
-		</form>
-	</div>
-	<br>
+				<div id="config-section-div"></div><hr>
+				<h4>User Manual</h4>
+				<ul>
+					<li><b> Status Button:</b> Quick Start-Stop Service. Enable Web Server must be checked to modify settings.<br>
+					<li><b> Enable Server on Start:</b> To activate the Web Server tick and save this screen.<br>
+					<li><b> Keep Config Files:</b> Have you modified the configuration file manually? Tick this box and changes will be maintained.<br>
+					<li><b> Web Server Port:</b> The Port used by the Web Server to be accessed. Check conflict when the port is used by other services.<br>
+					<li><b> Web Server Name:</b> Name that will appear on top of your Internet Browser.<br>
+					<li><b> Document Root Path:</b> The path in your router where documents are stored.<br>
+					<li><b> Examples:<br></b>
+					/tmp/mnt/HDD/www/ as you can find in USB mount path.<br>
+					<li><b> NGINX Custom Configuration:</b> You can add other values to nginx.conf to suit your needs.</li>
+					<li>
+						<b> Server Priority:</b> Sets the service priority over other processes running on the router.<br>
+						The operating system kernel has priority -5.<br>
+						Never select a lower value than the kernel uses. Do not use the service test page to adjust the<br>
+						server performance, it's performance is lower than the definitive media where files will be <br>
+						located, i.e; USB Stick, Hard Drive or SSD.<br>
+					</li>
+				</ul>
+			</div>
+		</div>
 
-	<ul>
-	<h4>User Manual</h4>
-	<ul>
-		<li><b> Status Button:</b> Quick Start-Stop Service. Enable Web Server must be checked to modify settings.<br>
-		<li><b> Enable Server on Start:</b> To activate the Web Server tick and save this screen.<br>
-		<li><b> Keep Config Files:</b> Have you modified the configuration file manually? Tick this box and changes will be maintained.<br>
-		<li><b> Web Server Port:</b> The Port used by the Web Server to be accessed. Check conflict when the port is used by other services.<br>
-		<li><b> Web Server Name:</b> Name that will appear on top of your Internet Browser.<br>
-		<li><b> Document Root Path:</b> The path in your router where documents are stored.<br>
-		<li><b> Examples:<br></b>
-		/tmp/mnt/HDD/www/ as you can find in USB mount path.<br>
-		<li><b> NGINX Custom Configuration:</b> You can add other values to nginx.conf to suit your needs.<br>
-		</span>
-		<span style='color:blue'>
-			<li><b> Server Priority:</b> Sets the service priority over other processes running on the router.<br><br>
-			The operating system kernel has priority -5.<br>
-			Never select a lower value than the kernel uses. Do not use the service test page to adjust the<br>
-			server performance, it's performance is lower than the definitive media where files will be <br>
-			located, i.e; USB Stick, Hard Drive or SSD.<br>
-		</span>
-	</ul>
-	<br>
-
-	<!-- / / / -->
+		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
+		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
+		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
 	</form>
+
+	<script type="text/javascript">
+		$('#config-section-div').forms([
+			{ title: 'Enable Server on Start', name: 'f_nginx_enable', type: 'checkbox', value: nvram.nginx_enable == '1'},
+			{ title: 'Enable PHP support', name: 'f_nginx_php', type: 'checkbox', value: (nvram.nginx_php != '0') },
+			{ title: 'Keep Config Files', name: 'f_nginx_keepconf', type: 'checkbox', value: (nvram.nginx_keepconf != '0') },
+			{ title: 'Web Server Port', name: 'f_nginx_port', type: 'text', maxlen: 5, size: 7, value: fixPort(nvram.nginx_port, 85), suffix: '<small> default: 85</small>' },
+			{ title: 'Web Server Name', name: 'f_nginx_fqdn', type: 'text', maxlen: 255, size: 20, value: nvram.nginx_fqdn },
+			{ title: 'Server Root Path', name: 'f_nginx_docroot', type: 'text', maxlen: 255, size: 40, value: nvram.nginx_docroot, suffix: '<span>&nbsp;/index.html / index.htm / index.php</span>' },
+			{ title: 'Server Priority', name: 'f_nginx_priority', type: 'text', maxlen: 8, size:3, value: nvram.nginx_priority, suffix:'<small> Max. Perfor: -20, Min.Perfor: 19, default: 10</small>' },
+			{ title: '<a href="http://wiki.nginx.org/Configuration" target="_new">NGINX</a><br>Custom configuration', name: 'f_nginx_custom', type: 'textarea', value: nvram.nginx_custom, style: 'width: 100%; height: 100px;' }
+		]);
+	</script>
 	<script type='text/javascript'>init(); verifyFields(null, 1);</script>
 </content>

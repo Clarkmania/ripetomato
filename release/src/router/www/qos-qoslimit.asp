@@ -3,8 +3,8 @@ Tomato GUI
 Copyright (C) 2006-2008 Jonathan Zarate
 http://www.polarcloud.com/tomato/
 
-Copyright (C) 2011 Deon 'PrinceAMD' Thomas 
-rate limit & connection limit from Conanxu, 
+Copyright (C) 2011 Deon 'PrinceAMD' Thomas
+rate limit & connection limit from Conanxu,
 adapted by Victek, Shibby, PrinceAMD, Phykris
 
 For use with Tomato Firmware only.
@@ -12,7 +12,7 @@ No part of this file may be used without permission.
 --><title>Bandwidth Limiter</title>
 <content>
 	<script type="text/javascript">
-		// <% nvram("qos_enable,at_update,tomatoanon_answer,new_qoslimit_enable,qos_ibw,qos_obw,new_qoslimit_rules,lan_ipaddr,lan_netmask,qosl_enable,qosl_dlr,qosl_dlc,qosl_ulr,qosl_ulc,qosl_udp,qosl_tcp,limit_br1_enable,limit_br1_dlc,limit_br1_dlr,limit_br1_ulc,limit_br1_ulr,limit_br1_prio,limit_br2_enable,limit_br2_dlc,limit_br2_dlr,limit_br2_ulc,limit_br2_ulr,limit_br2_prio,limit_br3_enable,limit_br3_dlc,limit_br3_dlr,limit_br3_ulc,limit_br3_ulr,limit_br3_prio,limit_br4_enable,limit_br4_dlc,limit_br4_dlr,limit_br4_ulc,limit_br4_ulr,limit_br4_prio,limit_br5_enable,limit_br5_dlc,limit_br5_dlr,limit_br5_ulc,limit_br5_ulr,limit_br5_prio,limit_br6_enable,limit_br6_dlc,limit_br6_dlr,limit_br6_ulc,limit_br6_ulr,limit_br6_prio,limit_br7_enable,limit_br7_dlc,limit_br7_dlr,limit_br7_ulc,limit_br7_ulr,limit_br7_prio"); %>
+		// <% nvram("qos_enable,at_update,tomatoanon_answer,new_qoslimit_enable,qos_ibw,qos_obw,new_qoslimit_rules,lan_ipaddr,lan_netmask,qosl_enable,qosl_dlr,qosl_dlc,qosl_ulr,qosl_ulc,qosl_udp,qosl_tcp,limit_br1_enable,limit_br1_dlc,limit_br1_dlr,limit_br1_ulc,limit_br1_ulr,limit_br1_prio,limit_br2_enable,limit_br2_dlc,limi t_br2_dlr,limit_br2_ulc,limit_br2_ulr,limit_br2_prio,limit_br3_enable,limit_br3_dlc,limit_br3_dlr,limit_br3_ulc,limit_br3_ulr,limit_br3_prio,limit_br4_enable,limit_br4_dlc,limit_br4_dlr,limit_br4_ulc,limit_br4_ulr,limit_br4_prio,limit_br5_enable,limit_br5_dlc,limit_br5_dlr,limit_br5_ulc,limit_br5_ulr,limit_br5_prio,limit_br6_enable,l imit_br6_dlc,limit_br6_dlr,limit_br6_ulc,limit_br6_ulr,limit_br6_prio,limit_br7_enable,limit_br7_dlc,limit_br7_dlr,limit_br7_ulc,limit_br7_ulr,limit_br7_prio"); %>
 
 		var class_prio = [['0','Highest'],['1','High'],['2','Normal'],['3','Low'],['4','Lowest']];
 		var class_tcp = [['0','nolimit']];
@@ -33,7 +33,7 @@ No part of this file may be used without permission.
 				{ type: 'select', options: class_prio },
 				{ type: 'select', options: class_tcp },
 				{ type: 'select', options: class_udp }]);
-			this.headerSet(['<b>IP</b> | <b>IP Range</b> | <b>MAC Address</b>', '<b>DLRate</b>', '<b>DLCeil</b>', '<b>ULRate</b>', '<b>ULCeil</b>', '<b>Priority</b>', '<b>TCP Limit</b>', '<b>UDP Limit</b>']);
+			this.headerSet(['IP | IP Range | MAC Address', 'DLRate', 'DLCeil', 'ULRate', 'ULCeil', 'Priority', 'TCP Limit', 'UDP Limit']);
 			var qoslimitrules = nvram.new_qoslimit_rules.split('>');
 			for (var i = 0; i < qoslimitrules.length; ++i) {
 				var t = qoslimitrules[i].split('<');
@@ -261,7 +261,7 @@ No part of this file may be used without permission.
 			var qoslimitrules = '';
 			var i;
 
-			if (data.length != 0) qoslimitrules += data[0].join('<'); 	
+			if (data.length != 0) qoslimitrules += data[0].join('<');
 			for (i = 1; i < data.length; ++i) {
 				qoslimitrules += '>' + data[i].join('<');
 			}
@@ -272,10 +272,6 @@ No part of this file may be used without permission.
 			fom.limit_br1_enable.value = E('_f_limit_br1_enable').checked ? 1 : 0;
 			fom.limit_br2_enable.value = E('_f_limit_br2_enable').checked ? 1 : 0;
 			fom.limit_br3_enable.value = E('_f_limit_br3_enable').checked ? 1 : 0;
-			fom.limit_br4_enable.value = E('_f_limit_br4_enable').checked ? 1 : 0;
-			fom.limit_br5_enable.value = E('_f_limit_br5_enable').checked ? 1 : 0;
-			fom.limit_br6_enable.value = E('_f_limit_br6_enable').checked ? 1 : 0;
-			fom.limit_br7_enable.value = E('_f_limit_br7_enable').checked ? 1 : 0;
 			fom.new_qoslimit_rules.value = qoslimitrules;
 			form.submit(fom, 1);
 		}
@@ -289,7 +285,7 @@ No part of this file may be used without permission.
 
 	<script type="text/javascript">
 		if (nvram.qos_enable != '1') {
-			$('.content .ajaxwrap').prepend('<div class="alert alert-warning"><b>QoS is disabled.</b>&nbsp; <a class="ajaxload" href="#qos-settings.asp">Enable &raquo;</a></div>');
+			$('.container .ajaxwrap').prepend('<div class="alert alert-warning"><b>QoS is disabled.</b>&nbsp; <a class="ajaxload" href="#qos-settings.asp">Enable &raquo;</a> <a class="close"><i class="icon-cancel"></i></a></div>');
 		}
 	</script>
 
@@ -309,38 +305,38 @@ No part of this file may be used without permission.
 		<input type="hidden" name="limit_br6_enable">
 		<input type="hidden" name="limit_br7_enable">
 
-		<div id="qoslimit">
-			<h3>Bandwidth Limiter for LAN (br0)</h3>
-			<div class="section">
-				<div class="br0-set"></div>
+		<div class="box" data-box="qos-lan-limit">
+			<div class="heading">Bandwidth Limiter for LAN (br0)</div>
+			<div class="content">
+				<div class="br0-set"></div><hr>
 				<script type="text/javascript">
-					createFieldTable('', [
+					$('.br0-set').forms([
 						{ title: 'Enable Limiter', name: 'f_new_qoslimit_enable', type: 'checkbox', value: nvram.new_qoslimit_enable != '0' },
 						{ title: 'Max Available Download <br><small>(same as used in QoS)</small>', indent: 2, name: 'qos_ibw', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.qos_ibw },
 						{ title: 'Max Available Upload <br><small>(same as used in QoS)</small>', indent: 2, name: 'qos_obw', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.qos_obw }
-						], '.section .br0-set', 'fields-table');
+					]);
 				</script>
-				<br>
-				<table class="line-table" id="qosg-grid"></table>
-				<div>
-					<ul>
-						<li><b>IP Address / IP Range:</b>
-						<li>Example: 192.168.1.5 for one IP.
-						<li>Example: 192.168.1.4-7 for IP 192.168.1.4 to 192.168.1.7
-						<li>Example: 4-7 for IP Range .4 to .7
-						<li><b>The IP Range devices will share the Bandwidth</b>
-						<li><b>MAC Address</b> Example: 00:2E:3C:6A:22:D8
-					</ul>
-					<br />
-				</div>
+
+				<table class="line-table" id="qosg-grid"></table><br /><hr>
+
+				<h4>Notes</h4>
+				<ul>
+					<li><b>IP Address / IP Range:</b>
+					<li>Example: 192.168.1.5 for one IP.
+					<li>Example: 192.168.1.4-7 for IP 192.168.1.4 to 192.168.1.7
+					<li>Example: 4-7 for IP Range .4 to .7
+					<li><b>The IP Range devices will share the Bandwidth</b>
+					<li><b>MAC Address</b> Example: 00:2E:3C:6A:22:D8
+				</ul>
 			</div>
 		</div>
 
-		<div id="qoslimitbr0">
-			<h4>Default Class for unlisted MAC / IP's in LAN (br0)</h4>
-			<div class="section unlistedmac">
+		<div class="box" id="qoslimitbr0" data-box="qos-br0-limit">
+			<div class="heading">Default Class for unlisted MAC / IP's in LAN (br0)</div>
+			<div class="content">
+				<div id="unlistedmac"></div><hr>
 				<script type="text/javascript">
-					createFieldTable('', [
+					$('#unlistedmac').forms([
 						{ title: 'Enable', name: 'f_qosl_enable', type: 'checkbox', value: nvram.qosl_enable == '1'},
 						{ title: 'Download rate', indent: 2, name: 'qosl_dlr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.qosl_dlr },
 						{ title: 'Download ceil', indent: 2, name: 'qosl_dlc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.qosl_dlc },
@@ -367,24 +363,22 @@ No part of this file may be used without permission.
 								['20', '20/s'],
 								['50', '50/s'],
 								['100', '100/s']], value: nvram.qosl_udp }
-						], '.section.unlistedmac', 'fields-table');
+					]);
 				</script>
-				<div>
-					<ul>
-						<li>Default Class - IP / MAC's non included in the list will take the Default Rate/Ceiling setting</li>
-						<li>The bandwitdh will be shared by all unlisted hosts in br0</li>
-					</ul>
-					<br />
-				</div>
+
+				<ul>
+					<li>Default Class - IP / MAC's non included in the list will take the Default Rate/Ceiling setting</li>
+					<li>The bandwitdh will be shared by all unlisted hosts in br0</li>
+				</ul>
 			</div>
 		</div>
 
-		<div id="qoslimitbr1">
-			<h4>Default Class for LAN1 (br1)</h4>
-			<div class="section">
-				<div class="table-set1"></div>
+		<div class="box" id="qoslimitbr1" data-box="qos-limit-br1">
+			<div class="heading">Default Class for LAN1 (br1)</div>
+			<div class="content">
+				<div class="table-set1"></div><hr>
 				<script type="text/javascript">
-					createFieldTable('', [
+					$('.table-set1').forms([
 						{ title: 'Enable', name: 'f_limit_br1_enable', type: 'checkbox', value: nvram.limit_br1_enable == '1'},
 						{ title: 'Download rate', indent: 2, name: 'limit_br1_dlr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br1_dlr },
 						{ title: 'Download ceil', indent: 2, name: 'limit_br1_dlc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br1_dlc },
@@ -392,23 +386,21 @@ No part of this file may be used without permission.
 						{ title: 'Upload ceil', indent: 2, name: 'limit_br1_ulc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br1_ulc },
 						{ title: 'Priority', indent: 2, name: 'limit_br1_prio', type: 'select', options:
 							[['0','Highest'],['1','High'],['2','Normal'],['3','Low'],['4','Lowest']], value: nvram.limit_br1_prio }
-						], '.table-set1', 'fields-table');
+					]);
 				</script>
-				<div>
-					<ul>
-						<li>The bandwitdh will be shared by all hosts in br1.</li>
-					</ul>
-					<br />
-				</div>
+
+				<ul>
+					<li>The bandwitdh will be shared by all hosts in br1.</li>
+				</ul>
 			</div>
 		</div>
 
-		<div id="qoslimitbr2">
-			<h4>Default Class for LAN2 (br2)</h4>
-			<div class="section">
-				<div class="table-set2"></div>
+		<div class="box" id="qoslimitbr2" data-box="qos-limit-br2">
+			<div class="heading">Default Class for LAN2 (br2)</div>
+			<div class="content">
+				<div class="table-set2"></div><hr>
 				<script type="text/javascript">
-					createFieldTable('', [
+					$('.table-set2').forms([
 						{ title: 'Enable', name: 'f_limit_br2_enable', type: 'checkbox', value: nvram.limit_br2_enable == '1'},
 						{ title: 'Download rate', indent: 2, name: 'limit_br2_dlr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br2_dlr },
 						{ title: 'Download ceil', indent: 2, name: 'limit_br2_dlc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br2_dlc },
@@ -416,23 +408,21 @@ No part of this file may be used without permission.
 						{ title: 'Upload ceil', indent: 2, name: 'limit_br2_ulc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br2_ulc },
 						{ title: 'Priority', indent: 2, name: 'limit_br2_prio', type: 'select', options:
 							[['0','Highest'],['1','High'],['2','Normal'],['3','Low'],['4','Lowest']], value: nvram.limit_br2_prio }
-						], '.table-set2', 'fields-table');
+					]);
 				</script>
-				<div>
-					<ul>
-						<li>The bandwitdh will be shared by all hosts in br2.</li>
-					</ul>
-					<br />
-				</div>
+
+				<ul>
+					<li>The bandwitdh will be shared by all hosts in br2.</li>
+				</ul>
 			</div>
 		</div>
 
-		<div id="qoslimitbr3">
-			<h4>Default Class for LAN3 (br3)</h4>
-			<div class="section">
-				<div class="table-set3"></div>
+		<div class="box" id="qoslimitbr3" data-box="qos-limit-br3">
+			<div class="heading">Default Class for LAN3 (br3)</div>
+			<div class="content">
+				<div class="table-set3"></div><hr>
 				<script type="text/javascript">
-					createFieldTable('', [
+					$('.table-set3').forms([
 						{ title: 'Enable', name: 'f_limit_br3_enable', type: 'checkbox', value: nvram.limit_br3_enable == '1'},
 						{ title: 'Download rate', indent: 2, name: 'limit_br3_dlr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br3_dlr },
 						{ title: 'Download ceil', indent: 2, name: 'limit_br3_dlc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br3_dlc },
@@ -440,113 +430,103 @@ No part of this file may be used without permission.
 						{ title: 'Upload ceil', indent: 2, name: 'limit_br3_ulc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br3_ulc },
 						{ title: 'Priority', indent: 2, name: 'limit_br3_prio', type: 'select', options:
 							[['0','Highest'],['1','High'],['2','Normal'],['3','Low'],['4','Lowest']], value: nvram.limit_br3_prio }
-						], '.table-set3', 'fields-table');
+					]);
 				</script>
-				<div>
-					<ul>
-						<li>The bandwitdh will be shared by all hosts in br3.</li>
-					</ul>
-					<br />
-				</div>
+
+				<ul>
+					<li>The bandwitdh will be shared by all hosts in br3.</li>
+				</ul>
 			</div>
 		</div>
 
-		<div id="qoslimitbr4">
-			<h4>Default Class for LAN4 (br4)</h4>
-			<div class="section">
-				<div class="table-set4"></div>
+		<div class="box" id="qoslimitbr4" data-box="qos-limit-br4">
+			<div class="heading">Default Class for LAN4 (br4)</div>
+			<div class="content">
+				<div class="table-set4"></div><hr>
 				<script type="text/javascript">
-					createFieldTable('', [
+					$('.table-set4').forms([
 						{ title: 'Enable', name: 'f_limit_br4_enable', type: 'checkbox', value: nvram.limit_br4_enable == '1'},
 						{ title: 'Download rate', indent: 2, name: 'limit_br4_dlr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br4_dlr },
 						{ title: 'Download ceil', indent: 2, name: 'limit_br4_dlc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br4_dlc },
 						{ title: 'Upload rate', indent: 2, name: 'limit_br4_ulr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br4_ulr },
 						{ title: 'Upload ceil', indent: 2, name: 'limit_br4_ulc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br4_ulc },
 						{ title: 'Priority', indent: 2, name: 'limit_br4_prio', type: 'select', options:
-							[['0','Highest'],['1','High'],['2','Normal'],['4','Low'],['4','Lowest']], value: nvram.limit_br4_prio }
-						], '.table-set4', 'fields-table');
+							[['0','Highest'],['1','High'],['2','Normal'],['3','Low'],['4','Lowest']], value: nvram.limit_br4_prio }
+					]);
 				</script>
-				<div>
-					<ul>
-						<li>The bandwitdh will be shared by all hosts in br4.</li>
-					</ul>
-					<br />
-				</div>
+
+				<ul>
+					<li>The bandwitdh will be shared by all hosts in br4.</li>
+				</ul>
 			</div>
 		</div>
 
-		<div id="qoslimitbr5">
-			<h4>Default Class for LAN5 (br5)</h4>
-			<div class="section">
-				<div class="table-set5"></div>
+		<div class="box" id="qoslimitbr5" data-box="qos-limit-br5">
+			<div class="heading">Default Class for LAN5 (br5)</div>
+			<div class="content">
+				<div class="table-set5"></div><hr>
 				<script type="text/javascript">
-					createFieldTable('', [
+					$('.table-set5').forms([
 						{ title: 'Enable', name: 'f_limit_br5_enable', type: 'checkbox', value: nvram.limit_br5_enable == '1'},
 						{ title: 'Download rate', indent: 2, name: 'limit_br5_dlr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br5_dlr },
 						{ title: 'Download ceil', indent: 2, name: 'limit_br5_dlc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br5_dlc },
 						{ title: 'Upload rate', indent: 2, name: 'limit_br5_ulr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br5_ulr },
 						{ title: 'Upload ceil', indent: 2, name: 'limit_br5_ulc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br5_ulc },
 						{ title: 'Priority', indent: 2, name: 'limit_br5_prio', type: 'select', options:
-							[['0','Highest'],['1','High'],['2','Normal'],['5','Low'],['4','Lowest']], value: nvram.limit_br5_prio }
-						], '.table-set5', 'fields-table');
+							[['0','Highest'],['1','High'],['2','Normal'],['3','Low'],['4','Lowest']], value: nvram.limit_br5_prio }
+					]);
 				</script>
-				<div>
-					<ul>
-						<li>The bandwitdh will be shared by all hosts in br5.</li>
-					</ul>
-					<br />
-				</div>
+
+				<ul>
+					<li>The bandwitdh will be shared by all hosts in br5.</li>
+				</ul>
 			</div>
 		</div>
 
-		<div id="qoslimitbr6">
-			<h4>Default Class for LAN6 (br6)</h4>
-			<div class="section">
-				<div class="table-set6"></div>
+		<div class="box" id="qoslimitbr6" data-box="qos-limit-br6">
+			<div class="heading">Default Class for LAN6 (br6)</div>
+			<div class="content">
+				<div class="table-set6"></div><hr>
 				<script type="text/javascript">
-					createFieldTable('', [
+					$('.table-set6').forms([
 						{ title: 'Enable', name: 'f_limit_br6_enable', type: 'checkbox', value: nvram.limit_br6_enable == '1'},
 						{ title: 'Download rate', indent: 2, name: 'limit_br6_dlr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br6_dlr },
 						{ title: 'Download ceil', indent: 2, name: 'limit_br6_dlc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br6_dlc },
 						{ title: 'Upload rate', indent: 2, name: 'limit_br6_ulr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br6_ulr },
 						{ title: 'Upload ceil', indent: 2, name: 'limit_br6_ulc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br6_ulc },
 						{ title: 'Priority', indent: 2, name: 'limit_br6_prio', type: 'select', options:
-							[['0','Highest'],['1','High'],['2','Normal'],['6','Low'],['4','Lowest']], value: nvram.limit_br6_prio }
-						], '.table-set6', 'fields-table');
+							[['0','Highest'],['1','High'],['2','Normal'],['3','Low'],['4','Lowest']], value: nvram.limit_br6_prio }
+					]);
 				</script>
-				<div>
-					<ul>
-						<li>The bandwitdh will be shared by all hosts in br6.</li>
-					</ul>
-					<br />
-				</div>
+
+				<ul>
+					<li>The bandwitdh will be shared by all hosts in br6.</li>
+				</ul>
 			</div>
 		</div>
 
-		<div id="qoslimitbr7">
-			<h4>Default Class for LAN7 (br7)</h4>
-			<div class="section">
-				<div class="table-set7"></div>
+		<div class="box" id="qoslimitbr7" data-box="qos-limit-br7">
+			<div class="heading">Default Class for LAN7 (br7)</div>
+			<div class="content">
+				<div class="table-set7"></div><hr>
 				<script type="text/javascript">
-					createFieldTable('', [
+					$('.table-set7').forms([
 						{ title: 'Enable', name: 'f_limit_br7_enable', type: 'checkbox', value: nvram.limit_br7_enable == '1'},
 						{ title: 'Download rate', indent: 2, name: 'limit_br7_dlr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br7_dlr },
 						{ title: 'Download ceil', indent: 2, name: 'limit_br7_dlc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br7_dlc },
 						{ title: 'Upload rate', indent: 2, name: 'limit_br7_ulr', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br7_ulr },
 						{ title: 'Upload ceil', indent: 2, name: 'limit_br7_ulc', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s</small>', value: nvram.limit_br7_ulc },
 						{ title: 'Priority', indent: 2, name: 'limit_br7_prio', type: 'select', options:
-							[['0','Highest'],['1','High'],['2','Normal'],['7','Low'],['4','Lowest']], value: nvram.limit_br7_prio }
-						], '.table-set7', 'fields-table');
+							[['0','Highest'],['1','High'],['2','Normal'],['3','Low'],['4','Lowest']], value: nvram.limit_br7_prio }
+					]);
 				</script>
-				<div>
-					<ul>
-						<li>The bandwitdh will be shared by all hosts in br7.</li>
-					</ul>
-					<br />
-				</div>
+
+				<ul>
+					<li>The bandwitdh will be shared by all hosts in br7.</li>
+				</ul>
 			</div>
 		</div>
-		<br />
+
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>

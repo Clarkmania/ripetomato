@@ -172,82 +172,85 @@ No part of this file may be used without permission.
 		}
 	</script>
 
-	<div class="section" id="config-section">
-		<form id="_fom" method="post" action="tomato.cgi">
-			<input type="hidden" name="_nextpage" value="/#admin-bwm.asp">
-			<input type="hidden" name="_service" value="rstats-restart">
-			<input type="hidden" name="rstats_enable">
-			<input type="hidden" name="rstats_path">
-			<input type="hidden" name="rstats_sshut">
-			<input type="hidden" name="rstats_bak">
+	<div class="box" id="config-section">
+		<div class="heading">Bandwidth Monitoring Settings</div>
+		<div class="content">
+			<form id="_fom" method="post" action="tomato.cgi" style="margin: 0;">
+				<input type="hidden" name="_nextpage" value="/#admin-bwm.asp">
+				<input type="hidden" name="_service" value="rstats-restart">
+				<input type="hidden" name="rstats_enable">
+				<input type="hidden" name="rstats_path">
+				<input type="hidden" name="rstats_sshut">
+				<input type="hidden" name="rstats_bak">
 
-			<script type="text/javascript">
-				switch (nvram.rstats_path) {
-					case '':
-					case '*nvram':
-					case '/jffs/':
-					case '/cifs1/':
-					case '/cifs2/':
-						loc = nvram.rstats_path;
-						break;
-					default:
-						loc = '*user';
-						break;
-				}
-				createFieldTable('', [
-					{ title: 'Enable', name: 'f_rstats_enable', type: 'checkbox', value: nvram.rstats_enable == '1' },
-					{ title: 'Save History Location', multi: [
-						{ name: 'f_loc', type: 'select', options: [['','RAM (Temporary)'],['*nvram','NVRAM'],
-							/* JFFS2-BEGIN */
-							['/jffs/','JFFS2'],
-							/* JFFS2-END */
-							/* CIFS-BEGIN */
-							['/cifs1/','CIFS 1'],['/cifs2/','CIFS 2'],
-							/* CIFS-END */
-							['*user','Custom Path']], value: loc },
-						{ name: 'f_user', type: 'text', maxlen: 48, size: 50, value: nvram.rstats_path }
-					] },
-					{ title: 'Save Frequency', indent: 2, name: 'rstats_stime', type: 'select', value: nvram.rstats_stime, options: [
-						[1,'Every Hour'],[2,'Every 2 Hours'],[3,'Every 3 Hours'],[4,'Every 4 Hours'],[5,'Every 5 Hours'],[6,'Every 6 Hours'],
-						[9,'Every 9 Hours'],[12,'Every 12 Hours'],[24,'Every 24 Hours'],[48,'Every 2 Days'],[72,'Every 3 Days'],[96,'Every 4 Days'],
-						[120,'Every 5 Days'],[144,'Every 6 Days'],[168,'Every Week']] },
-					{ title: 'Save On Shutdown', indent: 2, name: 'f_sshut', type: 'checkbox', value: nvram.rstats_sshut == '1' },
-					{ title: 'Create New File<br><small>(Reset Data)</small>', indent: 2, name: 'f_new', type: 'checkbox', value: 0,
-						suffix: ' &nbsp; <b id="newmsg" style="visibility:hidden"><small>(note: enable if this is a new file)</small></b>' },
-					{ title: 'Create Backups', indent: 2, name: 'f_bak', type: 'checkbox', value: nvram.rstats_bak == '1' },
-					{ title: 'First Day Of The Month', name: 'rstats_offset', type: 'text', value: nvram.rstats_offset, maxlen: 2, size: 4 },
-					{ title: 'Excluded Interfaces', name: 'rstats_exclude', type: 'text', value: nvram.rstats_exclude, maxlen: 64, size: 50, suffix: '&nbsp;<br><small>(comma separated list)</small>' }
-				], 'form:first', 'fields-table');
-			</script>
-		</form>
-	</div>
-	
-	<hr>
-	
-	<h3>Backup</h3>
-	<div class="section" id="backup-section">
-		<div class="input-append">
-			<script type="text/javascript">
-				$('#backup-section .input-append').prepend('<input size="40" type="text" maxlength="64" id="backup-name" name="backup_name" onchange="backupNameChanged()" value="tomato_rstats_' + nvram.et0macaddr.replace(/:/g, '').toLowerCase() + '">');
-			</script>
-			<button name="f_backup_button" id="backup-button" onclick="backupButton(); return false;" value="Backup" class="btn">Backup <i class="icon-download"></i></button>
+				<script type="text/javascript">
+					switch (nvram.rstats_path) {
+						case '':
+						case '*nvram':
+						case '/jffs/':
+						case '/cifs1/':
+						case '/cifs2/':
+							loc = nvram.rstats_path;
+							break;
+						default:
+							loc = '*user';
+							break;
+					}
+					$('#config-section form:first').forms([
+						{ title: 'Enable', name: 'f_rstats_enable', type: 'checkbox', value: nvram.rstats_enable == '1' },
+						{ title: 'Save History Location', multi: [
+							{ name: 'f_loc', type: 'select', options: [['','RAM (Temporary)'],['*nvram','NVRAM'],
+								/* JFFS2-BEGIN */
+								['/jffs/','JFFS2'],
+								/* JFFS2-END */
+								/* CIFS-BEGIN */
+								['/cifs1/','CIFS 1'],['/cifs2/','CIFS 2'],
+								/* CIFS-END */
+								['*user','Custom Path']], value: loc },
+							{ name: 'f_user', type: 'text', maxlen: 48, size: 50, value: nvram.rstats_path }
+						] },
+						{ title: 'Save Frequency', indent: 2, name: 'rstats_stime', type: 'select', value: nvram.rstats_stime, options: [
+							[1,'Every Hour'],[2,'Every 2 Hours'],[3,'Every 3 Hours'],[4,'Every 4 Hours'],[5,'Every 5 Hours'],[6,'Every 6 Hours'],
+							[9,'Every 9 Hours'],[12,'Every 12 Hours'],[24,'Every 24 Hours'],[48,'Every 2 Days'],[72,'Every 3 Days'],[96,'Every 4 Days'],
+							[120,'Every 5 Days'],[144,'Every 6 Days'],[168,'Every Week']] },
+						{ title: 'Save On Shutdown', indent: 2, name: 'f_sshut', type: 'checkbox', value: nvram.rstats_sshut == '1' },
+						{ title: 'Create New File<br><small>(Reset Data)</small>', indent: 2, name: 'f_new', type: 'checkbox', value: 0,
+							suffix: ' &nbsp;<small id="newmsg" style="visibility:hidden">Enable if this is a new file</small>' },
+						{ title: 'Create Backups', indent: 2, name: 'f_bak', type: 'checkbox', value: nvram.rstats_bak == '1' },
+						{ title: 'First Day Of The Month', name: 'rstats_offset', type: 'text', value: nvram.rstats_offset, maxlen: 2, size: 4 },
+						{ title: 'Excluded Interfaces', name: 'rstats_exclude', type: 'text', value: nvram.rstats_exclude, maxlen: 64, size: 50, suffix: '<small>(comma separated list)</small>' }
+						], { align: 'left' });
+				</script>
+			</form><hr><br />
+
+			<div class="col-sm-12">
+				<h4>Backup</h4>
+				<div class="section" id="backup-section">
+					<form>
+						<div class="input-append">
+							<script type="text/javascript">
+								$('#backup-section .input-append').prepend('<input size="40" type="text" maxlength="64" id="backup-name" name="backup_name" onchange="backupNameChanged()" value="tomato_rstats_' + nvram.et0macaddr.replace(/:/g, '').toLowerCase() + '">');
+							</script>
+							<button name="f_backup_button" id="backup-button" onclick="backupButton(); return false;" value="Backup" class="btn">Backup <i class="icon-download"></i></button>
+						</div>
+					</form>
+				</div>
+
+				<h4>Restore</h4>
+				<div class="section" id="restore-section">
+					<form id="restore-form" method="post" action="bwm/restore.cgi?_http_id=<% nv(http_id); %>" encType="multipart/form-data">
+						<input class="uploadfile" type="file" size="40" id="restore-name" name="restore_name" accept="application/x-gzip">
+						<button name="f_restore_button" id="restore-button" value="Restore" onclick="restoreButton(); return false;" class="btn">Restore <i class="icon-upload"></i></button>
+						<br>
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
 
-	<h3>Restore</h3>
-	<div class="section" id="restore-section">
-		<form id="restore-form" method="post" action="bwm/restore.cgi?_http_id=<% nv(http_id); %>" encType="multipart/form-data">
-			<input class="uploadfile" type="file" size="40" id="restore-name" name="restore_name" accept="application/x-gzip">
-			<button name="f_restore_button" id="restore-button" value="Restore" onclick="restoreButton(); return false;" class="btn">Restore <i class="icon-upload"></i></button>
-			<br>
-		</form>
-	</div>
-
-	<br /><br />
 	<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 	<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 	&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
-
 
 	<script type="text/javascript">init(); verifyFields(null, 1);</script>
 </content>

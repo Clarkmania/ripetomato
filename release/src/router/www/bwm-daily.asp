@@ -103,7 +103,7 @@ No part of this file may be used without permission.
 		function init() {
 			var s;
 
-			if (nvram.rstats_enable != '1') return;
+			if (nvram.rstats_enable != '1') $('#rstats').before('<div class="alert">Bandwidth monitoring disabled.</b> <a href="/#admin-bwm.asp">Enable &raquo;</a></div>'); return;
 			checkRstats();
 
 			if ((s = cookie.get('daily')) != null) {
@@ -126,31 +126,31 @@ No part of this file may be used without permission.
 		<li><a class="ajaxload" href="bwm-monthly.asp"><i class="icon-month"></i> Monthly</a></li>
 	</ul>
 
-	<div id="rstats">
-		<div id="bwm-daily-grid" class="span7" style="float: left;"></div>
-		<div class="span2" style="float: left; margin-left: 20px;">
-			<table class="data-table">
-				<thead>
-					<tr><th colspan=2 style="text-align:center">Last 30 Days<br><span style="font-weight:normal" id="last-dates"></span></th></tr>
-				</thead>
-				<tbody>
-					<tr><td>Down</td><td id="last-dn">-</td></tr>
-					<tr><td>Up</td><td id="last-up">-</td></tr>
-					<tr><td>Total</td><td id="last-total">-</td></tr>
-				</tbody>
-			</table>
-			<hr/>
+	<div id="rstats" class="box">
+		<div class="heading">Daily Bandwidth <a class="pull-right" href="#" data-toggle="tooltip" title="Reload Information" onclick="reloadPage(); return false;"><i class="icon-reboot"></i></a></div>
+		<div class="content">
+			<div id="bwm-daily-grid" class="span7" style="float: left;"></div>
+			<div class="span2" style="float: left; margin-left: 20px;">
+				<table class="data-table">
+					<thead>
+						<tr><th colspan=2 style="text-align:center">Last 30 Days<br><span style="font-weight:normal" id="last-dates"></span></th></tr>
+					</thead>
+					<tbody>
+						<tr><td>Down</td><td id="last-dn">-</td></tr>
+						<tr><td>Up</td><td id="last-up">-</td></tr>
+						<tr><td>Total</td><td id="last-total">-</td></tr>
+					</tbody>
+				</table>
+				<hr/>
 
-			<b>Date</b>: &nbsp; <select onchange="changeDate(this, 'ymd')" id="dafm"><option value=0>yyyy-mm-dd</option><option value=1>mm-dd-yyyy</option><option value=2>mmm dd, yyyy</option><option value=3>dd.mm.yyyy</option></select><br>
-			<b>Scale</b>: &nbsp; <select onchange="changeScale(this)" id="scale"><option value=0>KB</option><option value=1>MB</option><option value=2 selected>GB</option></select><br>
+				<b>Date</b>: &nbsp; <select onchange="changeDate(this, 'ymd')" id="dafm"><option value=0>yyyy-mm-dd</option><option value=1>mm-dd-yyyy</option><option value=2>mmm dd, yyyy</option><option value=3>dd.mm.yyyy</option></select><br>
+				<b>Scale</b>: &nbsp; <select onchange="changeScale(this)" id="scale"><option value=0>KB</option><option value=1>MB</option><option value=2 selected>GB</option></select><br>
 
+			</div>
 		</div>
 	</div>
 
-	<div class="clearfix"></div><br />
-
-	<a class="btn btn-primary" href="javascript:genData(); return false;">Data <i class="icon-drive"></i></a> 
+	<a class="btn btn-primary" href="javascript:genData(); return false;">Data <i class="icon-drive"></i></a>
 	<a class="btn btn-danger ajaxload" href="admin-bwm.asp">Configure <i class="icon-tools"></i></a>
-	<a class="btn" style="float: right;" onclick="reloadPage();">Refresh <i class="icon-reboot"></i></a>
 	<script type="text/javascript">init();</script>
 </content>

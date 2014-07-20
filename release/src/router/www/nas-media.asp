@@ -83,7 +83,7 @@ No part of this file may be used without permission.
 			var a, b, v;
 			var eLoc, eUser;
 
-			elem.display('_restart_button', nvram.ms_enable == '1');
+			// elem.display('_restart_button', nvram.ms_enable == '1');
 
 			a = E('_f_ms_enable').checked ? 1 : 0;
 
@@ -168,6 +168,7 @@ No part of this file may be used without permission.
 			if (changed) {
 				if (!confirm("Unsaved changes will be lost. Continue anyway?")) return;
 			}
+			$('.minidlna-control').html('<div class="spinner spinner-small"></div>');
 			E('_restart_button').disabled = true;
 			form.submitHidden('tomato.cgi', {
 				ms_rescan: E('_f_ms_rescan').checked ? 1 : 0,
@@ -188,7 +189,7 @@ No part of this file may be used without permission.
 		function setNoticeText(s)
 		{
 			if (s.length)
-				s = '<div id="notice1">' + s.replace(/\n/g, '<br>') + '</div><br style="clear:both">';
+				s = '<div class="alert info" id="notice1">' + s.replace(/\n/g, '<br>') + '</div>';
 			elem.setInnerHTML('notice-msg', s);
 		}
 
@@ -225,8 +226,11 @@ No part of this file may be used without permission.
 		<input type="hidden" name="ms_rescan">
 		<input type="hidden" name="ms_sas">
 
-		<h3>Media / DLNA Server</h3>
-		<div class="section mediadlna">
+		<span id="notice-msg"></span>
+
+		<div class="box" id="dlna" data-box="dlna-media-serv">
+			<div class="heading">Media / DLNA Server </div>
+			<div class="content mediadlna"></div>
 			<script type="text/javascript">
 
 				switch (nvram.ms_dbdir) {
@@ -241,7 +245,7 @@ No part of this file may be used without permission.
 						break;
 				}
 
-				createFieldTable('', [
+				$('.content.mediadlna').forms([
 					{ title: 'Enable', name: 'f_ms_enable', type: 'checkbox', value: nvram.ms_enable == '1' },
 					{ title: 'Database Location', multi: [
 						{ name: 'f_loc', type: 'select', options: [['','RAM (Temporary)'],
@@ -258,29 +262,29 @@ No part of this file may be used without permission.
 					] },
 					{ title: 'Scan Media at Startup*', indent: 2, name: 'f_ms_sas', type: 'checkbox', value: nvram.ms_sas == '1', hidden: 1 },
 					{ title: 'Rescan on the next run*', indent: 2, name: 'f_ms_rescan', type: 'checkbox', value: 0,
-						suffix: '<br><small>* Media scan may take considerable time to complete.</small>' },
-					null,
+						suffix: '&nbsp; <small>(Media scan may take considerable time to complete.)</small>' },
 					{ title: 'TiVo Support', name: 'f_ms_tivo', type: 'checkbox', value: nvram.ms_tivo == '1' },
 					{ title: 'Strictly adhere to DLNA standards', name: 'f_ms_stdlna', type: 'checkbox', value: nvram.ms_stdlna == '1' }
-				], '.mediadlna', 'fields-table');
-				$('.mediadlna').append('<br><button type="button" value="' + (mdup ? 'Res' : 'S') + 'tart Now" onclick="restart(mdup)" id="_restart_button" class="btn">' + (mdup ? '<i class="icon-reboot"></i> Res' : '<i class="icon-play"></i>S') + 'tart Now</btton>');
+				]);
+
+				$('#dlna .heading').append('<a href="#" class="minidlna-control pull-right" data-toggle="tooltip" title="' + (mdup ? 'Res' : 'S') + 'tart Now" onclick="restart(mdup)"' +
+					'id="_restart_button">' + (mdup ? '<i class="icon-reboot"></i>' : '<i class="icon-play"></i>') + '</a>');
+				$('#dlna .heading').append('<small ' + (mdup ? 'style="color: green;">(Running' : 'style="color: red;">(Stopped') + ')</small>');
 			</script>
 		</div>
-		<span id="notice-msg"></span>
 
-		<h3>Media Directories</h3>
-		<div class="section">
-			<table class="line-table" id="ms-grid"></table>
-			<script type="text/javascript">msg.setup();</script>
-			<br>
+		<div class="box" data-box="dlna-dirs">
+			<div class="heading">Media Directories</div>
+			<div class="content">
+				<table class="line-table" id="ms-grid"></table>
+			</div>
 		</div>
 
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
 
 	</form>
 
-	<script type="text/javascript">init(); verifyFields(null, 1);</script>
+	<script type="text/javascript">msg.setup(); init(); verifyFields(null, 1);</script>
 </content>

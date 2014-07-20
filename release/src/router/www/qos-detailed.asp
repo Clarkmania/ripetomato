@@ -209,7 +209,7 @@ No part of this file may be used without permission.
 
 		grid.setup = function() {
 			this.init('grid', 'sort');
-			this.headerSet(['<b>Proto</b>', '<b>Source</b>', '<b>S Port</b>', '<b>Destination</b>', '<b>D Port</b>', '<b>Class</b>', '<b>Rule</b>', '<b>Bytes Out</b>', '<b>Bytes In</b>']);
+			this.headerSet(['Proto', 'Source', 'S Port', 'Destination', 'D Port', 'Class', 'Rule', 'Bytes Out', 'Bytes In']);
 		}
 
 		var ref = new TomatoRefresh('/update.cgi', '', 0, 'qos_detailed');
@@ -352,7 +352,7 @@ No part of this file may be used without permission.
 			if (numconnshown != numconntotal)
 				E('numtotalconn').innerHTML='<small><i>(showing ' + numconnshown + ' out of ' + numconntotal + ' connections)</i></small>';
 			else
-				E('numtotalconn').innerHTML='<small><i>(' + numconntotal + ' connections)</i></small>';
+				E('numtotalconn').innerHTML='<small>(' + numconntotal + ' connections)</small>';
 		}
 
 		function addExcludeList(address) {
@@ -466,34 +466,33 @@ No part of this file may be used without permission.
 
 	<script type="text/javascript">
 		if (nvram.qos_enable != '1') {
-			$('.content .ajaxwrap').prepend('<div class="note-disabled alert alert-info"><b>QoS is disabled.</b>&nbsp; <a class="ajaxload" href="#qos-settings.asp">Enable &raquo;</a></div>');
+			$('.container .ajaxwrap').prepend('<div class="alert alert-info"><b>QoS is disabled.</b>&nbsp; <a class="ajaxload" href="#qos-settings.asp">Enable &raquo;</a> <a class="close"><i class="icon-cancel"></i></a></div>');
 		}
 	</script>
 
-	<h3><a href="javascript:toggleVisibility('filters');">Filters <span id="sesdivfiltersshowhide"><i class="icon-chevron-up"></i></span></a></h3>
-	<div class="section" id="sesdivfilters" style="display:none">
-		<script type="text/javascript">
-			var c;
-			c = [];
-			c.push({ title: 'Show only these IPs', name: 'f_filter_ip', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
-			c.push({ title: 'Exclude these IPs', name: 'f_filter_ipe', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
-			c.push({ title: 'Exclude gateway traffic', name: 'f_excludegw', type: 'checkbox', value: ((nvram.t_hidelr) == '1' ? 1 : 0) });
-			c.push({ title: 'Exclude IPv4 broadcast', name: 'f_excludebcast', type: 'checkbox' });
-			c.push({ title: 'Exclude IPv4 multicast', name: 'f_excludemcast', type: 'checkbox' });
-			c.push({ title: 'Auto resolve addresses', name: 'f_autoresolve', type: 'checkbox' });
-			c.push({ title: 'Show shortcuts', name: 'f_shortcuts', type: 'checkbox' });
-			createFieldTable('', c, '#sesdivfilters', 'fields-table');
-		</script>
+	<div class="box" id="qos-details">
+		<div class="heading">QOS Details <span id="numtotalconn"></span></div>
+		<div class="content">
+			<h4>Filters <a href="javascript:toggleVisibility('filters');"><span id="sesdivfiltersshowhide"><i class="icon-chevron-up"></i></span></a></h4>
+			<div id="sesdivfilters" style="display:none"></div>
+			<script type="text/javascript">
+				var c;
+				c = [];
+				c.push({ title: 'Show only these IPs', name: 'f_filter_ip', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
+				c.push({ title: 'Exclude these IPs', name: 'f_filter_ipe', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
+				c.push({ title: 'Exclude gateway traffic', name: 'f_excludegw', type: 'checkbox', value: ((nvram.t_hidelr) == '1' ? 1 : 0) });
+				c.push({ title: 'Exclude IPv4 broadcast', name: 'f_excludebcast', type: 'checkbox' });
+				c.push({ title: 'Exclude IPv4 multicast', name: 'f_excludemcast', type: 'checkbox' });
+				c.push({ title: 'Auto resolve addresses', name: 'f_autoresolve', type: 'checkbox' });
+				c.push({ title: 'Show shortcuts', name: 'f_shortcuts', type: 'checkbox' });
+				$('#sesdivfilters').forms(c);
+			</script>
+
+			<br /><table id="grid" class="line-table"></table>
+			<div id="loading"><br><b>Loading...</b> <div class="spinner"></div></div>
+		</div>
 	</div>
 
-	<h3 id="stitle" onclick="document.location='#qos-graphs.asp'" style="cursor:pointer">Details <span id="numtotalconn"></span></h3>
-	<div class="section tables">
-		<table id="grid" class="line-table"></table>
-
-		<div id="loading"><br><b>Loading...</b> <div class="spinner"></div></div>
-	</div>
-
-	<script type="text/javascript">$('.section.tables').after(genStdRefresh(1,1,"ref.toggle()"));</script>
-
+	<script type="text/javascript">$('#qos-details').after(genStdRefresh(1,1,"ref.toggle()"));</script>
 	<script type="text/javascript">init();</script>
 </content>

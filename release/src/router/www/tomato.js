@@ -1243,7 +1243,7 @@ TomatoGrid.prototype = {
 		this.sortAscending = true;
 	},
 
-	_insert: function(at, cells, escCells) {
+	_insert: function(at, cells, escCells, header) {
 		var tr, td, c;
 		var i, t;
 
@@ -1254,7 +1254,7 @@ TomatoGrid.prototype = {
 				td = tr.insertCell(i);
 				td.className = 'co' + (i + 1);
 				if (escCells) td.appendChild(document.createTextNode(c));
-				else td.innerHTML = c;
+				else td.innerHTML = (header === true) ? '<b>' + c + '</b>' : c;
 			}
 			else {
 				tr.appendChild(c);
@@ -1275,7 +1275,7 @@ TomatoGrid.prototype = {
 		var e, i;
 
 		elem.remove(this.header);
-		this.header = e = this._insert(0, cells, escCells);
+		this.header = e = this._insert(0, cells, escCells, true);
 
 
 		for (i = 0; i < e.cells.length; ++i) {
@@ -1567,9 +1567,9 @@ TomatoGrid.prototype = {
 						break;
 					case 'checkbox':
 
-						s += '<input type="checkbox"' + common + attrib;
+						s += '<div class="checkbox c-checkbox"><label><input type="checkbox"' + common + attrib;
 						if ((which == 'edit') && (values[vi])) s += ' checked';
-						s += '>';
+						s += '><span class="icon-check"></span> </label></div>';
 						break;
 					default:
 						s += f.custom.replace(/\$which\$/g, which);
@@ -2220,7 +2220,7 @@ function E(e)
 
 function PR(e)
 {
-	return elem.parentElem(e, 'TR');
+	return elem.parentElem(e, 'TR') || elem.parentElem(e, 'FIELDSET');
 }
 
 function THIS(obj, func)
@@ -2332,10 +2332,10 @@ function nothing()
 
 // -----------------------------------------------------------------------------
 
-function show_notice1(s)
+function show_notice1(s, type)
 {
 	// ---- !!TB - USB Support: multi-line notices
-	if (s.length) $('.content').prepend('<div class="alert info" style="margin: -10px 0 5px;"><a href="#" class="close">×</a>' + s.replace(/\n/g, '<br>') + '</div>');
+	if (s.length) $('#ajaxwrap').prepend('<div class="alert ' + ((type == null) ? 'alert-warning' : type) + '"><a href="#" class="close"><i class="icon-cancel"></i></a>' + s.replace(/\n/g, '<br>') + '</div>');
 }
 
 // -----------------------------------------------------------------------------
@@ -2354,13 +2354,13 @@ function navi()
 {
 	var htmlmenu = '', activeURL = myName();
 	var menu = {
-		'Status': {
+		'<i class="icon-home"></i> <span class="icons-desc">Status</span>': {
 			'Overview':            'status-home.asp',
 			'Device List':         'status-devices.asp',
 			'Web Usage':           'status-webmon.asp',
 			'Logs':                'status-log.asp'
 		},
-		'Basic Settings': {
+		'<i class="icon-tools"></i> <span class="icons-desc">Basic Settings</span>': {
 			'Network':             'basic-network.asp',
 			/* IPV6-BEGIN */
 			'IPv6':                'basic-ipv6.asp',
@@ -2371,7 +2371,7 @@ function navi()
 			'DHCP/ARP/BW':         'basic-static.asp',
 			'Wireless Filter':     'basic-wfilter.asp'
 		},
-		'Advanced Settings': {
+		'<i class="icon-shield"></i> <span class="icons-desc">Advanced Settings</span>': {
 			'Access Restriction':   'advanced-restrict.asp',
 			'Conntrack/Netfilter':  'advanced-ctnf.asp',
 			'DHCP/DNS':             'advanced-dhcpdns.asp',
@@ -2390,7 +2390,7 @@ function navi()
 			'LAN Access':           'advanced-access.asp',
 			'Virtual Wireless':     'advanced-wlanvifs.asp'
 		},
-		'Port Forwarding': {
+		'<i class="icon-forward"></i> <span class="icons-desc">Port Forwarding</span>': {
 			'Basic':                'forward-basic.asp',
 			/* IPV6-BEGIN */
 			'Basic IPv6':           'forward-basic-ipv6.asp',
@@ -2399,7 +2399,7 @@ function navi()
 			'Triggered':            'forward-triggered.asp',
 			'UPnP/NAT-PMP':         'forward-upnp.asp'
 		},
-		'Quality of Service': {
+		'<i class="icon-gauge"></i> <span class="icons-desc">Quality of Service</span>': {
 			'Basic Settings':       'qos-settings.asp',
 			'Classification':       'qos-classify.asp',
 			'View Graphs':          'qos-graphs.asp',
@@ -2409,7 +2409,7 @@ function navi()
 		},
 		/* USB-BEGIN */
 		// ---- !!TB - USB, FTP, Samba, Media Server
-		'USB & NAS': {
+		'<i class="icon-drive"></i> <span class="icons-desc">USB & NAS</span>': {
 			'USB Support':          'nas-usb.asp'
 			/* FTP-BEGIN */
 			,'FTP Server':          'nas-ftp.asp'
@@ -2435,7 +2435,7 @@ function navi()
 		},
 		/* USB-END */
 		/* VPN-BEGIN */
-		'VPN': {
+		'<i class="icon-globe"></i> <span class="icons-desc">VPN</span>': {
 			/* OPENVPN-BEGIN */
 			'OpenVPN Server':       'vpn-server.asp',
 			'OpenVPN Client':       'vpn-client.asp'
@@ -2447,9 +2447,9 @@ function navi()
 			/* PPTPD-END */
 		},
 		/* VPN-END */
-		'Administration': {
+		'<i class="icon-wrench"></i> <span class="icons-desc">Administration</span>': {
 			'Admin Access':         'admin-access.asp',
-			'Tomato Anon':          'admin-tomatoanon.asp',
+			'TomatoAnon': 			'admin-tomatoanon.asp',
 			'Bandwidth Monitoring': 'admin-bwm.asp',
 			'IP Traffic Monitoring':'admin-iptraffic.asp',
 			'Buttons/LED':          'admin-buttons.asp',
@@ -2475,11 +2475,7 @@ function navi()
 	};
 
 	// Add custom menu
-	try {
-		$.extend(menu, $.parseJSON(nvram.web_nav));
-	} catch (e) {
-		console.log('Failed to parse custom navigation (might not be set)');
-	}
+	try { $.extend(menu, $.parseJSON(nvram.web_nav)); } catch (e) {  /* console.log('Failed to parse custom navigation (might not be set)'); */ }
 
 	// Loop Through MENU
 	$.each(menu, function (key, linksobj) {
@@ -2488,14 +2484,14 @@ function navi()
 
 		// Loop Through subcats
 		$.each(linksobj, function(name, link) {
-			category += '<li' + ((activeURL == link) ? ' class="active"' : '') + '><a href="#' + link + '">' + name + '</a></li>';
+			category += '<li  class="' + ((activeURL == link) ? 'active' : '') + '"><a href="#' + link + '">' + name + '</a></li>';
 		});
 
 		htmlmenu += '<li' + (($(category).filter('.active')[0] == null) ? '' : ' class="active"') + '><a href="#">' + key + '</a><ul>' + category + '</ul></li>';
 
 	});
 
-	$('.navigation').html('<ul>' + htmlmenu + '</ul>');
+	$('.navigation > ul').prepend(htmlmenu);
 
 }
 
@@ -2657,7 +2653,7 @@ function peekaboo(id, show)
 // -----------------------------------------------------------------------------
 
 function reloadPage() {
-	document.location.reload(1);
+	if (document.location.hash.match(/#/)) { loadPage(document.location.hash); } else { loadPage('#status-home.asp'); }
 }
 
 function reboot() {
@@ -2673,7 +2669,129 @@ function logout(){
 }
 
 // -----------------------------------------------------------------------------
+// jQuery function to create forms on the fly
+(function ($) { $.fn.forms = function(data, settings) { $(this).append(createFormFields(data, settings)); } })(jQuery);
+function createFormFields (data, settings) {
 
+	var id, id1, common, output, form = '';
+	var s = $.extend({
+
+		// Defaults
+		'align': 'left',
+		'grid': ['col-sm-3', 'col-sm-9']
+
+
+		}, settings);
+
+
+	// Loop through array
+	$.each(data, function(key, v) {
+
+		if (!v) {
+			form += '<br />';
+			return;
+		}
+
+		if (v.ignore) return;
+
+		form += '<fieldset' + ((v.rid) ? ' id="' + v.rid + '"' : '') + ((v.hidden) ? ' style="display: none;"' : '') + '>';
+
+		if (v.help) { v.title += ' (<i data-toggle="tooltip" class="icon-info icon-normal" title="' + v.help + '"></i>)'; }
+		if (v.text) {
+			if (v.title) {
+				form += '<label class="' + s.grid[0] + ' ' + ((s.align == 'center') ? 'control-label' : 'control-left-label') + '">' + v.title + '</label><div class="' + s.grid[1] + ' text-block">' + v.text + '</div></fieldset>';
+			}
+			else {
+				form += '<label class="' + s.grid[0] + ' ' + ((s.align == 'center') ? 'control-label' : 'control-left-label') + '">' + v.text + '</label></fieldset>';
+			}
+			return;
+		}
+
+
+
+		if (v.multi) multiornot = v.multi; else multiornot = [v];
+
+		output = '';
+		$.each(multiornot, function(key, f) {
+
+			if ((f.type == 'radio') && (!f.id)) id = '_' + f.name + '_' + i;
+			else id = (f.id ? f.id : ('_' + f.name));
+
+			if (id1 == '') id1 = id;
+
+			common = ' onchange="verifyFields(this, 1)" id="' + id + '"';
+			if (f.size > 60) common += ' style="width: 100%; display: block;"';
+
+			if (f.attrib) common += ' ' + f.attrib;
+			name = f.name ? (' name="' + f.name + '"') : '';
+
+			// Prefix
+			if (f.prefix) output += f.prefix;
+
+			switch (f.type) {
+
+				case 'checkbox':
+					output += '<div class="checkbox c-checkbox"><label><input class="custom" type="checkbox"' + name + (f.value ? ' checked' : '') + ' onclick="verifyFields(this, 1)"' + common + '>\
+					<span class="icon-check"></span> ' + (f.suffix ? f.suffix : '') + '</label></div>';
+					break;
+
+				case 'radio':
+					output += '<div class="radio c-radio"><label><input class="custom" type="radio"' + name + (f.value ? ' checked' : '') + ' onclick="verifyFields(this, 1)"' + common + '>\
+					<span class="icon-check"></span> ' + (f.suffix ? f.suffix : '') + '</label></div>';
+					break;
+
+				case 'password':
+					if (f.peekaboo) {
+						switch (get_config('web_pb', '1')) {
+							case '0':
+								f.type = 'text';
+							case '2':
+								f.peekaboo = 0;
+								break;
+						}
+					}
+					if (f.type == 'password') {
+						common += ' autocomplete="off"';
+						if (f.peekaboo) common += ' onfocus=\'peekaboo("' + id + '",1)\'';
+					}
+
+				// drop
+				case 'text':
+
+					output += '<input type="' + f.type + '"' + name + ' value="' + escapeHTML(UT(f.value)) + '" maxlength=' + f.maxlen + (f.size ? (' size=' + f.size) : '') + common + '>';
+					break;
+
+				case 'select':
+					output += '<select' + name + common + '>';
+					for (optsCount = 0; optsCount < f.options.length; ++optsCount) {
+						a = f.options[optsCount];
+						if (a.length == 1) a.push(a[0]);
+						output += '<option value="' + a[0] + '"' + ((a[0] == f.value) ? ' selected' : '') + '>' + a[1] + '</option>';
+					}
+					output +='</select>';
+					break;
+
+				case 'textarea':
+					output += '<textarea ' + (f.style ? (' style="' + f.style + '" ') : '') + name + common + (f.wrap ? (' wrap=' + f.wrap) : '') + '>' + escapeHTML(UT(f.value)) + '</textarea>';
+					break;
+
+				default:
+					if (f.custom) output += f.custom;
+					break;
+			}
+
+			if (f.suffix && (f.type != 'checkbox' && f.type != 'radio')) output += '<span class="help-block">' + f.suffix + '</span>';
+
+		});
+
+		if (id1 != '') form += '<label class="' + s.grid[0] + ' ' + ((s.align == 'center') ? 'control-label' : 'control-left-label') + '" for="' + id + '">' + v.title + '</label><div class="' + s.grid[1] + '">' + output;
+		else form += '<label>' + v.title + '</label>';
+		form += '</div></fieldset>';
+
+	});
+
+	return form;
+}
 
 
 // ---- debug

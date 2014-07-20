@@ -325,12 +325,14 @@
 		<input type='hidden' name='aria2_usb_enable'>
 
 
-		<h3>Basic Settings</h3>
-		<div class="section basicsettings">
-			<script type='text/javascript'>
-				refresh_usb_disk();
+		<span id="notice-msg"></span>
 
-				createFieldTable('', [
+		<div class="box" data-box="aria2-basicsettings">
+			<div class="heading">Aria2 - Basic Settings</div>
+			<div class="content" id="basicsettings"></div><hr>
+			<script type="text/javascript">
+				refresh_usb_disk();
+				$('#basicsettings').forms([
 					{ title: 'Enable aria2 client', name: 'f_aria2_enable_all', type: 'checkbox', value: nvram.aria2_enable == 1, suffix: ' <small>*</small>', help: "CAUTION: your router will swap with less 32mb of RAM or less" },
 					{ title: 'Aria2c binary path', multi: [
 						{ name: 'aria2_binary', type: 'select', options: [
@@ -354,14 +356,15 @@
 					{ title: 'Enable MMAP', name: 'f_aria2_enable_mmap', type: 'checkbox', value: nvram.aria2_enable_mmap == 1, suffix: ' <small>*</small>' },
 					{ title: 'File allocation method', name: 'aria2_file_allocation', type: 'select', options: [ ['prealloc','Prealloc'], ['trunc','Trunc'], ['falloc','Falloc'], ['none','None*'] ], value: nvram.aria2_file_allocation, suffix: ' ' },
 					{ title: 'Aria2 custom configuration', name: 'aria2_custom', type: 'textarea', value: nvram.aria2_custom }
-				], '.section.basicsettings', 'fields-table');
+				]);
 			</script>
 		</div>
 
-		<h3>RPC Remote Access <script>W(btgui_link);</script></h3>
-		<div class="section rpcaccess">
+		<div class="box" data-box="aria2-rpcaccess">
+			<div class="heading">RPC Remote Access <script>W(btgui_link);</script></div>
+			<div class="content" id="rpcaccess"></div><hr>
 			<script type='text/javascript'>
-			createFieldTable('', [
+				$('#rpcaccess').forms([
 				{ title: 'Enable RPC', name: 'f_aria2_enable_rpc', type: 'checkbox', value: nvram.aria2_enable_rpc == 1, suffix: ' <small>*</small>' },
 				{ title: 'RPC listening port', name: 'aria2_rpc_listen_port', type: 'text', maxlen: 5, size: 7, value: nvram.aria2_rpc_listen_port, suffix: ' <small>*</small>', help: "Port used for RPC service. Make sure this port is not in use." },
 				{ title: 'RPC allow origin all', name: 'f_aria2_rpc_allow_origin_all', type: 'checkbox', value: nvram.aria2_rpc_allow_origin_all == 1, suffix: ' <small>*</small>' },
@@ -369,14 +372,15 @@
 				{ title: 'Event poll', name: 'aria2_event_poll', type: 'select', options: [ ['select','Select'], ['poll','Poll'], ['port','Port'], ['kqueue','KQueue'], ['epoll','EPoll'] ], value: nvram.aria2_event_poll, suffix: ' ' },
 				{ title: 'RPC Username', name: 'aria2_rpc_user', type: 'text', maxlen: 32, size: 15, value: nvram.aria2_rpc_user, help: "Not required, but prevents unauthorized access to RPC server" },
 				{ title: 'RPC Password', name: 'aria2_rpc_passwd', type: 'password', maxlen: 32, size: 15, value: nvram.aria2_rpc_passwd }
-			], '.section.rpcaccess', 'fields-table');
+				]);
 			</script>
 		</div>
 
-		<h3>Limits</h3>
-		<div class="section limits">
+		<div class="box" data-box="aria2-limits">
+			<div class="heading">Limits</div>
+			<div class="content" id="limits"></div><hr>
 			<script type='text/javascript'>
-			createFieldTable('', [
+				$('#limits').forms([
 				{ title: 'Max concurrent downloads', name: 'aria2_max_concurrent_downloads', type: 'text', maxlen: 10, size: 7, value: nvram.aria2_max_concurrent_downloads, suffix: ' <small>(range: 1 - 100; default: 5)</small>' },
 				{ title: 'Max connections per server', name: 'aria2_max_connection_per_server', type: 'text', maxlen: 10, size: 7, value: nvram.aria2_max_connection_per_server, suffix: ' <small>(range: 1 - 16; default: 5)</small>' },
 				{ title: 'Minimum split size', name: 'aria2_min_split_size', type: 'text', maxlen: 20, size: 10, value: nvram.aria2_min_split_size, suffix: ' <small>(range: 1M - 1024M; default: 10M)</small>' },
@@ -386,14 +390,15 @@
 				{ title: 'Max overall upload limit', name: 'aria2_max_overall_upload_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_max_overall_upload_limit, suffix: ' <small>( e.g. 10K, 5M, 1024K etc.; default: 0 - No limit)</small>' },
 				{ title: 'Max speed per upload', name: 'aria2_max_upload_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_max_upload_limit, suffix: ' <small>( e.g. 10K, 5M, 1024K etc.; default: 0 - No limit)</small>' },
 				{ title: 'Lowest speed limit', name: 'aria2_lowest_speed_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_lowest_speed_limit, suffix: ' <small>( e.g. 10K, 5M, 1024K etc.; default: 0 - No limit)</small>' }
-			], '.section.limits', 'fields-table');
+				]);
 			</script>
 		</div>
 
-		<h3>BitTorrent Settings</h3>
-		<div class='section btsettings'>
+		<div class="box" data-box="aria2-btsettings">
+			<div class="heading">BitTorrent Settings</div>
+			<div class="content" id="btsettings"></div><hr>
 			<script type='text/javascript'>
-			createFieldTable('', [
+				$('#btsettings').forms([
 				{ title: 'BitTorrent Enable LPD', name: 'f_aria2_bt_enable_lpd', type: 'checkbox', value: nvram.aria2_bt_enable_lpd == 1, suffix: ' <small>*</small>' },
 				{ title: 'BT enable DHT', name: 'f_aria2_enable_dht', type: 'checkbox', value: nvram.aria2_enable_dht == 1, suffix: ' <small>*</small>' },
 				{ title: 'DHT listening port', name: 'aria2_dht_listen_port', type: 'text', maxlen: 50, size: 50, value: nvram.aria2_dht_listen_port, suffix: ' <small>default: 6881-6999</small>' },
@@ -413,15 +418,13 @@
 				{ title: 'Enable BT hash check to seed', name: 'f_aria2_bt_hash_check_seed', type: 'checkbox', value: nvram.aria2_bt_hash_check_seed == 1, suffix: ' <small>*</small>' },
 				{ title: 'Enable BT seed unverified', name: 'f_aria2_bt_seed_unverified', type: 'checkbox', value: nvram.aria2_bt_seed_unverified == 1, suffix: ' <small>*</small>' },
 				{ title: 'Enable BT save metadata', name: 'f_aria2_bt_save_metadata', type: 'checkbox', value: nvram.aria2_bt_save_metadata == 1, suffix: ' <small>*</small>' }
-			], '.section.btsettings', 'fields-table');
+				]);
 			</script>
-
 		</div>
 
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage()" class="btn">Cancel <i class="icon-cancel"></i></button>
-		&nsbp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
+		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
 
 	</form>
 

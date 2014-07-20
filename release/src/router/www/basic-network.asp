@@ -28,11 +28,12 @@ No part of this file may be used without permission.
 		}
 
 	</style>
+
 	<script type="text/javascript" src="js/md5.js"></script>
 	<script type="text/javascript" src="js/wireless.jsx?_http_id=<% nv(http_id); %>"></script>
 	<script type="text/javascript" src="js/interfaces.js"></script>
-	<script type="text/javascript">
-		//	<% nvram("dhcp_lease,dhcp_num,dhcp_start,dhcpd_startip,dhcpd_endip,l2tp_server_ip,lan_gateway,lan_ipaddr,lan_netmask,lan_proto,lan_state,lan_desc,lan_invert,mtu_enable,ppp_demand,ppp_idletime,pppoe_lei,pppoe_lef,ppp_passwd,ppp_redialperiod,ppp_service,ppp_username,ppp_custom,pptp_server_ip,pptp_dhcp,wl_security_mode,wan_dns,dnscrypt_proxy,dnscrypt_priority,dnscrypt_port,dnscrypt_resolver,dnscrypt_log,dnscrypt_manual,dnscrypt_provider_name,dnscrypt_provider_key,dnscrypt_resolver_address,wan_gateway,wan_ipaddr,wan_mtu,wan_netmask,wan_proto,wan_wins,wl_wds_enable,wl_channel,wl_closed,wl_crypto,wl_key,wl_key1,wl_key2,wl_key3,wl_key4,wl_lazywds,wl_mode,wl_net_mode,wl_passphrase,wl_radio,wl_radius_ipaddr,wl_radius_port,wl_ssid,wl_wds,wl_wep_bit,wl_wpa_gtk_rekey,wl_wpa_psk,wl_radius_key,wl_auth,wl_hwaddr,wan_islan,t_features,wl_nbw_cap,wl_nctrlsb,wl_nband,wl_phytype,lan_ifname,lan_stp,lan1_ifname,lan1_ipaddr,lan1_netmask,lan1_proto,lan1_stp,dhcp1_start,dhcp1_num,dhcp1_lease,dhcpd1_startip,dhcpd1_endip,lan2_ifname,lan2_ipaddr,lan2_netmask,lan2_proto,lan2_stp,dhcp2_start,dhcp2_num,dhcp2_lease,dhcpd2_startip,dhcpd2_endip,lan3_ifname,lan3_ipaddr,lan3_netmask,lan3_proto,lan3_stp,dhcp3_start,dhcp3_num,dhcp3_lease,dhcpd3_startip,dhcpd3_endip,lan4_ifname,lan4_ipaddr,lan4_netmask,lan4_proto,lan4_stp,dhcp4_start,dhcp4_num,dhcp4_lease,dhcpd4_startip,dhcpd4_endip,lan5_ifname,lan5_ipaddr,lan5_netmask,lan5_proto,lan5_stp,dhcp5_start,dhcp5_num,dhcp5_lease,dhcpd5_startip,dhcpd5_endip,lan6_ifname,lan6_ipaddr,lan6_netmask,lan6_proto,lan6_stp,dhcp6_start,dhcp6_num,dhcp6_lease,dhcpd6_startip,dhcpd6_endip,lan7_ifname,lan7_ipaddr,lan7_netmask,lan7_proto,lan7_stp,dhcp7_start,dhcp7_num,dhcp7_lease,dhcpd7_startip,dhcpd7_endip,ppp_mlppp,modem_ipaddr,modem_pin,modem_dev,modem_init,modem_apn,cstats_enable,dnssec_enable"); %>
+	<script type='text/javascript'>
+		//      <% nvram("dhcp_lease,dhcp_num,dhcp_start,dhcpd_startip,dhcpd_endip,l2tp_server_ip,lan_gateway,lan_ipaddr,lan_netmask,lan_proto,lan_state,lan_desc,lan_invert,mtu_enable,ppp_demand,ppp_idletime,pppoe_lei,pppoe_lef,ppp_passwd,ppp_redialperiod,ppp_service,ppp_username,ppp_custom,pptp_server_ip,pptp_dhcp,wl_security_mode,wan_dns,dnscrypt_proxy,dnscrypt_priority,dnscrypt_port,dnscrypt_resolver,dnscrypt_log,dnscrypt_manual,dnscrypt_provider_name,dnscrypt_provider_key,dnscrypt_resolver_address,wan_gateway,wan_ipaddr,wan_mtu,wan_netmask,wan_proto,wan_wins,wl_wds_enable,wl_channel,wl_closed,wl_crypto,wl_key,wl_key1,wl_key2,wl_key3,wl_key4,wl_lazywds,wl_mode,wl_net_mode,wl_passphrase,wl_radio,wl_radius_ipaddr,wl_radius_port,wl_ssid,wl_wds,wl_wep_bit,wl_wpa_gtk_rekey,wl_wpa_psk,wl_radius_key,wl_auth,wl_hwaddr,wan_islan,t_features,wl_nbw_cap,wl_nctrlsb,wl_nband,wl_phytype,lan_ifname,lan_stp,lan1_ifname,lan1_ipaddr,lan1_netmask,lan1_proto,lan1_stp,dhcp1_start,dhcp1_num,dhcp1_lease,dhcpd1_startip,dhcpd1_endip,lan2_ifname,lan2_ipaddr,lan2_netmask,lan2_proto,lan2_stp,dhcp2_start,dhcp2_num,dhcp2_lease,dhcpd2_startip,dhcpd2_endip,lan3_ifname,lan3_ipaddr,lan3_netmask,lan3_proto,lan3_stp,dhcp3_start,dhcp3_num,dhcp3_lease,dhcpd3_startip,dhcpd3_endip,lan4_ifname,lan4_ipaddr,lan4_netmask,lan4_proto,lan4_stp,dhcp4_start,dhcp4_num,dhcp4_lease,dhcpd4_startip,dhcpd4_endip,lan5_ifname,lan5_ipaddr,lan5_netmask,lan5_proto,lan5_stp,dhcp5_start,dhcp5_num,dhcp5_lease,dhcpd5_startip,dhcpd5_endip,lan6_ifname,lan6_ipaddr,lan6_netmask,lan6_proto,lan6_stp,dhcp6_start,dhcp6_num,dhcp6_lease,dhcpd6_startip,dhcpd6_endip,lan7_ifname,lan7_ipaddr,lan7_netmask,lan7_proto,lan7_stp,dhcp7_start,dhcp7_num,dhcp7_lease,dhcpd7_startip,dhcpd7_endip,ppp_mlppp,modem_ipaddr,modem_pin,modem_dev,modem_init,modem_apn,cstats_enable,dnssec_enable"); %>
 
 		var lg = new TomatoGrid();
 		lg.setup = function() {
@@ -353,10 +354,19 @@ No part of this file may be used without permission.
 			return ok;
 		}
 
+		W('<style type=\'text/css\'>');
+		for (var u = 0; u < wl_ifaces.length; ++u) {
+			W('#spin'+wl_unit(u)+', ');
+		}
+		W('#spin {');
+		W('	visibility: hidden;');
+		W('	vertical-align: middle;');
+		W('}');
+		W('</style>');
+
 		var xob = null;
 		var refresher = [];
 		var nphy = features('11n');
-		var acphy = features('11ac');
 
 		var ghz = [];
 		var bands = [];
@@ -430,31 +440,6 @@ No part of this file may be used without permission.
 			nm_loaded[uidx] = 1;
 		}
 
-		function refreshBandWidth(uidx) {
-			var e, i, buf, val;
-			if (uidx >= wl_ifaces.length) return;
-			var u = wl_unit(uidx);
-
-			var m = [['0','20 MHz']];
-			if(nphy || acphy){
-				m.push(['1','40 MHz']);
-			}
-			if(acphy && selectedBand(uidx) == '1') {
-				m.push(['3','80 MHz']);
-			}
-
-			e = E('_wl'+u+'_nbw_cap');
-			buf = '';
-			val = (!nm_loaded[uidx] || (e.value + '' == '')) ? eval('nvram.wl'+u+'_nbw_cap') : e.value;
-			for (i = 0; i < m.length; ++i)
-				buf += '<option value="' + m[i][0] + '"' + ((m[i][0] == val) ? ' selected' : '') + '>' + m[i][1] + '</option>';
-
-			e = E('__wl'+u+'_nbw_cap');
-			buf = '<select name="wl'+u+'_nbw_cap" onchange="verifyFields(this, 1)" id = "_wl'+u+'_nbw_cap">' + buf + '</select>';
-			elem.setInnerHTML(e, buf);
-			nm_loaded[uidx] = 1;
-		}
-
 		function refreshChannels(uidx)
 		{
 			if (refresher[uidx] != null) return;
@@ -504,7 +489,7 @@ No part of this file may be used without permission.
 			bw = (e.value + '' == '' ? eval('nvram.wl'+u+'_nbw_cap') : e.value) == '0' ? '20' : '40';
 
 			refresher[uidx].onError = function(ex) { alert(ex); refresher[uidx] = null; reloadPage(); }
-			refresher[uidx].post('update.cgi', 'exec=wlchannels&arg0=' + u + '&arg1=' + (nphy || acphy ? '1' : '0') +
+			refresher[uidx].post('update.cgi', 'exec=wlchannels&arg0=' + u + '&arg1=' + (nphy ? '1' : '0') +
 				'&arg2=' + bw + '&arg3=' + selectedBand(uidx) + '&arg4=' + sb);
 		}
 
@@ -516,7 +501,7 @@ No part of this file may be used without permission.
 			var e = E('_f_wl'+unit+'_scan');
 			if (x) e.value = 'Scan ' + (wscan.tries + 1);
 			else e.value = 'Scan';
-			E('spin'+unit).style.display = x ? 'inline-block' : 'none';
+			E('spin'+unit).style.visibility = x ? 'visible' : 'hidden';
 		}
 
 		function scan()
@@ -753,8 +738,8 @@ No part of this file may be used without permission.
 						_wl_ssid: 1,
 						_f_wl_bcast: 1,
 						_wl_channel: 1,
-						_wl_nbw_cap: nphy || acphy ? 1 : 0,
-						_f_wl_nctrlsb: nphy || acphy ? 1 : 0,
+						_wl_nbw_cap: nphy ? 1 : 0,
+						_f_wl_nctrlsb: nphy ? 1 : 0,
 						_f_wl_scan: 1,
 
 						_wl_security_mode: 1,
@@ -972,7 +957,7 @@ No part of this file may be used without permission.
 							wl_vis[uidx][a] = 2;
 						}
 						wl_vis[uidx]._f_wl_radio = 1;
-						wl_vis[uidx]._wl_nbw_cap = nphy || acphy ? 2 : 0;
+						wl_vis[uidx]._wl_nbw_cap = nphy ? 2 : 0;
 						wl_vis[uidx]._f_wl_nband = (bands[uidx].length > 1) ? 2 : 0;
 					}
 
@@ -1105,6 +1090,7 @@ No part of this file may be used without permission.
 				PR(b).style.display = c ? '' : 'none';
 			}
 
+
 			for (uidx = 0; uidx < wl_ifaces.length; ++uidx) {
 				if(wl_ifaces[uidx][0].indexOf('.') < 0) {
 					for (a in wl_vis[uidx]) {
@@ -1144,7 +1130,7 @@ No part of this file may be used without permission.
 						case 'mixed':
 						case 'n-only':
 							if (nphy && (a.value == 'tkip') && (sm2.indexOf('wpa') != -1)) {
-								ferror.set(a, 'TKIP encryption is not supported with WPA / WPA2 in N and AC mode.', quiet || !ok);
+								ferror.set(a, 'TKIP encryption is not supported with WPA / WPA2 in N mode.', quiet || !ok);
 								ok = 0;
 							}
 							else ferror.clear(a);
@@ -1281,7 +1267,6 @@ No part of this file may be used without permission.
 
 		function earlyInit()
 		{
-			init();
 			verifyFields(null, 1);
 		}
 
@@ -1403,7 +1388,7 @@ No part of this file may be used without permission.
 					E('_wl'+u+'_nctrlsb').value = eval('nvram.wl'+u+'_nctrlsb');
 					if (E('_wl'+u+'_nmode').value != 0) {
 						E('_wl'+u+'_nctrlsb').value = E('_f_wl'+u+'_nctrlsb').value;
-						E('_wl'+u+'_nbw').value = (E('_wl'+u+'_nbw_cap').value == 0) ? 20 : ((E('_wl'+u+'_nbw_cap').value== 3) ? 80:40);
+						E('_wl'+u+'_nbw').value = (E('_wl'+u+'_nbw_cap').value == 0) ? 20 : 40;
 					}
 
 					E('_wl'+u+'_closed').value = E('_f_wl'+u+'_bcast').checked ? 0 : 1;
@@ -1525,10 +1510,10 @@ No part of this file may be used without permission.
 				if (wl_sunit(uidx)<0) {
 					refreshNetModes(uidx);
 					refreshChannels(uidx);
-					refreshBandWidth(uidx);
 				}
 			}
 		}
+
 	</script>
 
 	<form id="_fom" method="post" action="tomato.cgi">
@@ -1544,10 +1529,10 @@ No part of this file may be used without permission.
 		<!-- DNSSEC-BEGIN -->
 		<input type="hidden" name="dnssec_enable">
 		<!-- DNSSEC-END -->
-/* DNSCRYPT-BEGIN */
+		/* DNSCRYPT-BEGIN */
 		<input type="hidden" name="dnscrypt_proxy">
 		<input type="hidden" name="dnscrypt_manual">
-/* DNSCRYPT-END
+		/* DNSCRYPT-END
 		<input type="hidden" name="lan_state">
 		<input type="hidden" name="lan_desc">
 		<input type="hidden" name="lan_invert">
@@ -1572,10 +1557,11 @@ No part of this file may be used without permission.
 		</script>
 		<!-- VLAN-END -->
 
-		<h3>WAN / Internet</h3>
-		<div class="section wan-internet">
+		<div class="box" data-box="network-wan">
+			<div class="heading">WAN / Internet</div>
+			<div class="content" id="wan-settings"></div>
 			<script type="text/javascript">
-				createFieldTable('', [
+				$('#wan-settings').forms([
 					{ title: 'Type', name: 'wan_proto', type: 'select', options: [['dhcp','DHCP'],['pppoe','PPPoE'],['static','Static'],['pptp','PPTP'],['l2tp','L2TP'],
 						/* LINUX26-BEGIN */
 						/* USB-BEGIN */
@@ -1616,21 +1602,22 @@ No part of this file may be used without permission.
 					{ title: 'Route Modem IP', name: 'modem_ipaddr', type: 'text', maxlen: 15, size: 17, suffix: ' <i>(must be in different subnet to router, 0.0.0.0 to disable)</i>', value: nvram.modem_ipaddr },
 
 					{ title: 'Bridge WAN port to primary LAN (br0)', name: 'f_wan_islan', type: 'checkbox', value: (nvram.wan_islan == 1) }
-					], '.wan-internet', 'fields-table');
+				]);
 			</script>
 		</div>
 
-		<h3>LAN</h3>
-		<div class="section lan-settings">
-			<!-- VLAN-BEGIN -->
-			<table class="line-table" id="lan-grid"></table><br />
+		<div class="box" data-box="network-lan">
+			<div class="heading">LAN</div>
+			<div class="content lan-settings">
+				<!-- VLAN-BEGIN -->
+				<table class="line-table" id="lan-grid"></table><br />
+				<script type="text/javascript">lg.setup();</script>
+				<!-- VLAN-END -->
 
-			<script type="text/javascript">lg.setup();</script>
-			<!-- VLAN-END -->
-
+			</div>
 			<script type="text/javascript">
 				dns = nvram.wan_dns.split(/\s+/);
-				createFieldTable('', [
+				$('.content.lan-settings').forms([
 					{ title: 'Default Gateway', name: 'lan_gateway', type: 'text', maxlen: 15, size: 17, value: nvram.lan_gateway },
 					{ title: 'Static DNS', suffix: '&nbsp; <i>(IP:port)</i>', name: 'f_dns_1', type: 'text', maxlen: 21, size: 25, value: dns[0] || '0.0.0.0' },
 					{ title: '', name: 'f_dns_2', type: 'text', maxlen: 21, size: 25, value: dns[1] || '0.0.0.0' },
@@ -1641,7 +1628,7 @@ No part of this file may be used without permission.
 					/* DNSCRYPT-BEGIN */
 					{ title: 'Use dnscrypt-proxy', name: 'f_dnscrypt_proxy', type: 'checkbox', value: (nvram.dnscrypt_proxy == 1) },
 					{ title: 'Manual Entry', indent: 2, name: 'f_dnscrypt_manual', type: 'checkbox', value: (nvram.dnscrypt_manual == 1) },
-					{ title: 'Resolver', indent: 2, name: 'dnscrypt_resolver', type: 'select', options: _dnscrypt_resolvers_, value: nvram.dnscrypt_resolver, suffix: ' <a href=\'https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv\' target=\'_new\'>Resolver Details</a>' },
+					{ title: 'Resolver', indent: 2, name: 'dnscrypt_resolver', type: 'select', options: [/*dnscrypt_resolvers*/], value: nvram.dnscrypt_resolver, suffix: ' <a href=\'https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv\' target=\'_new\'>Resolver Details</a>' },
 					{ title: 'Resolver Address', indent: 2, name: 'dnscrypt_resolver_address', type: 'text', maxlen: 50, size: 25, value: nvram.dnscrypt_resolver_address, suffix: ' <a href=\'https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv\' target=\'_new\'>Resolver Details</a>' },
 					{ title: 'Provider Name', indent: 2, name: 'dnscrypt_provider_name', type: 'text', maxlen: 60, size: 25, value: nvram.dnscrypt_provider_name },
 					{ title: 'Provider Public Key', indent: 2, name: 'dnscrypt_provider_key', type: 'text', maxlen: 80, size: 25, value: nvram.dnscrypt_provider_key },
@@ -1650,18 +1637,19 @@ No part of this file may be used without permission.
 					{ title: 'Log Level', indent: 2, name: 'dnscrypt_log', type: 'text', maxlen: 2, size: 5, value: nvram.dnscrypt_log },
 					/* DNSCRYPT-END */
 					{ title: 'WINS <i>(for DHCP)</i>', name: 'wan_wins', type: 'text', maxlen: 15, size: 17, value: nvram.wan_wins }
-					], '.lan-settings', 'fields-table');
+				]);
 			</script>
 		</div>
 
-		<h3>Ethernet Ports State - Configuration</h3>
-		<div class="section eth-ports">
+		<div class="box" data-box="network-ethports">
+			<div class="heading">Ethernet Ports State - Configuration</div>
+			<div class="content eth-ports"></div>
 			<script type="text/javascript">
-				createFieldTable('', [
+				$('.content.eth-ports').forms([
 					{ title: 'Enable Ports State', name: 'f_lan_state', type: 'checkbox', value: (nvram.lan_state == 1) },
 					{ title: 'Show Speed Info', indent: 2, name: 'f_lan_desc', type: 'checkbox', value: (nvram.lan_desc == 1) },
 					{ title: 'Invert Ports Order', indent: 2, name: 'f_lan_invert', type: 'checkbox', value: (nvram.lan_invert == 1) }
-					], '.eth-ports', 'fields-table');
+				]);
 			</script>
 		</div>
 
@@ -1675,36 +1663,36 @@ No part of this file may be used without permission.
 				if (wl_sunit(uidx)<0) {
 					var u = wl_unit(uidx);
 
-					htmlOut += '<input type="hidden" id="_wl'+u+'_mode" name="wl'+u+'_mode">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_nband" name="wl'+u+'_nband">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_wds_enable" name="wl'+u+'_wds_enable">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_wds" name="wl'+u+'_wds">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_radio" name="wl'+u+'_radio">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_closed" name="wl'+u+'_closed">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_key" name="wl'+u+'_key">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_gmode" name="wl'+u+'_gmode">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_akm" name="wl'+u+'_akm">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_auth" name="wl'+u+'_auth">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_auth_mode" name="wl'+u+'_auth_mode">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_wep" name="wl'+u+'_wep">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_lazywds" name="wl'+u+'_lazywds">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_nmode" name="wl'+u+'_nmode">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_nmcsidx" name="wl'+u+'_nmcsidx">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_nreqd" name="wl'+u+'_nreqd">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_nctrlsb" name="wl'+u+'_nctrlsb">';
-					htmlOut += '<input type="hidden" id="_wl'+u+'_nbw" name="wl'+u+'_nbw">';
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_mode" name="wl'+u+'_mode">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_nband" name="wl'+u+'_nband">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_wds_enable" name="wl'+u+'_wds_enable">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_wds" name="wl'+u+'_wds">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_radio" name="wl'+u+'_radio">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_closed" name="wl'+u+'_closed">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_key" name="wl'+u+'_key">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_gmode" name="wl'+u+'_gmode">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_akm" name="wl'+u+'_akm">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_auth" name="wl'+u+'_auth">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_auth_mode" name="wl'+u+'_auth_mode">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_wep" name="wl'+u+'_wep">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_lazywds" name="wl'+u+'_lazywds">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_nmode" name="wl'+u+'_nmode">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_nmcsidx" name="wl'+u+'_nmcsidx">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_nreqd" name="wl'+u+'_nreqd">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_nctrlsb" name="wl'+u+'_nctrlsb">');
+					htmlOut += ('<input type="hidden" id="_wl'+u+'_nbw" name="wl'+u+'_nbw">');
 
-					htmlOut += '<h3>Wireless';
+					htmlOut += '<div class="box" data-box="network_wl' + u +'"><div class="heading">Wireless';
 					//	if (wl_ifaces.length > 1)
 					htmlOut += ' (' + wl_display_ifname(uidx) + ')';
-					htmlOut += '</h3>';
+					htmlOut += '</div>';
 
-					htmlOut += '<div class="section wifi-' + uidx + '">';
+					htmlOut += '<div class="content wifi-' + uidx + '">';
 
 					f = [
 						{ title: 'Enable Wireless', name: 'f_wl'+u+'_radio', type: 'checkbox',
 							value: (eval('nvram.wl'+u+'_radio') == '1') && (eval('nvram.wl'+u+'_net_mode') != 'disabled') },
-						{ title: 'MAC Address', text: '<a href="advanced-mac.asp">' + eval('nvram.wl'+u+'_hwaddr') + '</a>' },
+						{ title: 'MAC Address', text: '<a href="/#advanced-mac.asp">' + eval('nvram.wl'+u+'_hwaddr') + '</a>' },
 						{ title: 'Wireless Mode', name: 'f_wl'+u+'_mode', type: 'select',
 							options: [['ap', 'Access Point'],['apwds', 'Access Point + WDS'],['sta', 'Wireless Client'],['wet', 'Wireless Ethernet Bridge'],['wds', 'WDS']],
 							value: ((eval('nvram.wl'+u+'_mode') == 'ap') && (eval('nvram.wl'+u+'_wds_enable') == '1')) ? 'apwds' : eval('nvram.wl'+u+'_mode') },
@@ -1715,23 +1703,22 @@ No part of this file may be used without permission.
 							options: [], prefix: '<span id="__wl'+u+'_net_mode">', suffix: '</span>' },
 						{ title: 'SSID', name: 'wl'+u+'_ssid', type: 'text', maxlen: 32, size: 34, value: eval('nvram.wl'+u+'_ssid') },
 						{ title: 'Broadcast', indent: 2, name: 'f_wl'+u+'_bcast', type: 'checkbox', value: (eval('nvram.wl'+u+'_closed') == '0') },
-						{ title: 'Channel', name: 'wl'+u+'_channel', type: 'select', options: ghz[uidx], prefix: '<span id="__wl'+u+'_channel">', suffix: '</span> <button class="btn btn-primary" type="button" id="_f_wl'+u+'_scan" value="Scan" onclick="scanButton('+u+')">Scan</button> <div class="spinner" id="spin'+u+'" style="display: none;"></div>',
+						{ title: 'Channel', name: 'wl'+u+'_channel', type: 'select', options: ghz[uidx], prefix: '<div class="pull-left" id="__wl'+u+'_channel">', suffix: '</div> &nbsp; <button class="btn btn-primary" type="button" id="_f_wl'+u+'_scan" value="Scan" onclick="scanButton('+u+')">Scan <i class="icon-search"></i></button> &nbsp; <div class="spinner" style="visibility: hidden;" id="spin'+u+'"></div>',
 							value: eval('nvram.wl'+u+'_channel') },
-						{ title: 'Channel Width', name: 'wl'+u+'_nbw_cap', type: 'select', options: [],
-							value: eval('nvram.wl'+u+'_nbw_cap'), prefix: '<span id="__wl'+u+'_nbw_cap">', suffix: '</span>' },
+						{ title: 'Channel Width', name: 'wl'+u+'_nbw_cap', type: 'select', options: [['0','20 MHz'],['1','40 MHz']],
+							value: eval('nvram.wl'+u+'_nbw_cap') },
 						{ title: 'Control Sideband', name: 'f_wl'+u+'_nctrlsb', type: 'select', options: [['lower','Lower'],['upper','Upper']],
 							value: eval('nvram.wl'+u+'_nctrlsb') == 'none' ? 'lower' : eval('nvram.wl'+u+'_nctrlsb') },
-						null,
 						{ title: 'Security', name: 'wl'+u+'_security_mode', type: 'select',
 							options: [['disabled','Disabled'],['wep','WEP'],['wpa_personal','WPA Personal'],['wpa_enterprise','WPA Enterprise'],['wpa2_personal','WPA2 Personal'],['wpa2_enterprise','WPA2 Enterprise'],['wpaX_personal','WPA / WPA2 Personal'],['wpaX_enterprise','WPA / WPA2 Enterprise'],['radius','Radius']],
 							value: eval('nvram.wl'+u+'_security_mode') },
 						{ title: 'Encryption', indent: 2, name: 'wl'+u+'_crypto', type: 'select',
 							options: [['tkip','TKIP'],['aes','AES'],['tkip+aes','TKIP / AES']], value: eval('nvram.wl'+u+'_crypto') },
-						{ title: 'Shared Key', indent: 2, name: 'wl'+u+'_wpa_psk', type: 'password', maxlen: 64, size: 66, peekaboo: 1,
+						{ title: 'Shared Key', indent: 2, name: 'wl'+u+'_wpa_psk', type: 'password', maxlen: 59, size: 59, peekaboo: 1,
 							suffix: ' <button class="btn" type="button" id="_f_wl'+u+'_psk_random1" value="Random" onclick="random_psk(\'_wl'+u+'_wpa_psk\')">Random</button>',
 							value: eval('nvram.wl'+u+'_wpa_psk') },
-						{ title: 'Shared Key', indent: 2, name: 'wl'+u+'_radius_key', type: 'password', maxlen: 80, size: 32, peekaboo: 1,
-							suffix: ' <input type="button" id="_f_wl'+u+'_psk_random2" value="Random" onclick="random_psk(\'_wl'+u+'_radius_key\')">',
+						{ title: 'Shared Key', indent: 2, name: 'wl'+u+'_radius_key', type: 'password', maxlen: 59, size: 32, peekaboo: 1,
+							suffix: ' <button class="btn" type="button" id="_f_wl'+u+'_psk_random2" value="Random" onclick="random_psk(\'_wl'+u+'_radius_key\')">Random</button>',
 							value: eval('nvram.wl'+u+'_radius_key') },
 						{ title: 'Group Key Renewal', indent: 2, name: 'wl'+u+'_wpa_gtk_rekey', type: 'text', maxlen: 4, size: 6, suffix: ' <i>(seconds)</i>',
 							value: eval('nvram.wl'+u+'_wpa_gtk_rekey') },
@@ -1741,7 +1728,7 @@ No part of this file may be used without permission.
 						{ title: 'Encryption', indent: 2, name: 'wl'+u+'_wep_bit', type: 'select', options: [['128','128-bits'],['64','64-bits']],
 							value: eval('nvram.wl'+u+'_wep_bit') },
 						{ title: 'Passphrase', indent: 2, name: 'wl'+u+'_passphrase', type: 'text', maxlen: 16, size: 20,
-							suffix: ' <input type="button" id="_f_wl'+u+'_wep_gen" value="Generate" onclick="generate_wep('+u+')"> <button class="btn" type="button" id="_f_wl'+u+'_wep_random" value="Random" onclick="random_wep('+u+')">Random</button>',
+							suffix: ' <button class="btn" type="button" id="_f_wl'+u+'_wep_gen" value="Generate" onclick="generate_wep('+u+')">Generate</button> <button class="btn" type="button" id="_f_wl'+u+'_wep_random" value="Random" onclick="random_wep('+u+')">Random</button>',
 							value: eval('nvram.wl'+u+'_passphrase') }
 					];
 
@@ -1762,8 +1749,9 @@ No part of this file may be used without permission.
 							{ name: 'f_wl'+u+'_wds_' + (i + 1), type: 'text', maxlen: 17, size: 20, value: wds[i + 1] || '00:00:00:00:00:00' } ] } );
 					}
 
-					htmlOut += createFieldTable('', f, null, 'fields-table');
-					htmlOut += '</div>';
+
+					htmlOut += createFormFields(f);
+					htmlOut += '</div></div>';
 				}
 			}
 			// for each wlif
@@ -1771,12 +1759,11 @@ No part of this file may be used without permission.
 			$('#wifi-interfaces').append(htmlOut);
 		</script>
 
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
 
 	</form>
 
-	<script type="text/javascript">earlyInit();</script>
+	<script type="text/javascript"> earlyInit();init();</script>
 </content>

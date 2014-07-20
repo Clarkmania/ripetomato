@@ -36,7 +36,7 @@ No part of this file may be used without permission.
 
 			var element = document.getElementById(id);
 			if (!element) {
-				alert("Bad id " + id + 
+				alert("Bad id " + id +
 					"passed to clientSideInclude." +
 					"You need a div or span element " +
 					"with this id in your page.");
@@ -60,14 +60,18 @@ No part of this file may be used without permission.
 	</script>
 
 	<input type="hidden" name="_nextpage" value="/#nas-ups.asp">
-	<h3>APC UPS Status</h3>
-	<div class="section">
-		<span id="ups-status"></span>
+	<div class="box">
+		<div class="heading">APC UPS Status</div>
+		<div class="content">
+			<span id="ups-status"></span>
+		</div>
 	</div>
 
-	<h3>UPS Response</h3>
-	<div class="section">
-		<span id="ups-data"></span>
+	<div class="box">
+		<div class="heading">UPS Response</div>
+		<div class="content">
+			<span id="ups-data"></span>
+		</div>
 	</div>
 
 	<script type="text/javascript">init();</script>

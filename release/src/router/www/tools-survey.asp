@@ -29,8 +29,9 @@ No part of this file may be used without permission.
 		#survey-controls {
 			text-align: right;
 		}
-		#expire-time {
+		#expire-time, #refresh-time {
 			width: 120px;
+			vertical-align: middle;
 		}
 	</style>
 	<script type="text/javascript">
@@ -203,16 +204,28 @@ No part of this file may be used without permission.
 					e.rssi = MAX(e.rssi - 5, -101);
 					e.noise = MAX(e.noise - 2, -101);
 					if ((e.rssi == -101) || (e.noise == -101))
-						e.noise = e.rssi = -999;
+					e.noise = e.rssi = -999;
 				}
 				e.saw = 0;
 
 				e.qual = MAX(e.rssi - e.noise, 0);
+				var bar = '';
+				switch(MIN(MAX(Math.floor(e.qual / 10), 1), 6)) {
+					case 1: case 2:
+						bar = 'danger';
+						break;
+					case 3: case 4:
+						bar = 'warning';
+						break;
+					case 5: case 6:
+						bar = 'success';
+						break;
+				}
 
 				seen = e.lastSeen.toWHMS();
 				if (useAjax()) {
 					m = Math.floor(((new Date()).getTime() - e.firstSeen.getTime()) / 60000);
-					if (m <= 10) seen += '<br> <b><small>NEW (' + -m + 'm)</small></b>';
+					if (m <= 10) seen += '<br> <small>NEW (' + -m + 'm)</small>';
 				}
 
 				mac = e.bssid;
@@ -225,7 +238,7 @@ No part of this file may be used without permission.
 					mac,
 					(e.rssi == -999) ? '' : (e.rssi + ' <small>dBm</small>'),
 					(e.noise == -999) ? '' : (e.noise + ' <small>dBm</small>'),
-					'<small>' + e.qual + '</small> <i class="icon-wifi-' + MIN(MAX(Math.floor(e.qual / 10), 1), 3) + '"></i>',
+					'<small>' + e.qual + '</small></b> <div class="progress"><div class="bar ' + bar + '" style="width:' + e.qual + '%;"></div></div>',
 					'' + e.channel,
 					'' + e.cap,
 					'' + e.rates], false);
@@ -243,7 +256,7 @@ No part of this file may be used without permission.
 
 		sg.setup = function() {
 			this.init('survey-grid', 'sort');
-			this.headerSet(['<b>Last Seen</b>', '<b>SSID</b>', '<b>BSSID</b>', '<b>RSSI</b> &nbsp; &nbsp; ', '<b>Noise</b> &nbsp; &nbsp; ', '<b>Quality</b>', '<b>Ch</b>', '<b>Capabilities</b>', '<b>Rates</b>']);
+			this.headerSet(['Last Seen', 'SSID', 'BSSID', 'RSSI &nbsp; &nbsp; ', 'Noise &nbsp; &nbsp; ', 'Quality', 'Ch', 'Capabilities', 'Rates']);
 			this.populate();
 			this.sort(0);
 		}
@@ -270,7 +283,7 @@ No part of this file may be used without permission.
 			sg.resort();
 		}
 
-		function earlyInit() {    
+		function earlyInit() {
 			if (!useAjax()) E('expire-time').style.visibility = 'hidden';
 			sg.setup();
 			sg.recolor();
@@ -280,7 +293,7 @@ No part of this file may be used without permission.
 
 	</script>
 
-	<ul class="nav-tabs">
+	<ul class="nav-tabs" id="tabs">
 		<li><a class="ajaxload" href="tools-ping.asp">Ping</a></li>
 		<li><a class="ajaxload" href="tools-trace.asp">Trace</a></li>
 		<li><a class="ajaxload" href="tools-shell.asp">System Commands</a></li>
@@ -288,22 +301,28 @@ No part of this file may be used without permission.
 		<li><a class="ajaxload" href="tools-wol.asp">WOL</a></li>
 	</ul>
 
-	<div class="section">
-	
-		<br /><table id="survey-grid" class="line-table"></table>
-		<br />
-		<div id="survey-msg"></div>
-		<div id="survey-controls">
-			<div class="input-append"><div class="spinner"></div>
-				<button type="button" value="Refresh" onclick="ref.toggle()" id="refresh-button" class='btn'>Refresh <i class="icon-reboot"></i></button>
-			</div>
-		</div>
+	<div class="box">
+		<div class="heading">Wireless Survey</div>
+		<div class="content">
 
-		<script type="text/javascript">
-			if ('<% wlclient(); %>' == '0') {
-				$('.section').prepend('<div class="alert alert-warning">Warning: Wireless connections to this router may be disrupted while using this tool.</div>');
-			}
-		</script>
+			<br /><table id="survey-grid" class="line-table"></table><br />
+
+			<div id="survey-msg"></div>
+
+		</div>
+	</div>
+
+	<div id="survey-controls">
+		<div class="input-append"><div class="spinner"></div>
+			<button type="button" value="Refresh" onclick="ref.toggle()" id="refresh-button" class="btn">Refresh <i class="icon-reboot"></i></button>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		if ('<% wlclient(); %>' == '0') {
+			$('#tabs').after('<div class="alert warning"><h5>Warning!</h5> Wireless connections to this router may be disrupted while using this tool. <a class="close"><i class="icon-cancel"></i></a></div>');
+		}
+	</script>
 	</div>
 
 	<script type="text/javascript">earlyInit();</script>

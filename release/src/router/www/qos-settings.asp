@@ -57,7 +57,7 @@ No part of this file may be used without permission.
 					'Ceiling must be greater than or equal to rate.');
 
 				return 0;
-			}	                                                                                        
+			}
 
 			return 1;
 		}
@@ -67,7 +67,7 @@ No part of this file may be used without permission.
 			var i, e, b, f;
 
 			if (!v_range('_qos_obw', quiet, 10, 999999)) return 0;
-			for (i = 0; i < 10; ++i) 
+			for (i = 0; i < 10; ++i)
 			{
 				if (!verifyClassCeilingAndRate(
 					E('_qos_obw').value,
@@ -80,7 +80,7 @@ No part of this file may be used without permission.
 			}
 
 			if (!v_range('_qos_ibw', quiet, 10, 999999)) return 0;
-			for (i = 0; i < 10; ++i) 
+			for (i = 0; i < 10; ++i)
 			{
 				if (!verifyClassCeilingAndRate(
 					E('_qos_ibw').value,
@@ -95,7 +95,7 @@ No part of this file may be used without permission.
 			f = E('_fom').elements;
 			b = !E('_f_qos_enable').checked;
 			for (i = 0; i < f.length; ++i) {
-				if ((f[i].name.substr(0, 1) != '_') && (f[i].type != 'button') && (f[i].name.indexOf('enable') == -1) &&
+				if ((f[i].name.substr(0, 1) != '_') && (f[i].type != 'button' && f[i].type != 'fieldset') && (f[i].name.indexOf('enable') == -1) &&
 					(f[i].name.indexOf('ne_v') == -1)) f[i].disabled = b;
 			}
 
@@ -143,7 +143,7 @@ No part of this file may be used without permission.
 
 			a = [];
 
-			for (i = 0; i < 10; ++i) 
+			for (i = 0; i < 10; ++i)
 			{
 				//a.push(E('_f_iceil_' + i).value);
 				a.push(E('_f_irate_' + i).value + '-' + E('_f_iceil_' + i).value);
@@ -176,14 +176,17 @@ No part of this file may be used without permission.
 		<input type="hidden" name="qos_reset">
 		<input type="hidden" name="ne_vegas">
 
-		<div class="section qos-settings">
+		<div class="box" data-box="qos-basic-set">
+			<div class="heading">Basic QOS Settings</div>
+			<div class="content qos-settings"></div>
 			<script type="text/javascript">
 
 				classList = [];
 				for (i = 0; i < 10; ++i) {
 					classList.push([i, classNames[i]]);
 				}
-				createFieldTable('', [
+
+				$('.qos-settings').forms([
 					{ title: 'Enable QoS', name: 'f_qos_enable', type: 'checkbox', value: nvram.qos_enable == '1' },
 					{ title: 'Prioritize small packets with these control flags', multi: [
 						{ suffix: ' ACK &nbsp;', name: 'f_qos_ack', type: 'checkbox', value: nvram.qos_ack == '1' },
@@ -199,15 +202,15 @@ No part of this file may be used without permission.
 					!!TB - added qos_pfifo
 					REMOVE-END */
 					{ title: 'Qdisc Scheduler', name: 'qos_pfifo', type: 'select', options: [['0','sfq'],['1','pfifo']], value: nvram.qos_pfifo }
-					], '.qos-settings', 'fields-table');
+				]);
 			</script>
 		</div>
 
-		<h3>Settings for DSL only</h3>
-		<div class="section qos-dsl">
+		<div class="box" data-box="qos-dsl-set">
+			<div class="heading">Settings for DSL only</div>
+			<div class="content qos-dsl"></div>
 			<script type="text/javascript">
-
-				createFieldTable('', [
+				$('.qos-dsl').forms([
 					{ title: 'DSL Overhead Value - ATM Encapsulation Type', multi:[
 						{name: 'atm_overhead', type: 'select', options: [['0','None'],['32','32-PPPoE VC-Mux'],['40','40-PPPoE LLC/Snap'],
 							['10','10-PPPoA VC-Mux'],['14','14-PPPoA LLC/Snap'],
@@ -215,17 +218,17 @@ No part of this file may be used without permission.
 							['24','24-RFC2684/RFC1483 Bridged VC-Mux'],
 							['32','32-RFC2684/RFC1483 Bridged LLC/Snap']], value:nvram.atm_overhead }
 					] }
-					], '.qos-dsl', 'fields-table');
+				]);
 			</script>
 		</div>
 
-		<h3>Outbound Rates / Limits</h3>
-		<div class="section out-limit">
+		<div class="box" data-box="qos-out-limits">
+			<div class="heading">Outbound Rates / Limits</div>
+			<div class="content out-limit"></div>
 			<script type="text/javascript">
 				cc = nvram.qos_orates.split(/[,-]/);
 				f = [];
 				f.push({ title: 'Max Bandwidth Limit', name: 'qos_obw', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s   (Set to measured bandwidth less 15-30%)</small>', value: nvram.qos_obw });
-				f.push(null);
 				j = 0;
 				for (i = 0; i < 10; ++i) {
 					x = cc[j++] || 1;
@@ -236,45 +239,39 @@ No part of this file may be used without permission.
 						{ type: 'custom', custom: ' &nbsp; <span id="_okbps_' + i + '"></span>' } ]
 					});
 				}
-				createFieldTable('', f, '.out-limit', 'fields-table');
+				$('.out-limit').forms(f);
 			</script>
 		</div>
 
-		<h3>Inbound Rates / Limits</h3>
-		<div class="section in-limit">
+		<div class="box" data-box="qos-in-limits">
+			<div class="heading">Inbound Rates / Limits</div>
+			<div class="content in-limit"></div>
 			<script type="text/javascript">
 				allRates = nvram.qos_irates.split(',');
 				f = [];
 				f.push({ title: 'Max Bandwidth Limit', name: 'qos_ibw', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s   (Set to measured bandwidth less 15-30%)</small>', value: nvram.qos_ibw });
-				f.push(null);
 
-				f.push(
-					{
-						title: '', multi: [
-							{ title: 'Rate' },
-							{ title: 'Limit' } ]
-				});			
-
-				for (i = 0; i < 10; ++i) 
+				for (i = 0; i < 10; ++i)
 				{
 					splitRate = allRates[i].split('-');
 					incoming_rate = splitRate[0] || 1;
 					incoming_ceil = splitRate[1] || 100;
 
 					f.push(
-						{ 
+						{
 							title: classNames[i], multi: [
 								{ name:	'f_irate_' + i, type: 'select', options: pctListin, value: incoming_rate, suffix: ' ' },
 								{ name:	'f_iceil_' + i, type: 'select', options: pctListin, value: incoming_ceil },
 								{ custom: ' &nbsp; <span id="_ikbps_' + i + '"></span>' } ]
 					});
 				}
-				createFieldTable('', f, '.in-limit', 'fields-table');
+				$('.in-limit').forms(f);
 			</script>
 		</div>
 
-		<h3><a href="javascript:toggleFiltersVisibility();">QOS Class Names <i class="icon-chevron-down"></i></a></h3>
-		<div class="section classnames" id="qosclassnames" style="display:none">
+		<div class="box" data-box="qos-class-n">
+			<div class="heading">QOS Class Names</div>
+			<div class="content classnames" style="display:none"></div>
 			<script type="text/javascript">
 
 				if ((v = nvram.qos_classnames.match(/^(.+)\s+(.+)\s+(.+)\s+(.+)\s+(.+)\s+(.+)\s+(.+)\s+(.+)\s+(.+)\s+(.+)$/)) == null) {
@@ -287,26 +284,24 @@ No part of this file may be used without permission.
 						type: 'text', maxlen: 10, size: 15, value: v[i],
 						suffix: '<span id="count' + i + '"></span>' });
 				}
-				createFieldTable('', f, '.classnames', 'fields-table');
+				$('.classnames').forms(f);
 			</script>
 		</div>
 
-		<span id="s_vegas" style="display:none">
-			<h3>TCP Vegas <small>(network congestion control)</small></h3>
-			<div class="section tcp-vegas">
-				<script type="text/javascript">
-					/* move me? */
-					createFieldTable('', [
-						{ title: 'Enable TCP Vegas', name: 'f_ne_vegas', type: 'checkbox', value: nvram.ne_vegas == '1' },
-						{ title: 'Alpha', name: 'ne_valpha', type: 'text', maxlen: 6, size: 8, value: nvram.ne_valpha },
-						{ title: 'Beta', name: 'ne_vbeta', type: 'text', maxlen: 6, size: 8, value: nvram.ne_vbeta },
-						{ title: 'Gamma', name: 'ne_vgamma', type: 'text', maxlen: 6, size: 8, value: nvram.ne_vgamma }
-						], '.tcp-vegas', 'fields-table');
-				</script>
-			</div>
-		</span>
+		<div class="box" data-box="qos-tcp-vegas">
+			<div class="heading">TCP Vegas <small>(Network Congestion Control)</small></div>
+			<div class="content tcp-vegas"></div>
+			<script type="text/javascript">
+				/* move me? */
+				$('.tcp-vegas').forms([
+					{ title: 'Enable TCP Vegas', name: 'f_ne_vegas', type: 'checkbox', value: nvram.ne_vegas == '1' },
+					{ title: 'Alpha', name: 'ne_valpha', type: 'text', maxlen: 6, size: 8, value: nvram.ne_valpha },
+					{ title: 'Beta', name: 'ne_vbeta', type: 'text', maxlen: 6, size: 8, value: nvram.ne_vbeta },
+					{ title: 'Gamma', name: 'ne_vgamma', type: 'text', maxlen: 6, size: 8, value: nvram.ne_vgamma }
+				]);
+			</script>
+		</div>
 
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>

@@ -148,7 +148,6 @@ No part of this file may be used without permission.
 	<style>
 		#wol-grid tr { cursor: pointer; }
 		.sectionmacs tr td:first-child { width: 150px; }
-		.sectionmacs textarea { width: 80%; }
 	</style>
 
 	<ul class="nav-tabs">
@@ -165,23 +164,26 @@ No part of this file may be used without permission.
 		<input type="hidden" name="_nextwait" value="1">
 		<input type="hidden" name="mac" value="" id="_mac">
 
-		<div class="section">
-			<table id="wol-grid" class="line-table"></table><br />
+		<div class="box">
+			<div class="heading">Wake on Lan</div>
+			<div class="content">
+
+				<table id="wol-grid" class="line-table"></table><br />
+				<div class="sectionmacs"></div>
+
+				<div class="input-append pull-right">
+					<div id="spin" class="spinner" style="vertical-align:middle;visibility:hidden"></div> &nbsp;
+					<button type="button" value="Refresh" onclick="refreshClick()" id="refreshb" class="btn"><i class="icon-reboot"></i> Refresh</button>
+				</div>
+
+				<button type="button" value="Wake Up" onclick="wake(null)" id="save-button" class="btn"><i class="icon-forward"></i> Wake Up</button>
+			</div>
 		</div>
-
-		<div class="sectionmacs"></div>
-
-		<div class="input-append pull-right">
-			<div id="spin" class="spinner" style="vertical-align:middle;visibility:hidden"></div> &nbsp; 
-			<button type="button" value="Refresh" onclick="refreshClick()" id="refreshb" class="btn"><i class="icon-reboot"></i> Refresh</button>
-		</div>
-
-		<button type="button" value="Wake Up" onclick="wake(null)" id="save-button" class="btn"><i class="icon-forward"></i> Wake Up</button>
 
 		<script type="text/javascript">
-			createFieldTable('', [
-				{ title: 'MAC Address List', name: 'f_mac', type: 'textarea', value: cookie.get('wakemac') || '' },
-				], '.sectionmacs');
+			$('.sectionmacs').forms([
+				{ title: 'MAC Address List', name: 'f_mac', type: 'textarea', value: cookie.get('wakemac') || '', style: 'width: 100%; height: 60px;' },
+				]);
 		</script>
 
 	</form>

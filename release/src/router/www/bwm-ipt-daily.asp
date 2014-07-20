@@ -22,7 +22,7 @@ No part of this file may be used without permission.
 	<script type="text/javascript" src="js/bwm-common.js"></script>
 	<script type="text/javascript" src="js/interfaces.js"></script>
 	<script type="text/javascript">
-		//	<% nvram("at_update,tomatoanon_answer,wan_ifname,lan_ifname,wl_ifname,wan_proto,wan_iface,web_svg,cstats_enable,cstats_colors,dhcpd_static,lan_ipaddr,lan_netmask,lan1_ipaddr,lan1_netmask,lan2_ipaddr,lan2_netmask,lan3_ipaddr,lan3_netmask"); %>
+		//	<% nvram("at_update,tomatoanon_answer,wan_ifname,lan_ifname,wl_ifname,wan_proto,wan_iface,web_svg,cstats_enable,cstats_colors,dhcpd_static,lan_ipaddr,lan_netmask,lan1_ipaddr,lan1_netmask,lan2_ipaddr,lan2_netmask,lan3_ipaddr,lan3_netmask,lan4_ipaddr,lan4_netmask,lan5_ipaddr,lan5_netmask,lan6_ipaddr,lan6_netmask,lan7_ipaddr,lan7_netmask"); %>
 		//	<% devlist(); %>
 
 		try {
@@ -177,16 +177,16 @@ No part of this file may be used without permission.
 				dg.resort();
 				dg.recolor();
 				dg.footerSet([
-					'Total', 
+					'Total',
 					('<small><i>(' +
-						(((hostslisted.length > 0) || (subnetslisted.length > 0)) ? 
+						(((hostslisted.length > 0) || (subnetslisted.length > 0)) ?
 							((hostslisted.length > 0) ? (hostslisted.length + ' hosts') : '') +
 							(((hostslisted.length > 0) && (subnetslisted.length > 0)) ? ', ' : '') +
 							((subnetslisted.length > 0) ? (subnetslisted.length + ' subnets') : '')
 							: 'no data') +
 						')</i></small>'),
-					rescale(rx), 
-					rescale(tx), 
+					rescale(rx),
+					rescale(tx),
 					rescale(rx+tx)]);
 			}
 		}
@@ -282,7 +282,10 @@ No part of this file may be used without permission.
 
 		function init() {
 
-			if (nvram.cstats_enable != '1') return;
+			if (nvram.cstats_enable != '1') {
+				$('.cstats').before('<div class="alert info">IP Traffic monitoring disabled.</b> <a href="/#admin-iptraffic.asp">Enable &raquo;</a>');
+				return;
+			}
 
 			var c;
 
@@ -428,34 +431,35 @@ No part of this file may be used without permission.
 	</ul>
 
 
-	<div id="cstats">
-		<div class="section">
-			<table id="daily-grid" class="line-table td-large"></table>
+	<div id="cstats" class="box">
+		<div class="heading">Daily IP Traffic <a class="pull-right" href="#" data-toggle="tooltip" title="Reload Information" onclick="reloadPage(); return false;"><i class="icon-reboot"></i></a></div>
+		<div class="content">
+			<table id="daily-grid" class="line-table td-large"></table><br />
+
+			<h4><a href="javascript:toggleVisibility('options');">Options <span id="sesdivoptionsshowhide"><i class="icon-chevron-up"></i></span></a></h4>
+			<div class="section" id="sesdivoptions" style="display:none"></div>
 		</div>
-
-		<a class="btn" style="float: right;" value="Refresh" onclick="reloadPage()">Refresh <i class="icon-reboot"></i></a>
-		<a href="javascript:genData()" class="btn btn-primary">Data <i class="icon-drive"></i></a> 
-		<a href="admin-iptraffic.asp" class="btn btn-danger ajaxload">Configure <i class="icon-tools"></i></a>
-
-		<br /><br /><div class="section-title"><h4><a href="javascript:toggleVisibility('options');">Options <span id="sesdivoptionsshowhide"><i class="icon-chevron-up"></i></span></a></h4></div>
-		<div class="section" id="sesdivoptions" style="display:none">
-			<script type="text/javascript">
-				var c;
-				c = [];
-				c.push({ title: 'List only these IPs', name: 'f_filter_ip', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
-				c.push({ title: 'Exclude these IPs', name: 'f_filter_ipe', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
-				c.push({ title: 'Date Range', multi: [ { name: 'f_begin_date', type: 'select', options: [['0', 'Any']], suffix: ' - ' }, { name: 'f_end_date', type: 'select', options: [['0', 'Any']] } ] } );
-				c.push({ title: 'Date Format', name: 'f_dafm', type: 'select', options: [['0', 'yyyy-mm-dd'], ['1', 'mm-dd-yyyy'], ['2', 'mmm dd, yyyy'], ['3', 'dd.mm.yyyy']] });
-				c.push({ title: 'Scale', name: 'f_scale', type: 'select', options: [['0', 'KB'], ['1', 'MB'], ['2', 'GB']] });
-				c.push({ title: 'Show subnet totals', name: 'f_subnet', type: 'checkbox', suffix: ' <small>(Not considered when calculating total traffic on the last line)</small>' });
-				c.push({ title: 'Hide IPs without traffic', name: 'f_ignorezeroes', type: 'checkbox' });
-				c.push({ title: 'Show known hostnames', name: 'f_hostnames', type: 'checkbox' });
-				c.push({ title: 'Show shortcuts', name: 'f_shortcuts', type: 'checkbox' });
-				createFieldTable('',c, '#sesdivoptions');
-			</script>
-
-		</div>
-		<div class="clearfix"></div>
 	</div>
+
+	<a href="javascript:genData()" class="btn btn-primary">Data <i class="icon-drive"></i></a>
+	<a href="admin-iptraffic.asp" class="btn btn-danger ajaxload">Configure <i class="icon-tools"></i></a>
+
+	<script type="text/javascript">
+		var c;
+		c = [];
+		c.push({ title: 'List only these IPs', name: 'f_filter_ip', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
+		c.push({ title: 'Exclude these IPs', name: 'f_filter_ipe', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
+		c.push({ title: 'Date Range', multi: [ { name: 'f_begin_date', type: 'select', options: [['0', 'Any']], suffix: ' - ' }, { name: 'f_end_date', type: 'select', options: [['0', 'Any']] } ] } );
+		c.push({ title: 'Date Format', name: 'f_dafm', type: 'select', options: [['0', 'yyyy-mm-dd'], ['1', 'mm-dd-yyyy'], ['2', 'mmm dd, yyyy'], ['3', 'dd.mm.yyyy']] });
+		c.push({ title: 'Scale', name: 'f_scale', type: 'select', options: [['0', 'KB'], ['1', 'MB'], ['2', 'GB']] });
+		c.push({ title: 'Show subnet totals', name: 'f_subnet', type: 'checkbox', suffix: ' <small>(Not considered when calculating total traffic on the last line)</small>' });
+		c.push({ title: 'Hide IPs without traffic', name: 'f_ignorezeroes', type: 'checkbox' });
+		c.push({ title: 'Show known hostnames', name: 'f_hostnames', type: 'checkbox' });
+		c.push({ title: 'Show shortcuts', name: 'f_shortcuts', type: 'checkbox' });
+		$('#sesdivoptions').forms(c);
+	</script>
+
+	<div class="clearfix"></div>
+
 	<script type="text/javascript">checkCstats(); init();</script>
 </content>

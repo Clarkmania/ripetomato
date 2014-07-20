@@ -88,14 +88,16 @@ No part of this file may be used without permission.
 		<input type="hidden" name="dmz_ipaddr">
 		<input type="hidden" name="dmz_sip">
 
-		<div class="section dmz-settings">
+		<div class="box">
+			<div class="heading">DMZ Settings</div>
+			<div class="content dmz-settings"></div>
 			<script type="text/javascript">
 				var lans = [];
 				for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
 					var j = (i == 0) ? "" : i;
 					lans.push.apply(lans, [['br'+i, 'LAN'+j+' (br'+i+')']]);
 				}
-				createFieldTable('', [
+				$('.dmz-settings').forms([
 					{ title: 'Enable DMZ', name: 'f_dmz_enable', type: 'checkbox', value: (nvram.dmz_enable == '1') },
 					{ title: 'Destination Address', indent: 2, name: 'f_dmz_ipaddr', type: 'text', maxlen: 15, size: 17,
 						value: (nvram.dmz_ipaddr.indexOf('.') != -1) ? nvram.dmz_ipaddr : (lipp + nvram.dmz_ipaddr) },
@@ -103,14 +105,13 @@ No part of this file may be used without permission.
 					{ title: 'Destination Interface', indent: 2, name: 'dmz_ifname', type: 'select',
 						options: lans, value: nvram.dmz_ifname },
 					/* VLAN-END */
-					{ title: 'Source Address<br>Restriction', indent: 2, name: 'f_dmz_sip', type: 'text', maxlen: 512, size: 64,
+					{ title: 'Source Address Restriction', indent: 2, name: 'f_dmz_sip', type: 'text', maxlen: 512, size: 64,
 						value: nvram.dmz_sip, suffix: '<br><small>(optional; ex: "1.1.1.1", "1.1.1.0/24", "1.1.1.1 - 2.2.2.2" or "me.example.com")</small>' }
-				], '.section.dmz-settings', 'fields-table');
+					]);
 			</script>
 		</div>
 		<script type="text/javascript">if (nvram.dmz_enable == '1') show_notice1('<% notice("iptables"); %>');</script>
 
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>

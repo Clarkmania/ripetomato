@@ -67,7 +67,7 @@ No part of this file may be used without permission.
 		}
 
 		// TESTED ONLY ON WRT54G v2 (boardtype 0x0101),WRT54GL v1.1 (boardtype 0x0467) and WNR3500L (boardtype 0x04cf)
-		// info on some of these boardtypes/routers obtained from 
+		// info on some of these boardtypes/routers obtained from
 		// http://wiki.openwrt.org/toh/asus/start
 		// http://wiki.openwrt.org/toh/linksys/start
 		// http://wiki.openwrt.org/toh/start
@@ -178,7 +178,6 @@ No part of this file may be used without permission.
 			for (var uidx = 0; uidx < wl_ifaces.length; ++uidx) {
 				var u = wl_fface(uidx);
 				var wlan = E('_f_bridge_wlan'+u+'_to');
-
 				for (var ib = 0; ib <= MAX_BRIDGE_ID; ib++) {
 					var j = (ib == 0) ? "" : ib;
 					if(nvram['lan'+j+'_ifname'].length < 1)
@@ -291,7 +290,7 @@ No part of this file may be used without permission.
 			// in some cases, if some/any of them are not found, a full nvram reset/clean could be triggered
 			// so, to (try to) play it safe, we check for the 1st needed/available/required
 			// VLAN for FastE (vlan0 is usually LAN) and GigE routers (vlan1 is usually LAN)
-			if((fom['vlan0ports'].value.length < 1) || (fom['vlan0hwname'].value.length < 1) || 
+			if((fom['vlan0ports'].value.length < 1) || (fom['vlan0hwname'].value.length < 1) ||
 				(fom['vlan1ports'].value.length < 1) || (fom['vlan1hwname'].value.length < 1))
 				fom['manual_boot_nv'].value = '1';
 			else
@@ -872,80 +871,84 @@ No part of this file may be used without permission.
 		<input type="hidden" name="vlan14vid">
 		<input type="hidden" name="vlan15vid">
 
-		<div id="sesdiv" style="display:none">
-			<h3>VLAN</h3>
-			<div class="section">
-				<table class="line-table" id="vlan-grid"></table>
-			</div>
+		<div id="sesdiv" class="box" style="display:none">
+			<div class="heading">VLAN Settings</div>
+			<div class="content">
+				<table class="line-table" id="vlan-grid"></table><br />
 
-			<h3><a href="javascript:toggleVisibility('vidmap');">VID Offset <span id="sesdiv_vidmap_showhide"><i class="icon-chevron-up"></i></span></a></h3>
-			<div class="section vidoffset" id="sesdiv_vidmap" style="display:none">
+
+				<h4><a href="javascript:toggleVisibility('vidmap');">VID Offset <span id="sesdiv_vidmap_showhide"><i class="icon-chevron-up"></i></span></a></h4>
+				<div class="section vidoffset" id="sesdiv_vidmap" style="display:none"></div><hr>
 				<script type="text/javascript">
-					createFieldTable('', [
+					$('.section.vidoffset').forms([
 						{ title: 'First 802.1Q VLAN tag', name: 'vlan0tag', type: 'text', maxlen:4, size:6,
 							value: fixInt(nvram.vlan0tag, 0, 4080, 0),
 							suffix: ' <small><i>(range: 0 - 4080; must be a multiple of 16; set to 0 to disable)</i></small>' }
-						], '.section.vidoffset', 'fields-table');
+					]);
 				</script>
-			</div>
 
-			<h3><a href="javascript:toggleVisibility('wireless');">Wireless <span id="sesdiv_wireless_showhide"><i class="icon-chevron-up"></i></span></a></h3>
-			<div class="section wifi" id="sesdiv_wireless" style="display:none">
+
+				<h4><a href="javascript:toggleVisibility('wireless');">Wireless <span id="sesdiv_wireless_showhide"><i class="icon-chevron-up"></i></span></a></h4>
+				<div class="section wifi" id="sesdiv_wireless" style="display:none"></div><hr>
 				<script type="text/javascript">
 					var f = [];
 					for (var uidx = 0; uidx < wl_ifaces.length; ++uidx) {
 						var u = wl_fface(uidx);
 						f.push(
-							{ title: ('Bridge ' + wl_ifaces[uidx][0] + ' to'), name: ('f_bridge_wlan'+u+'_to'), type: 'select', 
+							{ title: ('Bridge ' + wl_ifaces[uidx][0] + ' to'), name: ('f_bridge_wlan'+u+'_to'), type: 'select',
 								options: [[0,'LAN (br0)'],[1,'LAN1  (br1)'],[2,'LAN2 (br2)'],[3,'LAN3 (br3)'],[4,'LAN4 (br4)'],[5,'LAN5 (br5)'],[6,'LAN6 (br6)'],[7,'LAN7 (br7)'],[8,'none']], value: 8 } );
 					}
-					createFieldTable('',f, '.section.wifi', 'fields-table');
+					$('.section.wifi').forms(f);
 					if(port_vlan_supported) vlg.setup();
 				</script>
-			</div>
 
-			<h3><a href="javascript:toggleVisibility('notes');">Notes <span id='sesdiv_notes_showhide'><i class="icon-chevron-up"></i></span></a></h3>
-			<div class="section" id="sesdiv_notes" style="display:none">
-				<ul>
-					<li><b>VLAN</b> - Unique identifier of a VLAN.</li>
-					<li><b>VID</b> - <i>EXPERIMENTAL</i> - Allows overriding "traditional" VLAN/VID mapping with arbitrary VIDs for each VLAN (set to "0" to use "regular" VLAN/VID mappings instead). Warning: this hasn"t been verified/tested on anything but a Cisco/Linksys E3000 and may not be supported by your particular device/model (<small><b><i>see notes on "VID Offset" below</i></b></small>).</li>
-					<li><b>Ports 1-4 &amp; WAN</b> - Which ethernet ports on the router should be members of this VLAN.</li>
-					<li><b>Tagged</b> - Enable 802.1Q tagging of ethernet frames on a particular port/VLAN
-						<script type="text/javascript">
-							if(!trunk_vlan_supported)
-								W(' <i><b>(unknown support for this model...contact the developper (Victek))</i></b>');
-						</script>
-					</li>
-					<li><b>Default</b> - VLAN ID assigned to untagged frames received by the router.</li>
-					<li><b>Bridge</b> - Determines if this VLAN ID should be treated as WAN, part of a LAN bridge or just left alone (i.e. member of a 802.1Q trunk, being managed manually via scripts, etc...).</li>
-				</ul>
 
-				<ul>
-					<li><b>VID Offset</b> - <i>EXPERIMENTAL</i> - First 802.1Q VLAN tag to be used as <i>base/initial tag/VID</i> for VLAN and VID assignments. This allows using VIDs larger than 15 on (older) devices such as the Linksys WRT54GL v1.1 (in contiguous blocks/ranges with up to 16 VLANs/VIDs). Set to '0' (zero) to disable this feature and VLANs will have the very same/identical value for its VID, as usual (from 0 to 15).</li>
-				</ul>
+				<h4><a href="javascript:toggleVisibility('notes');">Notes <span id='sesdiv_notes_showhide'><i class="icon-chevron-up"></i></span></a></h4>
+				<div class="section" id="sesdiv_notes" style="display:none">
+					<ul>
+						<li><b>VLAN</b> - Unique identifier of a VLAN.</li>
+						<li><b>VID</b> - <i>EXPERIMENTAL</i> - Allows overriding "traditional" VLAN/VID mapping with arbitrary VIDs for each VLAN (set to "0" to use "regular" VLAN/VID mappings instead). Warning: this hasn"t been verified/tested on anything but a Cisco/Linksys E3000 and may not be supported by your particular device/model (<small><b><i>see notes on "VID Offset" below</i></b></small>).</li>
+						<li><b>Ports 1-4 &amp; WAN</b> - Which ethernet ports on the router should be members of this VLAN.</li>
+						<li><b>Tagged</b> - Enable 802.1Q tagging of ethernet frames on a particular port/VLAN
+							<script type="text/javascript">
+								if(!trunk_vlan_supported)
+									W(' <i><b>(unknown support for this model...contact the developper (Victek))</i></b>');
+							</script>
+						</li>
+						<li><b>Default</b> - VLAN ID assigned to untagged frames received by the router.</li>
+						<li><b>Bridge</b> - Determines if this VLAN ID should be treated as WAN, part of a LAN bridge or just left alone (i.e. member of a 802.1Q trunk, being managed manually via scripts, etc...).</li>
+					</ul>
 
-				<ul>
-					<li><b>Wireless</b> - Assignments of wireless interfaces to different LAN briges. You should probably be using and/or check things on <a href=advanced-wlanvifs.asp>Advanced/Virtual Wireless</a> and <a href=basic-network.asp>Basic/Network</a>.</li>
-				</ul>
+					<ul>
+						<li><b>VID Offset</b> - <i>EXPERIMENTAL</i> - First 802.1Q VLAN tag to be used as <i>base/initial tag/VID</i> for VLAN and VID assignments. This allows using VIDs larger than 15 on (older) devices such as the Linksys WRT54GL v1.1 (in contiguous blocks/ranges with up to 16 VLANs/VIDs). Set to '0' (zero) to disable this feature and VLANs will have the very same/identical value for its VID, as usual (from 0 to 15).</li>
+					</ul>
 
-				<small>
+					<ul>
+						<li><b>Wireless</b> - Assignments of wireless interfaces to different LAN briges. You should probably be using and/or check things on <a href=advanced-wlanvifs.asp>Advanced/Virtual Wireless</a> and <a href=basic-network.asp>Basic/Network</a>.</li>
+					</ul>
+
 					<ul>
 						<li><b>Other relevant notes/hints:</b>
 						<ul id="noteshints">
 							<li>One VID <i>must</i> be assigned to WAN.</li>
 							<li>One VID <i>must</i> be selected as the default.</li>
-							<script type="text/javascript">
-								if((trunk_vlan_supported) || (nvram.trunk_vlan_so == '1')) {
-									$('#noteshints').append('<li>To prevent 802.1Q compatibility issues, avoid using VID "0" as 802.1Q specifies that frames with a tag of "0" do not belong to any VLAN (the tag contains only user priority information).</li>');
-									$('#noteshints').append('<li>It may be also recommended to avoid using VID "1" as some vendors consider it special/reserved (for management purposes).</li>');
-								}
-							</script>
+
 						</ul>
 						<ul>
 							<li>This is an <b>experimental</b> feature and hasn't been tested in anything but a Linksys WRT54GL v1.1 running a Teaman-ND K24 build and a Cisco/Linksys E3000 running a Teaman-RT K26 build.</li>
 							<li>There's lots of things that could go wrong, please do think about what you're doing and take a backup before hitting the 'Save' button on this page!</li>
 						</ul>
 					</ul>
+
+					<script type="text/javascript">
+
+						if((trunk_vlan_supported) || (nvram.trunk_vlan_so == '1')) {
+							$('#noteshints').append('<li>To prevent 802.1Q compatibility issues, avoid using VID "0" as 802.1Q specifies that frames with a tag of "0" do not belong to any VLAN (the tag contains only user priority information).</li>');
+							$('#noteshints').append('<li>It may be also recommended to avoid using VID "1" as some vendors consider it special/reserved (for management purposes).</li>');
+						}
+
+					</script>
+
 					<div id="trunk_vlan_override" style="display:none">
 						<h3>Trunk VLAN support override (experimental)</h3>
 						<div class="section trunkvlan">
@@ -957,12 +960,12 @@ No part of this file may be used without permission.
 						</div>
 						<br />
 					</div>
-				</small>
+				</div>
 			</div>
 		</div>
 
 		<script type="text/javascript">
-			if(!port_vlan_supported) 
+			if(!port_vlan_supported)
 				$('#sesdiv').after('<i>This feature is not supported on this router.</i>');
 			else {
 				E('sesdiv').style.display = '';

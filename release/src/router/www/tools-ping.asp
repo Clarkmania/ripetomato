@@ -180,21 +180,26 @@ No part of this file may be used without permission.
 		<li><a class="ajaxload" href="tools-wol.asp">WOL</a></li>
 	</ul>
 
-	<div class="sectionping">
-		<script type='text/javascript'>
-			createFieldTable('', [
-				{ title: 'Address', name: 'f_addr', type: 'text', maxlen: 64, size: 32, value: '',
-					suffix: ' <button type="submit" value="Ping" onclick="ping()" id="pingb" class="btn">Ping <i class="icon-ping"></i></button>' },
-				{ title: 'Ping Count', name: 'f_count', type: 'text', maxlen: 2, size: 7, value: '5' },
-				{ title: 'Packet Size', name: 'f_size', type: 'text', maxlen: 5, size: 7, value: '56', suffix: ' <small>(bytes)</small>' }
-				], '.sectionping', 'data-table other');
-		</script>
+	<div class="box">
+		<div class="heading">Ping</div>
+		<div class="content">
+
+			<div id="ping-forms"></div><hr>
+			<script type='text/javascript'>
+				$('#ping-forms').forms([
+					{ title: 'Address', name: 'f_addr', type: 'text', maxlen: 64, size: 32, value: '',
+						suffix: ' <button type="submit" value="Ping" onclick="ping()" id="pingb" class="btn">Ping <i class="icon-ping"></i></button>' },
+					{ title: 'Ping Count', name: 'f_count', type: 'text', maxlen: 2, size: 7, value: '5' },
+					{ title: 'Packet Size', name: 'f_size', type: 'text', maxlen: 5, size: 7, value: '56', suffix: ' <small>(bytes)</small>' }
+				]);
+			</script>
+
+			<div style="visibility:hidden; text-align: right;" id="wait">Please wait... <div class="spinner"></div></div>
+
+			<table id="tp-grid" class="line-table"></table>
+			<pre id="stats"></pre>
+		</div>
 	</div>
-
-	<div style="visibility:hidden; text-align: right;" id="wait">Please wait... <div class="spinner"></div></div>
-
-	<table id="tp-grid" class="line-table"></table>
-	<pre id="stats"></pre>
 
 	<div style="height:10px;" onclick="javascript:E('debug').style.display=''"></div>
 	<textarea id="debug" style="width:99%;height:300px;display:none"></textarea>

@@ -152,7 +152,7 @@ No part of this file may be used without permission.
 							p = parts[k];
 							if (p) {
 								desc = desc + '<br>Partition \'' + p[0] + '\'' + (p[3] != '' ? ' ' + p[3] : '') +
-								((p[5] != 0) ? ' (' + doScaleSize(p[5], 0) + 
+								((p[5] != 0) ? ' (' + doScaleSize(p[5], 0) +
 									((p[1] == 1) ? ' / ' + doScaleSize(p[6], 0) + ' free' : '') +
 									')' : '') + ' is ' +
 								((p[1] != 0) ? '' : 'not ') + ((p[3] == 'swap') ? 'active' : 'mounted') +
@@ -175,6 +175,7 @@ No part of this file may be used without permission.
 		function earlyInit() {
 			dg.setup();
 			init();
+			$('#last-box').after(genStdRefresh(1,0,'ref.toggle()'));
 		}
 		function init()
 		{
@@ -280,67 +281,66 @@ No part of this file may be used without permission.
 		<input type="hidden" name="usb_3g">
 		/* LINUX26-END */
 
-		<h3>USB Support</h3>
-		<div class="section usbfields">
-			<script type="text/javascript">
+		<div class="box" data-box="usb-supp">
+			<div class="heading">USB Support</div>
+			<div class="content">
+				<div id="usbfields"></div>
+				<script type="text/javascript">
 
-				createFieldTable('', [
-					{ title: 'Core USB Support', name: 'f_usb', type: 'checkbox', value: nvram.usb_enable == 1 },
-					{ title: 'USB 2.0 Support', indent: 2, name: 'f_usb2', type: 'checkbox', value: nvram.usb_usb2 == 1 },
-					{ title: 'USB 1.1 Support', indent: 2, multi: [
-						{ suffix: '&nbsp; OHCI &nbsp;&nbsp;&nbsp;', name: 'f_ohci', type: 'checkbox', value: nvram.usb_ohci == 1 },
-						{ suffix: '&nbsp; UHCI &nbsp;',	name: 'f_uhci', type: 'checkbox', value: nvram.usb_uhci == 1 }
-					] },
-					null,
-					{ title: 'USB Printer Support', name: 'f_print', type: 'checkbox', value: nvram.usb_printer == 1 },
-					{ title: 'Bidirectional copying', indent: 2, name: 'f_bprint', type: 'checkbox', value: nvram.usb_printer_bidirect == 1 },
-					null,
-					{ title: 'USB Storage Support', name: 'f_storage', type: 'checkbox', value: nvram.usb_storage == 1 },
-					{ title: 'File Systems Support', indent: 2, multi: [
-						{ suffix: '&nbsp; Ext2 / Ext3 &nbsp;&nbsp;&nbsp;', name: 'f_ext3', type: 'checkbox', value: nvram.usb_fs_ext3 == 1 },
-						/* NTFS-BEGIN */
-						{ suffix: '&nbsp; NTFS &nbsp;&nbsp;&nbsp;', name: 'f_ntfs', type: 'checkbox', value: nvram.usb_fs_ntfs == 1 },
-						/* NTFS-END */
-						{ suffix: '&nbsp; FAT &nbsp;', name: 'f_fat', type: 'checkbox', value: nvram.usb_fs_fat == 1 }
-						/* HFS-BEGIN */
-						,{ suffix: '&nbsp; HFS / HFS+ &nbsp;', name: 'f_hfs', type: 'checkbox', value: nvram.usb_fs_hfs == 1 }
-						/* HFS-END */
-					] },
-					/* LINUX26-BEGIN */
-					/* MICROSD-BEGIN */
-					{ title: 'SD/MMC Card Support', indent: 2, name: 'f_mmc', type: 'checkbox', value: nvram.usb_mmc == 1 },
-					/* MICROSD-END */
-					/* LINUX26-END */
-					{ title: 'Automount', indent: 2, name: 'f_automount', type: 'checkbox',
-						suffix: ' <small>Automatically mount all partitions to sub-directories in <i>/mnt</i>.</small>', value: nvram.usb_automount == 1 },
-					{ title: 'Run after mounting', indent: 2, name: 'script_usbmount', type: 'textarea', value: nvram.script_usbmount },
-					{ title: 'Run before unmounting', indent: 2, name: 'script_usbumount', type: 'textarea', value: nvram.script_usbumount },
-					null,
-					/* LINUX26-BEGIN */
-					{ title: 'HDD Spindown', name: 'f_idle_enable', type: 'checkbox',
-						suffix: ' <small>Spin down each HDD when idle. No need to use with flashdrive.</small>', value: nvram.idle_enable == 1 },
-					null,
-					{ title: 'USB 3G Modem support', name: 'f_usb_3g', type: 'checkbox',
-						suffix: ' <small>Before disconnecting 3G Modem from USB port, remember to uncheck box. If modem used usbserial module, you have to reboot router before unplug modem.</small>', value: nvram.usb_3g == 1 },
-					null,
-					/* LINUX26-END */
-					{ title: 'Hotplug script<br><small>(called when any USB device is attached or removed)</small>', name: 'script_usbhotplug', type: 'textarea', value: nvram.script_usbhotplug },
-					null,
-					{ text: '<small>Some of the changes will take effect only after a restart.</small>' }
-					], '.usbfields', 'fields-table');
-			</script>
-		</div>
-
-		<h3>Attached Devices</h3>
-		<div class="section">
-			<table id="dev-grid" class="line-table"></table>
-			<div id="usb-controls">
-				<script type="text/javascript">$('#usb-controls').append(genStdRefresh(1,0,'ref.toggle()'));</script>
+					$('#usbfields').forms([
+						{ title: 'Core USB Support', name: 'f_usb', type: 'checkbox', value: nvram.usb_enable == 1 },
+						{ title: 'USB 2.0 Support', indent: 2, name: 'f_usb2', type: 'checkbox', value: nvram.usb_usb2 == 1 },
+						{ title: 'USB 1.1 Support', indent: 2, multi: [
+							{ suffix: '&nbsp; OHCI &nbsp;&nbsp;&nbsp;', name: 'f_ohci', type: 'checkbox', value: nvram.usb_ohci == 1 },
+							{ suffix: '&nbsp; UHCI &nbsp;',	name: 'f_uhci', type: 'checkbox', value: nvram.usb_uhci == 1 }
+						] },
+						null,
+						{ title: 'USB Printer Support', name: 'f_print', type: 'checkbox', value: nvram.usb_printer == 1 },
+						{ title: 'Bidirectional copying', indent: 2, name: 'f_bprint', type: 'checkbox', value: nvram.usb_printer_bidirect == 1 },
+						null,
+						{ title: 'USB Storage Support', name: 'f_storage', type: 'checkbox', value: nvram.usb_storage == 1 },
+						{ title: 'File Systems Support', indent: 2, multi: [
+							{ suffix: '&nbsp; Ext2 / Ext3 &nbsp;&nbsp;&nbsp;', name: 'f_ext3', type: 'checkbox', value: nvram.usb_fs_ext3 == 1 },
+							/* NTFS-BEGIN */
+							{ suffix: '&nbsp; NTFS &nbsp;&nbsp;&nbsp;', name: 'f_ntfs', type: 'checkbox', value: nvram.usb_fs_ntfs == 1 },
+							/* NTFS-END */
+							{ suffix: '&nbsp; FAT &nbsp;', name: 'f_fat', type: 'checkbox', value: nvram.usb_fs_fat == 1 }
+							/* HFS-BEGIN */
+							,{ suffix: '&nbsp; HFS / HFS+ &nbsp;', name: 'f_hfs', type: 'checkbox', value: nvram.usb_fs_hfs == 1 }
+							/* HFS-END */
+						] },
+						/* LINUX26-BEGIN */
+						/* MICROSD-BEGIN */
+						{ title: 'SD/MMC Card Support', indent: 2, name: 'f_mmc', type: 'checkbox', value: nvram.usb_mmc == 1 },
+						/* MICROSD-END */
+						/* LINUX26-END */
+						{ title: 'Automount', indent: 2, name: 'f_automount', type: 'checkbox',
+							suffix: ' <small>Automatically mount all partitions to sub-directories in <i>/mnt</i>.</small>', value: nvram.usb_automount == 1 },
+						{ title: 'Run after mounting', indent: 2, name: 'script_usbmount', type: 'textarea', value: nvram.script_usbmount },
+						{ title: 'Run before unmounting', indent: 2, name: 'script_usbumount', type: 'textarea', value: nvram.script_usbumount },
+						null,
+						/* LINUX26-BEGIN */
+						{ title: 'HDD Spindown', name: 'f_idle_enable', type: 'checkbox',
+							suffix: ' <small>Spin down each HDD when idle. No need to use with flashdrive.</small>', value: nvram.idle_enable == 1 },
+						null,
+						{ title: 'USB 3G Modem support', name: 'f_usb_3g', type: 'checkbox',
+							suffix: ' <small>Before disconnecting 3G Modem from USB port, remember to uncheck box. If modem used usbserial module, you have to reboot router before unplug modem.</small>', value: nvram.usb_3g == 1 },
+						null,
+						/* LINUX26-END */
+						{ title: 'Hotplug script<br><small>(called when any USB device is attached or removed)</small>', name: 'script_usbhotplug', type: 'textarea', value: nvram.script_usbhotplug },
+						{ text: '<small>Some of the changes will take effect only after a restart.</small>' }
+					]);
+				</script>
 			</div>
-			<script type="text/javascript"></script>
 		</div>
 
-		<br />
+		<div class="box" id="last-box" data-box="attached-devices">
+			<div class="heading">Attached Devices</div>
+			<div class="content">
+				<table id="dev-grid" class="line-table"></table>
+			</div>
+		</div>
+
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>

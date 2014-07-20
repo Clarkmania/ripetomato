@@ -177,23 +177,28 @@ No part of this file may be used without permission.
 		<li><a class="ajaxload" href="tools-wol.asp">WOL</a></li>
 	</ul>
 
-	<div class="sectiontrace">
-		<script type="text/javascript">
-			createFieldTable('', [
-				{ title: 'Address', name: 'f_addr', type: 'text', maxlen: 64, size: 32, value: '', 
-					suffix: ' <button type="submit" value="Trace" onclick="trace()" id="traceb" class="btn">Trace <i class="icon-gauge"></i></button>' },
-				{ title: 'Maximum Hops', name: 'f_hops', type: 'text', maxlen: 2, size: 4, value: '20' },
-				{ title: 'Maximum Wait Time', name: 'f_wait', type: 'text', maxlen: 2, size: 4, value: '3', suffix: ' <small>(seconds per hop)</small>' }
-				], '.sectiontrace', 'data-table other');
-		</script>
+	<div class="box">
+		<div class="heading">Trace Route</div>
+		<div class="content">
+
+			<div id="tracert-form"></div><hr>
+			<script type="text/javascript">
+				$('#tracert-form').forms([
+					{ title: 'Address', name: 'f_addr', type: 'text', maxlen: 64, size: 32, value: '',
+						suffix: ' <button type="submit" value="Trace" onclick="trace()" id="traceb" class="btn">Trace <i class="icon-gauge"></i></button>' },
+					{ title: 'Maximum Hops', name: 'f_hops', type: 'text', maxlen: 2, size: 4, value: '20' },
+					{ title: 'Maximum Wait Time', name: 'f_wait', type: 'text', maxlen: 2, size: 4, value: '3', suffix: ' <small>(seconds per hop)</small>' }
+				]);
+			</script>
+
+			<div style="visibility:hidden" id="trace-error"></div>
+			<div style="visibility:hidden;text-align:right" id="wait">Please wait... <div class="spinner"></div></div>
+			<table id="ttr-grid" class="line-table"></table>
+
+			<div style="height:10px;" onclick="javascript:E('debug').style.display=''"></div>
+			<textarea id="debug" style="width:99%;height:300px;display:none"></textarea>
+		</div>
 	</div>
-
-	<div style="visibility:hidden" id="trace-error"></div>
-	<div style="visibility:hidden;text-align:right" id="wait">Please wait... <div class="spinner"></div></div>
-	<table id="ttr-grid" class="line-table"></table>
-
-	<div style="height:10px;" onclick="javascript:E('debug').style.display=''"></div>
-	<textarea id="debug" style="width:99%;height:300px;display:none"></textarea>
 
 	<script type="text/javascript">init();</script>
 </content>

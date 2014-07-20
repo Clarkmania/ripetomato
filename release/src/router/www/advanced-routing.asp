@@ -42,7 +42,7 @@ No part of this file may be used without permission.
 		}
 		ars.setup = function() {
 			var arslanopts = [['WAN','WAN'],['MAN','MAN']];
-		        for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+			for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
 				var ln = (i == 0) ? "" : i;
 				arslanopts.unshift.apply(arslanopts, [['LAN'+ln],['LAN'+ln]]);
 			}
@@ -67,7 +67,7 @@ No part of this file may be used without permission.
 			e = fields.getAll(this.newEditor);
 
 			/* VLAN-BEGIN */
-		        for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+			for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
 				var ln = (i == 0) ? "" : i;
 				if (nvram['lan'+ln+'_ifname'].length < 1)
 					e[4].options[i].disabled = true;
@@ -88,7 +88,7 @@ No part of this file may be used without permission.
 		function verifyFields(focused, quiet)
 		{
 			/* VLAN-BEGIN */
-		        for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+			for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
 				var ln = (i == 0) ? "" : i;
 				E('_f_dr_lan'+ln).disabled = (nvram['lan'+ln+'_ifname'].length < 1);
 				if (E('_f_dr_lan'+ln).disabled)
@@ -134,7 +134,7 @@ No part of this file may be used without permission.
 			/* NOVLAN-END */
 
 			/* VLAN-BEGIN */
-		        for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
+			for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
 				var ln = (i == 0) ? "" : i;
 				fom['dr_lan'+ln+'_tx'].value = fom['dr_lan'+ln+'_rx'].value = (E('_f_dr_lan'+ln).checked) ? '1 2' : '0';
 			}
@@ -208,47 +208,57 @@ No part of this file may be used without permission.
 		<input type="hidden" name="dr_wan_tx">
 		<input type="hidden" name="dr_wan_rx">
 
-		<h3>Current Routing Table</h3>
-		<div class="section">
-			<table class="line-table" id="ara-grid"></table>
+		<div class="box" data-box="routing-table">
+			<div class="heading">Current Routing Table</div>
+			<div class="section content">
+				<table class="line-table" id="ara-grid"></table><br />
+			</div>
 		</div>
 
-		<h3>Static Routing Table</h3>
-		<div class="section">
-			<table class="line-table" id="ars-grid"></table>
+		<div class="box" data-box="routing-static">
+			<div class="heading">Static Routing Table</div>
+			<div class="section content">
+				<table class="line-table" id="ars-grid"></table>
+			</div>
 		</div>
 
-		<h3>Miscellaneous</h3>
-		<div class="section misc">
+		<div class="box" data-box="routing-misc">
+			<div class="heading">Miscellaneous</div>
+			<div class="content misc"></div>
 			<script type="text/javascript">
 				var mto = [
-					{ title: 'Mode', name: 'wk_mode', type: 'select', options: [['gateway','Gateway'],['router','Router']], value: nvram.wk_mode }
+					{ title: 'Mode', name: 'wk_mode', type: 'select', options: [['gateway','Gateway'],['router','Router']], value: nvram.wk_mode },
 				];
-				/* ZEBRA-BEGIN */
-				/* VLAN-BEGIN */
-				mto.push.apply(mto, [{ title: 'RIPv1 &amp; v2' }]);
+					/* ZEBRA-BEGIN */
+					/* VLAN-BEGIN */
+				mto.push.apply(mto, [
+					{ title: 'RIPv1 &amp; v2' },
+				]);
 				for (var i = 0; i <= MAX_BRIDGE_ID; i++) {
 					var ln = (i == 0) ? "" : i;
 					mto.push.apply(mto, [{ title: 'LAN'+ln, indent: 2, name: 'f_dr_lan'+ln, type: 'checkbox', value: ((nvram['dr_lan'+ln+'_rx'] != '0') && (nvram['dr_lan'+ln+'_rx'] != '')) }]);
 				}
-				mto.push.apply(mto, [{ title: 'WAN', indent: 2, name: 'f_dr_wan', type: 'checkbox', value: ((nvram.dr_wan_rx != '0') && (nvram.dr_wan_rx != '')) }]);
-				/* VLAN-END */
-				/* NOVLAN-BEGIN */
-				mto.push.apply(mto, [{ title: 'RIPv1 &amp; v2', name: 'dr_setting', type: 'select', options: [[0,'Disabled'],[1,'LAN'],[2,'WAN'],[3,'Both']], value: nvram.dr_setting }]);
-				/* NOVLAN-END */
-				/* ZEBRA-END */
-				/* EMF-BEGIN */
-				mto.push.apply(mto, [{ title: 'Efficient Multicast Forwarding', name: 'f_emf', type: 'checkbox', value: nvram.emf_enable != '0' }]);
-				/* EMF-END */
-				mto.push.apply(mto, [{ title: 'DHCP Routes', name: 'f_dhcp_routes', type: 'checkbox', value: nvram.dhcp_routes != '0' }]);
-				/* NOVLAN-BEGIN */
-				mto.push.apply(mto, [{ title: 'Spanning-Tree Protocol', name: 'f_stp', type: 'checkbox', value: nvram.lan_stp != '0' }]);
-				/* NOVLAN-END */
-				createFieldTable('', mto, '.section.misc', 'fields-table');
+				mto.push.apply(mto, [
+					{ title: 'WAN', indent: 2, name: 'f_dr_wan', type: 'checkbox', value: ((nvram.dr_wan_rx != '0') && (nvram.dr_wan_rx != '')) },
+				]);
+					/* VLAN-END */
+				mto.push.apply(mto, [
+					/* NOVLAN-BEGIN */
+					{ title: 'RIPv1 &amp; v2', name: 'dr_setting', type: 'select', options: [[0,'Disabled'],[1,'LAN'],[2,'WAN'],[3,'Both']], value: nvram.dr_setting },
+					/* NOVLAN-END */
+					/* ZEBRA-END */
+					/* EMF-BEGIN */
+					{ title: 'Efficient Multicast Forwarding', name: 'f_emf', type: 'checkbox', value: nvram.emf_enable != '0' },
+					/* EMF-END */
+					{ title: 'DHCP Routes', name: 'f_dhcp_routes', type: 'checkbox', value: nvram.dhcp_routes != '0' },
+					/* NOVLAN-BEGIN */
+					{ title: 'Spanning-Tree Protocol', name: 'f_stp', type: 'checkbox', value: nvram.lan_stp != '0' }
+					/* NOVLAN-END */
+				]);
+				$('.content.misc').forms(mto);
 			</script>
 		</div>
 
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>

@@ -102,31 +102,35 @@ No part of this file may be used without permission.
 		<input type="hidden" name="udpxy_clients">
 		<input type="hidden" name="udpxy_port">
 
-		<div class="section firewall">
+		<div class="box" data-box="firewal-set">
+			<div class="heading">Firewall Settings</div>
+			<div class="section firewall content"></div>
 			<script type="text/javascript">
-				createFieldTable('', [
+				$('.section.firewall').forms([
 					{ title: 'Respond to ICMP ping', name: 'f_icmp', type: 'checkbox', value: nvram.block_wan == '0' },
 					{ title: 'Limit PPS', indent: 2, name: 'f_icmp_limit', type: 'checkbox', value: nvram.block_wan_limit != '0' },
 					{ title: 'ICMP', indent: 3, name: 'f_icmp_limit_icmp', type: 'text', maxlen: 3, size: 3, suffix: ' <small> request per second</small>', value: fixInt(nvram.block_wan_limit_icmp || 1, 1, 300, 5) },
 					{ title: 'Traceroute', indent: 3, name: 'f_icmp_limit_traceroute', type: 'text', maxlen: 3, size: 3, suffix: ' <small> request per second</small>', value: fixInt(nvram.block_wan_limit_tr || 5, 1, 300, 5) },
 					{ title: 'Enable SYN cookies', name: 'f_syncookies', type: 'checkbox', value: nvram.ne_syncookies != '0' },
 					{ title: 'Enable DSCP Fix', name: 'f_DSCP_fix_enable', type: 'checkbox', value: nvram.DSCP_fix_enable != '0', suffix: ' <small>Fixes Comcast incorrect DSCP</small>' }
-				], '.section.firewall', 'fields-table');
+				]);
 			</script>
 		</div>
 
-		<h3>NAT</h3>
-		<div class="section natfirewall">
+		<div class="box" data-box="firewall-nat">
+			<div class="heading">NAT</div>
+			<div class="section natfirewall content"></div>
 			<script type="text/javascript">
-				createFieldTable('', [
+				$('.section.natfirewall').forms([
 					{ title: 'NAT loopback', name: 'nf_loopback', type: 'select', options: [[0,'All'],[1,'Forwarded Only'],[2,'Disabled']], value: fixInt(nvram.nf_loopback, 0, 2, 1) },
 					{ title: 'NAT target', name: 'ne_snat', type: 'select', options: [[0,'MASQUERADE'],[1,'SNAT']], value: nvram.ne_snat }
-				], '.section.natfirewall', 'fields-table');
+				]);
 			</script>
 		</div>
 
-		<h3>Multicast</h3>
-		<div class="section multicast">
+		<div class="box" data-box="firewall-multicast">
+			<div class="heading">Multicast</div>
+			<div class="section multicast content"></div>
 			<script type="text/javascript">
 				var multicast_options = [
 					{ title: 'Enable IGMPproxy', name: 'f_multicast', type: 'checkbox', value: nvram.multicast_pass == '1' },
@@ -143,11 +147,10 @@ No part of this file may be used without permission.
 					{ title: 'Max clients', indent: 2, name: 'f_udpxy_clients', type: 'text', maxlen: 4, size: 6, value: fixInt(nvram.udpxy_clients || 3, 1, 5000, 3) },
 					{ title: 'Udpxy port', indent: 2, name: 'f_udpxy_port', type: 'text', maxlen: 5, size: 7, value: fixPort(nvram.udpxy_port, 4022) }
 				]);
-				createFieldTable('', multicast_options, '.section.multicast', 'fields-table');
+				$('.section.multicast').forms(multicast_options);
 			</script>
 		</div>
 
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>

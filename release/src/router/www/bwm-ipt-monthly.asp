@@ -69,7 +69,7 @@ No part of this file may be used without permission.
 
 		dg.setup = function() {
 			this.init('monthly-grid', 'sort');
-			this.headerSet(['<b>Date</b>', '<b>Host</b>', '<b>Download</b>', '<b>Upload</b>', '<b>Total</b>']);
+			this.headerSet(['Date', 'Host', 'Download', 'Upload', 'Total']);
 		}
 
 		function redraw() {
@@ -181,16 +181,16 @@ No part of this file may be used without permission.
 				dg.resort();
 				dg.recolor();
 				dg.footerSet([
-					'Total', 
+					'Total',
 					('<small><i>(' +
-						(((hostslisted.length > 0) || (subnetslisted.length > 0)) ? 
+						(((hostslisted.length > 0) || (subnetslisted.length > 0)) ?
 							((hostslisted.length > 0) ? (hostslisted.length + ' hosts') : '') +
 							(((hostslisted.length > 0) && (subnetslisted.length > 0)) ? ', ' : '') +
 							((subnetslisted.length > 0) ? (subnetslisted.length + ' subnets') : '')
 							: 'no data') +
 						')</i></small>'),
-					rescale(rx), 
-					rescale(tx), 
+					rescale(rx),
+					rescale(tx),
 					rescale(rx+tx)]);
 			}
 		}
@@ -288,7 +288,10 @@ No part of this file may be used without permission.
 
 		function init() {
 
-			if (nvram.cstats_enable != '1') return;
+			if (nvram.cstats_enable != '1') {
+				$('.cstats').before('<div class="alert info">IP Traffic monitoring disabled.</b> <a href="/#admin-iptraffic.asp">Enable &raquo;</a>');
+				return;
+			}
 
 			var c;
 
@@ -433,34 +436,32 @@ No part of this file may be used without permission.
 		<li><a class="active"><i class="icon-month"></i> Monthly</a></li>
 	</ul>
 
-	<div id="cstats">
-		<div class="section">
-			<table id="monthly-grid" class="line-table"></table>
+	<div id="cstats" class="box">
+		<div class="heading">Monthly IP Traffic <a class="pull-right" href="#" data-toggle="tooltip" title="Reload Information" onclick="reloadPage(); return false;"><i class="icon-reboot"></i></a></div>
+		<div class="content">
+			<table id="monthly-grid" class="line-table"></table><br />
+
+			<h4><a href="javascript:toggleVisibility('options');">Options <span id="sesdivoptionsshowhide"><i class="icon-chevron-up"></i></span></a></h4>
+			<div class="section" id="sesdivoptions" style="display:none"></div>
 		</div>
-
-		<a class="btn" style="float: right;" onclick="reloadPage()">Refresh <i class="icon-reboot"></i></a>
-		<a href="javascript:genData()" class="btn">Data <i class="icon-drive"></i></a> 
-		<a href="admin-iptraffic.asp" class="btn btn-danger ajaxload">Configure <i class="icon-tools"></i></a>
-
-		<br /><br /><h3><a href="javascript:toggleVisibility('options');">Options <span id="sesdivoptionsshowhide"><i class="icon-chevron-up"></i></span></a></h3>
-		<div class="section" id="sesdivoptions" style="display:none">
-			<script type="text/javascript">
-				var c;
-				c = [];
-				c.push({ title: 'List only these IPs', name: 'f_filter_ip', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
-				c.push({ title: 'Exclude these IPs', name: 'f_filter_ipe', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
-				c.push({ title: 'Date Range', multi: [ { name: 'f_begin_date', type: 'select', options: [['0', 'Any']], suffix: ' - ' }, { name: 'f_end_date', type: 'select', options: [['0', 'Any']] } ] } );
-				c.push({ title: 'Date Format', name: 'f_dafm', type: 'select', options: [['0', 'yyyy-mm'], ['1', 'mm-yyyy'], ['2', 'mmm, yyyy'], ['3', 'mm.yyyy']] });
-				c.push({ title: 'Scale', name: 'f_scale', type: 'select', options: [['0', 'KB'], ['1', 'MB'], ['2', 'GB']] });
-				c.push({ title: 'Show subnet totals', name: 'f_subnet', type: 'checkbox', suffix: ' <small>(Not considered when calculating total traffic on the last line)</small>' });
-				c.push({ title: 'Hide IPs without traffic', name: 'f_ignorezeroes', type: 'checkbox' });
-				c.push({ title: 'Show known hostnames', name: 'f_hostnames', type: 'checkbox' });
-				c.push({ title: 'Show shortcuts', name: 'f_shortcuts', type: 'checkbox' });
-				createFieldTable('',c, '#sesdivoptions');
-			</script>
-
-		</div>
-		<div class="clearfix"></div>
 	</div>
+
+	<a href="javascript:genData()" class="btn btn-primary">Data <i class="icon-drive"></i></a>
+	<a href="admin-iptraffic.asp" class="btn btn-danger ajaxload">Configure <i class="icon-tools"></i></a>
+	<script type="text/javascript">
+		var c;
+		c = [];
+		c.push({ title: 'List only these IPs', name: 'f_filter_ip', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
+		c.push({ title: 'Exclude these IPs', name: 'f_filter_ipe', size: 50, maxlen: 255, type: 'text', suffix: ' <small>(Comma separated list)</small>' });
+		c.push({ title: 'Date Range', multi: [ { name: 'f_begin_date', type: 'select', options: [['0', 'Any']], suffix: ' - ' }, { name: 'f_end_date', type: 'select', options: [['0', 'Any']] } ] } );
+		c.push({ title: 'Date Format', name: 'f_dafm', type: 'select', options: [['0', 'yyyy-mm'], ['1', 'mm-yyyy'], ['2', 'mmm, yyyy'], ['3', 'mm.yyyy']] });
+		c.push({ title: 'Scale', name: 'f_scale', type: 'select', options: [['0', 'KB'], ['1', 'MB'], ['2', 'GB']] });
+		c.push({ title: 'Show subnet totals', name: 'f_subnet', type: 'checkbox', suffix: ' <small>(Not considered when calculating total traffic on the last line)</small>' });
+		c.push({ title: 'Hide IPs without traffic', name: 'f_ignorezeroes', type: 'checkbox' });
+		c.push({ title: 'Show known hostnames', name: 'f_hostnames', type: 'checkbox' });
+		c.push({ title: 'Show shortcuts', name: 'f_shortcuts', type: 'checkbox' });
+		$('#sesdivoptions').forms(c);
+	</script>
+
 	<script type="text/javascript">checkCstats(); init();</script>
 </content>

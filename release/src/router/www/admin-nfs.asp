@@ -79,45 +79,38 @@ No part of this file may be used without permission.
 		}
 	</script>
 
-	<div id="main" class="container">
-
 	<form id="_fom" method="post" action="tomato.cgi">
 		<input type="hidden" name="_nextpage" value="/#admin-nfs.asp">
 		<input type="hidden" name="_service" value="nfs-start">
 		<input type="hidden" name="nfs_enable">
 		<input type="hidden" name="nfs_exports">
 
-		<div class="section">
-			<div class="nfs-server"></div>
-			<script type="text/javascript">
-				createFieldTable('', [
-					{ title: 'Enable NFS Server', name: 'f_nfs_enable', type: 'checkbox', value: nvram.nfs_enable != '0' }
-					], '.section .nfs-server', 'fields-table');
-			</script>
+		<div class="box">
+			<div class="heading">NFS Server</div>
+			<div class="content">
+				<div id="nfs-server"></div><hr><br />
+				<script type="text/javascript">
+					$('#nfs-server').forms([
+						{ title: 'Enable NFS Server', name: 'f_nfs_enable', type: 'checkbox', value: nvram.nfs_enable != '0' }
+					]);
+				</script>
 
-			<h3>Exports</h3>
-			<div class="section">
-				<table class="line-table" id="nfsg-grid"></table>
-				<script type="text/javascript">nfsg.setup();</script>
+				<h4>Exports</h4>
+				<table class="line-table" id="nfsg-grid"></table><br><hr>
+
+				<h4>Notes</h4>
 				<ul>
 					<li>You can find more information on proper NFS configuration at the following website: <a href="http://nfs.sourceforge.net/nfs-howto/" target="_blanc"><b>http://nfs.sourceforge.net</b></a>.
+					<li>If you want to mount an NFS share from other NFS Server, you can use the mount.nfs tool via telnet/ssh.
 				</ul>
 			</div>
 		</div>
 
-		<h3>NFS Client</h3>
-		<div class="section">
-			<ul>
-				<li>If you want to mount an NFS share from other NFS Server, you can use the mount.nfs tool via telnet/ssh.
-			</ul>
-		</div>
-
-		<br />
 		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
 
 	</form>
 
-	<script type="text/javascript">init();</script>
+	<script type="text/javascript">nfsg.setup(); init();</script>
 </content>

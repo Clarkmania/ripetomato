@@ -14,12 +14,14 @@ LAN Access admin module by Augusto Bott
 			height: 25px;
 		}
 		.title {
+			padding: 0 5px;
 		}
 		.count {
 			text-align: right;
 		}
 		.pct {
 			width:55px;
+			padding-right: 10px;
 			text-align: right;
 		}
 		.thead {
@@ -32,16 +34,8 @@ LAN Access admin module by Augusto Bott
 			margin-top: 5px;
 		}
 
-		h3 {
-			border-bottom: 1px solid #E6E6E6;
-			padding-bottom: 3px;
-		}
-		.box.graphs { 
-			width: 350px;
-			margin: 0 30px 0 0;
-		}
 	</style>
-	<script type="text/javascript">                          
+	<script type="text/javascript">
 		//	<% nvram('at_update,tomatoanon_answer,cstats_enable,lan_ipaddr,lan1_ipaddr,lan2_ipaddr,lan3_ipaddr,lan4_ipaddr,lan5_ipaddr,lan6_ipaddr,lan7_ipaddr,lan_netmask,lan1_netmask,lan2_netmask,lan3_netmask,lan4_ipaddr,lan5_ipaddr,lan6_ipaddr,lan7_ipaddr,dhcpd_static,web_svg'); %>
 		// <% iptraffic(); %>
 
@@ -233,6 +227,20 @@ LAN Access admin module by Augusto Bott
 
 		function init() {
 
+			if (nvram.cstats_enable != '1') {
+				$('.cstats').before('<div class="alert info">IP Traffic monitoring disabled.</b> <a href="/#admin-iptraffic.asp">Enable &raquo;</a>');
+				return;
+			}
+
+			// SVG's
+			if (nvram.web_svg != '0') {
+
+				for (i=0; i < 3; i++) {
+
+					$('#svg-'+i).html('<embed id="svg' + i + '" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" src="img/ipt-graph.svg?n=' + i + '&v=<% version(); %>" style="width:310px;height:310px;"></embed>').css('text-align', 'center');
+				}
+			}
+
 			// Data
 			for (i = 0; i < 11; ++i) {
 				$('#firstTable').prepend('<tr>' +
@@ -278,58 +286,44 @@ LAN Access admin module by Augusto Bott
 		<li><a class="ajaxload" href="bwm-ipt-monthly.asp"><i class="icon-month"></i> Monthly</a></li>
 	</ul>
 
-	<script type="text/javascript">
-		if (nvram.cstats_enable != '1') {
-			$('.nav-tabs').after('<div class="alert info"><b>IP Traffic monitoring disabled.</b> <a href="admin-iptraffic.asp">Enable&nbsp;&raquo;</a></div>');
-		}
-	</script>
-
-	<div class="box graphs">
-		<h3>IP Traffic</h3>
-		<div id="firstGraph">
-			<script type="text/javascript">
-				if (nvram.web_svg != '0') {
-					$('#firstGraph').html('<object id="svg0" type="image/svg+xml" data="img/ipt-graph.svg?n=0&v=<% version(); %>" style="width:310px;height:310px;"></object>');
-				}
-			</script>
+	<div class="fluid-grid x3">
+		<div class="box graphs">
+			<div class="heading">IP Traffic</div>
+			<div class="content">
+				<div id="svg-0"></div>
+				<table id="firstTable">
+					<tr><td class="color" style="height:1em"></td><td class="title" style="width:45px">&nbsp;</td><td class="thead count">kbit/s</td><td class="thead count">KB/s</td><td class="pct">&nbsp;</td></tr>
+					<tr><td>&nbsp;</td><td class="total">Total</td><td id="ccnt-total" class="total count"></td><td class="total pct">100%</td></tr>
+				</table>
+			</div>
 		</div>
-		<table id="firstTable">
-			<tr><td class="color" style="height:1em"></td><td class="title" style="width:45px">&nbsp;</td><td class="thead count">kbit/s</td><td class="thead count">KB/s</td><td class="pct">&nbsp;</td></tr>
-			<tr><td>&nbsp;</td><td class="total">Total</td><td id="ccnt-total" class="total count"></td><td class="total pct">100%</td></tr>
-		</table>
+
+		<div class="box graphs">
+			<div class="heading">Bandwidth Distribution (Inbound)</div>
+			<div class="content">
+				<div id="svg-1"></div>
+
+				<table id="secondTable">
+					<tr><td class="color" style="height:1em"></td><td class="title" style="width:45px">&nbsp;</td><td class="thead count">kbit/s</td><td class="thead count">KB/s</td><td class="pct">&nbsp;</td></tr>
+					<tr><td>&nbsp;</td><td class="total">Total</td><td id="bcnt-total" class="total count"></td><td id="bcntx-total" class="total count"></td><td class="total pct">100%</td></tr>
+				</table>
+			</div>
+		</div>
+
+		<div class="box graphs">
+			<div class="heading">Bandwidth Distribution (Outbound)</div>
+			<div class="content">
+				<div id="svg-2"></div>
+
+				<table id="thirdTable">
+					<tr><td class="color" style="height:1em"></td><td class="title" style="width:45px">&nbsp;</td><td class="thead count">kbit/s</td><td class="thead count">KB/s</td><td class="pct">&nbsp;</td></tr>
+					<tr><td>&nbsp;</td><td class="total">Total</td><td id="obcnt-total" class="total count"></td><td id="obcntx-total" class="total count"></td><td class="total pct">100%</td></tr>
+				</table>
+			</div>
+		</div>
 	</div>
 
-	<div class="box graphs">
-		<h3>Bandwidth Distribution (Inbound)</h3>
-		<div id="secondGraph">
-			<script type='text/javascript'>
-				if (nvram.web_svg != '0') {
-					$('#secondGraph').html('<object id="svg1" type="image/svg+xml" data="img/ipt-graph.svg?n=1&v=<% version(); %>" style="width:310px;height:310px;"></object>');
-				}
-			</script>
-		</div>
-		<table id="secondTable">
-			<tr><td class="color" style="height:1em"></td><td class="title" style="width:45px">&nbsp;</td><td class="thead count">kbit/s</td><td class="thead count">KB/s</td><td class="pct">&nbsp;</td></tr>
-			<tr><td>&nbsp;</td><td class="total">Total</td><td id="bcnt-total" class="total count"></td><td id="bcntx-total" class="total count"></td><td class="total pct">100%</td></tr>
-		</table>
-	</div>
-
-	<div class="box graphs">
-		<h3>Bandwidth Distribution (Outbound)</h3> 
-		<div id="thirdGraph">
-			<script type='text/javascript'>
-				if (nvram.web_svg != '0') {
-					$('#thirdGraph').html('<object id="svg2" type="image/svg+xml" data="img/ipt-graph.svg?n=2&v=<% version(); %>" style="width:610px;height:310px;"></object>');
-				}
-			</script>
-		</div>
-		<table id="thirdTable">
-			<tr><td class="color" style="height:1em"></td><td class="title" style="width:45px">&nbsp;</td><td class="thead count">kbit/s</td><td class="thead count">KB/s</td><td class="pct">&nbsp;</td></tr>
-			<tr><td>&nbsp;</td><td class="total">Total</td><td id="obcnt-total" class="total count"></td><td id="obcntx-total" class="total count"></td><td class="total pct">100%</td></tr>
-		</table>
-	</div>
-
-	<div class="clearfix"></div><div id="refresh"></div>
+	<div id="refresh"></div>
 	<script type="text/javascript">$('#refresh').html(genStdRefresh(1,1,'ref.toggle()')); init();</script>
 
 </content>

@@ -10,7 +10,7 @@ No part of this file may be used without permission.
 // Function to resize SVG (responsive code) (jquery)
 var newPageWidth
 function updateSVGwidth() {
-	newPageWidth = $('object').width();
+	newPageWidth = $('embed[type="image/svg+xml"]').width();
 }
 
 var tabs = [];

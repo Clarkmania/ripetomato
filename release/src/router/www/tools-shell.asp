@@ -6,10 +6,10 @@ No part of this file may be used without permission.
 --><title>System Commands</title>
 <content>
 	<style>
-	.sectionshell { margin-top: 10px; }
-	textarea { width: 80%; height: 35px; }
-	table tr td:first-child { width: 150px; }
-	pre#result { background: #fff; border: 1px solid rgb(230,230,230); padding: 10px; margin: 25px 0 5px; }
+		.sectionshell { margin-top: 10px; }
+		textarea { width: 80%; height: 35px; }
+		table tr td:first-child { width: 150px; }
+		pre { max-height: 400px; overflow: auto; }
 	</style>
 	<script type="text/javascript">
 		var cmdresult = '';
@@ -80,7 +80,7 @@ No part of this file may be used without permission.
 			if (((s = cookie.get('tools_shell_notes_vis')) != null) && (s == '1')) {
 				toggleVisibility("notes");
 			}
-			
+
 			$('#refresh').append(genStdRefresh(1,1,"ref.toggle()"));
 		}
 
@@ -106,20 +106,24 @@ No part of this file may be used without permission.
 		<li><a class="ajaxload" href="tools-wol.asp">WOL</a></li>
 	</ul>
 
-	<div class="sectionshell">
-		<div class="command"></div>
-		<script type="text/javascript">
-			createFieldTable('', [
-				{ title: 'Command (<i class="icon-info tooltip icon-normal" data-info="Use the command &quot;nvram export --set&quot; or &quot;nvram export --set | grep qos&quot; to cut and paste configuration"></i>)', 
-				name: 'f_cmd', type: 'textarea', wrap: 'off', value: '' }
-				], '.sectionshell .command');
-		</script>
-		<div id="refresh"></div><button type="button" value="Execute" onclick="execute()" id="execb" class="btn">Execute <i class="icon-cmd"></i></button>
-	</div>
-	
-	<pre id="result"></pre>
+	<div class="box">
+		<div class="heading">System Shell</div>
+		<div class="content">
+			<div id="command-form"></div><hr>
 
-	<div style="visibility:hidden;" id="wait">Please wait... <div class="spinner"></div></div>
-	
+			<div style="visibility:hidden;" id="wait">Please wait... <span class="spinner"></span></div>
+			<pre id="result"></pre>
+
+			<script type="text/javascript">
+				$('#command-form').forms([
+					{ title: 'Command', help:'Use the command &quot;nvram export --set&quot; or &quot;nvram export --set | grep qos&quot; to cut and paste configuration',
+						name: 'f_cmd', type: 'textarea', wrap: 'off', value: '', style: 'width: 100%; height: 80px;' }
+					], { grid: ['col-sm-2', 'col-sm-10'] });
+			</script>
+		</div>
+	</div>
+
+	<div id="refresh"></div><button type="button" value="Execute" onclick="execute()" id="execb" class="btn">Execute <i class="icon-cmd"></i></button>
+
 	<script type="text/javascript">init();</script>
 </content>

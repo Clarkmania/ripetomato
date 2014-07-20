@@ -394,7 +394,7 @@ LAN Access admin module by Augusto Bott
 			//		wl_enc_modes_available.push([mode, enc[mode]]);
 			//	}
 
-			//wl_ifaces = [ ['eth1','0',0,-1,'bott','00:1C:10:9E:8C:8E',1,4],['wl0.1','0.1',0,1,'ghetto','02:1C:10:9E:8C:8F',1,0], 
+			//wl_ifaces = [ ['eth1','0',0,-1,'bott','00:1C:10:9E:8C:8E',1,4],['wl0.1','0.1',0,1,'ghetto','02:1C:10:9E:8C:8F',1,0],
 			//				['eth2','1',1,-1,'lixo','04:1C:10:9E:8C:8E',1,4]];
 			//wl_bands = [ [ '2'],[ '2'],[ '2'] ];
 			/* REMOVE-END */
@@ -1330,48 +1330,46 @@ LAN Access admin module by Augusto Bott
 	<input type="hidden" name="lan6_ifnames" value="">
 	<input type="hidden" name="lan7_ifnames" value="">
 
-	<div id="sesdiv" style="display:none">
+	<div class="box" id="sesdiv" style="display:none">
+		<div class="heading">Virtual Wireless Interfaces</div>
 
-		<h3>Virtual Wireless Interfaces</h3>
-		<div class="section">
-			<div id="tabsmain"></div>
-			<script type="text/javascript">
-				$('#tabsmain').append(tabCreate.apply(this, tabs));
-			</script>
+		<div class="content">
+
+			<div id="tabsmain"></div><br />
+			<script type="text/javascript">$('#tabsmain').append(tabCreate.apply(this, tabs));</script>
 
 			<div id="overview-tab">
-				<br>
-				<table class="line-table" id="wlif-grid"></table>
-				<br>
+				<table class="line-table" id="wlif-grid"></table><br />
 
 				<h3><a href="javascript:toggleVisibility('details');">Wireless Interfaces Details <span id="sesdivdetailsshowhide"><i class="icon-chevron-up"></i></span></a></h3>
 				<div class="section fixtables" id="sesdivdetails" style="display:none">
 
 					<script type="text/javascript">
+						var c = [];
 						for (var uidx = 0; uidx < wl_ifaces.length; ++uidx) {
 							if (wl_sunit(uidx)<0) {
-								var c = [];
 								c.push({ title: 'Interface', text: 'wl' + wl_fface(uidx) + ' <small>(' + wl_display_ifname(uidx) + ')</small>' });
 								c.push({ title: 'Virtual Interfaces', indent: 2, rid: 'wl' + wl_fface(uidx) + '_vifs',
 									text: 'wl' + wl_fface(uidx) + ' ' +  nvram['wl' + wl_fface(uidx) + '_vifs'] + ' <small>(max ' + wl_ifaces[uidx][7] + ')</small>' });
-								createFieldTable('',c, '#sesdivdetails', 'fields-table');
+
 							}
 						}
+
+						createFieldTable('',c, '#sesdivdetails', 'line-table');
 					</script>
-				</div>
+				</div><br />
 
 				<!-- LINUX24-BEGIN -->
 				<h3><a href="javascript:toggleVisibility('options');">Options <span id="sesdivoptionsshowhide"><i class="icon-chevron-up"></i></span></a></h3>
-				<div class="section" id="sesdivoptions" style="display:none">
-					<script type="text/javascript">
-						createFieldTable('', [
-							{ title: 'Use alternate NAS startup sequence', name: 'f_nas_alternate', type: 'checkbox', value: nvram.nas_alternate == '1' }
-							], '#sesdivoptions', 'fields-table');
-					</script>
-				</div>
+				<div class="section" id="sesdivoptions" style="display:none"></div><hr>
+				<script type="text/javascript">
+					$('#sesdivoptions').forms([
+						{ title: 'Use alternate NAS startup sequence', name: 'f_nas_alternate', type: 'checkbox', value: nvram.nas_alternate == '1' }
+					]);
+				</script>
 				<!-- LINUX24-END -->
 
-				<h3><a href="javascript:toggleVisibility('notes');">Notes <span id="sesdivnotesshowhide"><i class="icon-chevron-up"></i></span></a></h3>
+				<h4>Notes <a href="javascript:toggleVisibility('notes');"><span id="sesdivnotesshowhide"><i class="icon-chevron-up"></i></span></a></h4>
 				<div class="section" id="sesdivnotes" style="display:none">
 
 					<ul>
@@ -1397,7 +1395,6 @@ LAN Access admin module by Augusto Bott
 							<li>By definition, configuration settings for the <i>primary VIF</i> of any physical wireless interfaces shouldn't be touched here (use the <a class="ajaxload" href="basic-network.asp">Basic/Network</a> page instead).</li>
 						</ul>
 					</ul>
-					<br />
 				</div>
 			</div>
 
@@ -1451,12 +1448,12 @@ LAN Access admin module by Augusto Bott
 					f.push (
 						{ title: 'Enable Interface', name: 'f_wl'+u+'_radio', type: 'checkbox',
 							value: (eval('nvram["wl'+u+'_radio"]') == '1') && (eval('nvram["wl'+u+'_net_mode"]') != 'disabled') },
-						{ title: 'MAC Address', text: '<a href="advanced-mac.asp">' + (eval('nvram["wl'+u+'_hwaddr"]') || '00:00:00:00:00:00') + '</a>' +
+						{ title: 'MAC Address', text: '<a href="/#advanced-mac.asp">' + (eval('nvram["wl'+u+'_hwaddr"]') || '00:00:00:00:00:00') + '</a>' +
 							' &nbsp; <b id="wl'+u+'_hwaddr_msg" style="visibility:hidden"><small>(warning: WL driver reports BSSID <a href=advanced-mac.asp>' + ((typeof(wl_ifaces[wl_ifidxx(u)]) != 'undefined')? wl_ifaces[wl_ifidxx(u)][9] : '') + '</a>)</small></b>' },
 						{ title: 'Wireless Mode', name: 'f_wl'+u+'_mode', type: 'select',
 							options: wl_modes_available,
 							value: ((eval('nvram["wl'+u+'_mode"]') == 'ap') && (eval('nvram["wl'+u+'_wds_enable"]') == '1')) ? 'apwds' : eval('nvram["wl'+u+'_mode"]'),
-							suffix: ' &nbsp; <b id="wl'+u+'_mode_msg" style="visibility:hidden"><small>(note: you might wish to cross-check settings later on <a href=basic-network.asp>Basic/Network</a>)</small></b>' }
+							suffix: ' &nbsp; <b id="wl'+u+'_mode_msg" style="visibility:hidden"><small>(note: you might wish to cross-check settings later on <a href="/#basic-network.asp">Basic/Network</a>)</small></b>' }
 					);
 
 					// only if primary VIF
@@ -1482,7 +1479,7 @@ LAN Access admin module by Augusto Bott
 					if (u.toString().indexOf('.') < 0) {
 						f.push (
 							{ title: 'Channel', name: 'wl'+u+'_channel', type: 'select', options: ghz[uidx], prefix: '<span id="__wl'+u+'_channel">', suffix: '</span>\
-							<button type="button" id="_f_wl'+u+'_scan" value="Scan" onclick="scanButton('+u+')" class="btn">Scan</button> <div class="spinner" id="spin'+u+'" style="visibility: hidden;"></div>',
+								<button type="button" id="_f_wl'+u+'_scan" value="Scan" onclick="scanButton('+u+')" class="btn">Scan <i class="icon-search"></i></button> <div class="spinner" id="spin'+u+'" style="visibility: hidden;"></div>',
 								value: eval('nvram["wl'+u+'_channel"]') },
 							{ title: 'Channel Width', name: 'wl'+u+'_nbw_cap', type: 'select', options: [['0','20 MHz'],['1','40 MHz']],
 								value: eval('nvram["wl'+u+'_nbw_cap"]') },
@@ -1501,10 +1498,10 @@ LAN Access admin module by Augusto Bott
 							value: eval('nvram["wl'+u+'_security_mode"]') },
 						{ title: 'Encryption', indent: 2, name: 'wl'+u+'_crypto', type: 'select',
 							options: [['tkip','TKIP'],['aes','AES'],['tkip+aes','TKIP / AES']], value: eval('nvram["wl'+u+'_crypto"]') },
-						{ title: 'Shared Key', indent: 2, name: 'wl'+u+'_wpa_psk', type: 'password', maxlen: 64, size: 66, peekaboo: 1,
+						{ title: 'Shared Key', indent: 2, name: 'wl'+u+'_wpa_psk', type: 'password', maxlen: 80, size: 59, peekaboo: 1,
 							suffix: ' <button type="button" id="_f_wl'+u+'_psk_random1" value="Random" onclick="random_psk(\'_wl'+u+'_wpa_psk\')" class="btn">Random</button>',
 							value: eval('nvram["wl'+u+'_wpa_psk"]') },
-						{ title: 'Shared Key', indent: 2, name: 'wl'+u+'_radius_key', type: 'password', maxlen: 80, size: 32, peekaboo: 1,
+						{ title: 'Shared Key', indent: 2, name: 'wl'+u+'_radius_key', type: 'password', maxlen: 60, size: 32, peekaboo: 1,
 							suffix: ' <button type="button" id="_f_wl'+u+'_psk_random2" value="Random" onclick="random_psk(\'_wl'+u+'_radius_key\')" class="btn">Random</button>',
 							value: eval('nvram["wl'+u+'_radius_key"]') },
 						{ title: 'Group Key Renewal', indent: 2, name: 'wl'+u+'_wpa_gtk_rekey', type: 'text', maxlen: 4, size: 6, suffix: ' <i>(seconds)</i>',
@@ -1554,7 +1551,7 @@ LAN Access admin module by Augusto Bott
 							{ name: 'f_wl'+u+'_wds_' + (k + 1), type: 'text', maxlen: 17, size: 20, value: wds[k + 1] || '00:00:00:00:00:00' } ] } );
 					}
 
-					htmlOut += createFieldTable('', f, null, 'fields-table');
+					htmlOut += createFormFields(f);
 					htmlOut += ('</div>');
 
 				}

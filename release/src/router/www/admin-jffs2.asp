@@ -29,10 +29,10 @@ No part of this file may be used without permission.
 		function formatClock()
 		{
 			if (ftime == 0) {
-				E('fclock').innerHTML = 'a few more seconds';
+				$('.fclock').html('a few more seconds');
 			}
 			else {
-				E('fclock').innerHTML = ((ftime > 0) ? 'about ' : '') + ftime + ' second' + ((ftime == 1) ? '' : 's');
+				$('.fclock').html(((ftime > 0) ? 'about ' : '') + ftime + ' second' + ((ftime == 1) ? '' : 's'));
 			}
 			if (--ftime >= 0) setTimeout(formatClock, 1000);
 		}
@@ -42,7 +42,7 @@ No part of this file may be used without permission.
 			if (!verifyFields(null, 0)) return;
 
 			E('format').disabled = 1;
-			if (format) E('fmsg').style.visibility = 'visible';
+			if (format) $('.ajaxwrap').prepend('<div class="alert danger">Formating JFFS partition, please wait <span class="fclock">about 60 seconds</span>...</div>');
 
 			var fom = E('_fom');
 			var on = E('_f_jffs2_on').checked ? 1 : 0;
@@ -72,35 +72,46 @@ No part of this file may be used without permission.
 	</script>
 
 	<form id="_fom" method="post" action="tomato.cgi">
-	<input type="hidden" name="_nextpage" value="/#admin-jffs2.asp">
-	<input type="hidden" name="_nextwait" value="10">
-	<input type="hidden" name="_service" value="jffs2-restart">
-	<input type="hidden" name="_commit" value="1">
+		<input type="hidden" name="_nextpage" value="/#admin-jffs2.asp">
+		<input type="hidden" name="_nextwait" value="10">
+		<input type="hidden" name="_service" value="jffs2-restart">
+		<input type="hidden" name="_commit" value="1">
 
-	<input type="hidden" name="jffs2_on">
-	<input type="hidden" name="jffs2_format" value="0">
+		<input type="hidden" name="jffs2_on">
+		<input type="hidden" name="jffs2_format" value="0">
 
-	<div class="section" id="jffsdata">
-		<script type="text/javascript">
-			// <% statfs("/jffs", "jffs2"); %>
+		<div class="box">
+			<div class="heading">JFFS Partition</div>
+			<div class="content" id="jffsdata"></div>
+			<script type="text/javascript">
+				// <% statfs("/jffs", "jffs2"); %>
 
-			jfon = (nvram.jffs2_on == 1);
-			createFieldTable('', [
-				{ title: 'Enable', name: 'f_jffs2_on', type: 'checkbox', value: jfon },
-				{ title: 'Execute When Mounted', name: 'jffs2_exec', type: 'text', maxlen: 64, size: 34, value: nvram.jffs2_exec },
-				null,
-				{ title: 'Total / Free Size', text: (((jffs2.mnt) || (jffs2.size > 0)) ? scaleSize(jffs2.size) : '') + ((jffs2.mnt) ? ' / ' + scaleSize(jffs2.free) : ' (not mounted)') },
-				{ title: '', custom: '<button type="button" value="Format / Erase..." onclick="formatClicked()" id="format" class="btn">Format / Erase...</button>' +
-					'<span style="background:#b55;color:#fff;padding:1px 8px;visibility:hidden" id="fmsg">Please wait for <span id="fclock">about 60 seconds</span>...</span>' }
-				], '#jffsdata', 'fields-table');
-		</script>
-	</div>
+				show_notice1('<% notice("jffs"); %>');
 
-	<script type="text/javascript">show_notice1('<% notice("jffs"); %>');</script>
+				jfon = (nvram.jffs2_on == 1);
+				$('#jffsdata').forms([
+					{ title: 'Enable', name: 'f_jffs2_on', type: 'checkbox', value: jfon },
+					{ title: 'Execute When Mounted', name: 'jffs2_exec', type: 'text', maxlen: 64, size: 34, value: nvram.jffs2_exec },
+					null,
+					{ title: 'Total / Free Size ', text: (((jffs2.mnt) || (jffs2.size > 0)) ? scaleSize(jffs2.size) : '') + ((jffs2.mnt) ? ' / ' + scaleSize(jffs2.free) + ' (<span class="percentage"></span>)\
+					<div class="progress jffs2"><div class="bar"></div></div>' : ' (not mounted)') },
+					{ title: '', custom: '<button type="button" value="Format / Erase..." onclick="formatClicked()" id="format" class="btn">Format / Erase...</button>' }
+				]);
 
-	<br /><br />
-	<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
-	<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
-	&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
+				if (jffs2.size) {
+
+					var calc = (Math.round(((jffs2.size - jffs2.free) / jffs2.size) * 100)) + '%';
+					$('.percentage').html(calc);
+					$('.progress.jffs2 .bar').css('width', calc);
+
+				}
+			</script>
+		</div>
+
+		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
+		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
+		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
+	</form>
+
 	<script type="text/javascript">verifyFields(null, 1);</script>
 </content>

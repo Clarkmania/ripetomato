@@ -232,7 +232,7 @@
 				b = e.mac;
 				if (e.mac.match(/^(..):(..):(..)/)) {
 					b += '<br /><a class="btn btn-small" href="http://standards.ieee.org/cgi-bin/ouisearch?' + RegExp.$1 + '-' + RegExp.$2 + '-' + RegExp.$3 + '" target="_new" title="OUI Search">OUI</a> ' +
-					'<a class="btn btn-small" href="javascript:addStatic(' + i + ')" title="Static Lease...">Static</a>' +
+					'<a class="btn btn-small" href="javascript:addStatic(' + i + ')" title="Static Lease...">Static</a> ' +
 					'<a class="btn btn-small" href="javascript:addqoslimit(' + i + ')" title="QoS BW Limiter">BW Limit</a>';
 
 					if (e.rssi != '') {
@@ -269,9 +269,8 @@
 					}
 					this.insert(-1, e, [
 						e.ifname, b, (e.ip == '-') ? '' : e.ip + '<br />' + e.name,
-						(e.rssi != 0) ? e.rssi + ' <small>dBm</small>' : '',
-						(e.qual < 0) ? '' :
-						'<div class="progress" style="margin: 0;"><div title="' + e.qual + '%" class="bar ' + bar + '" style="width: ' + e.qual + '%;"></div></div>',
+						(e.rssi != 0) ? e.rssi + ' <small>dBm</small>' : '-',
+						(e.qual < 0) ? '-' : '<small>' + e.qual + '</small> <div class="progress"><div title="' + e.qual + '%" class="bar ' + bar + '" style="width: ' + e.qual + '%;"></div></div>',
 						e.txrx,	e.lease], false);
 				}
 			}
@@ -280,7 +279,7 @@
 		dg.setup = function()
 		{
 			this.init('dev-grid', 'sort');
-			this.headerSet(['<b>Interface</b>', '<b>MAC Address</b>', '<b>IP (Hostname)</b>', '<b>RSSI &nbsp; &nbsp; </b>', '<b>Quality (%)</b>', '<b>TX/RX Rate&nbsp;</b>', '<b>Lease &nbsp; &nbsp; </b>']);
+			this.headerSet(['<b>Interface</b>', '<b>MAC Address</b>', '<b>IP (Hostname)</b>', '<b>RSSI</b>', '<b>Quality (%)</b>', '<b>TX/RX Rate</b>', '<b>Lease</b>']);
 			this.populate();
 			this.sort(2);
 		}
@@ -296,31 +295,39 @@
 			ref.initPage(3000, 3);
 		}
 	</script>
+	<style>
+		#dev-grid td.co5, #dev-grid td.co4 {
+			text-align: center;
+		}
+	</style>
 
-	<div class="section refresher">
-		<table id="dev-grid" class="line-table"></table><br /><br />
-		<div class="devicedata"></div>
-		<script type="text/javascript">
-			f = [];
-			for (var uidx = 0; uidx < wl_ifaces.length; ++uidx) {
-				var u = wl_unit(uidx);
-				if (nvram['wl'+u+'_radio'] == '1') {
-					if (wl_sunit(uidx)<0) {
-						var a = '';
-						if ((nvram['wl'+u+'_mode'] == 'ap') || (nvram['wl'+u+'_mode'] == 'wds'))
-							a = '&nbsp;&nbsp;&nbsp; <button type="button" class="btn" value="Measure" onclick="javascript:window.location=\'wlmnoise.cgi?_http_id=' + nvram.http_id + '&_wl_unit=' + u +'\'">\
-							<i class="icon-signal"></i> Measure</button>';
-						f.push( { title: '<b>Noise Floor (' + wl_ifaces[uidx][0] + ')&nbsp;:</b>',
-							prefix: '<span id="noise'+uidx+'">',
-							custom: wlnoise[uidx],
-							suffix: '</span>&nbsp;<small>dBm</small>' + a } );
+	<div class="box">
+		<div class="heading">Devices List</div>
+		<div class="content">
+			<table id="dev-grid" class="line-table"></table><br />
+			<div class="devicedata"></div>
+			<script type="text/javascript">
+				f = [];
+				for (var uidx = 0; uidx < wl_ifaces.length; ++uidx) {
+					var u = wl_unit(uidx);
+					if (nvram['wl'+u+'_radio'] == '1') {
+						if (wl_sunit(uidx)<0) {
+							var a = '';
+							if ((nvram['wl'+u+'_mode'] == 'ap') || (nvram['wl'+u+'_mode'] == 'wds'))
+								a = '&nbsp;&nbsp;&nbsp; <button type="button" class="btn" value="Measure" onclick="javascript:window.location=\'wlmnoise.cgi?_http_id=' + nvram.http_id + '&_wl_unit=' + u +'\'">\
+								<i class="icon-signal"></i> Measure</button>';
+							f.push( { title: '<b>Noise Floor (' + wl_ifaces[uidx][0] + ')&nbsp;:</b>',
+								prefix: '<span id="noise'+uidx+'">',
+								custom: wlnoise[uidx],
+								suffix: '</span>&nbsp;<small>dBm</small>' + a } );
+						}
 					}
 				}
-			}
-			createFieldTable('', f, '.devicedata');
-		</script>
+				$('.devicedata').forms(f);
+			</script>
+		</div>
 	</div>
 
-	<script type="text/javascript">$('.refresher').after(genStdRefresh(1,1,'ref.toggle()'));</script>
+	<script type="text/javascript">$('.box').after(genStdRefresh(1,1,'ref.toggle()'));</script>
 	<script type="text/javascript">earlyInit(); init();</script>
 </content>

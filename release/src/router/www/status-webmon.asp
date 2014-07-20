@@ -339,25 +339,29 @@ No part of this file may be used without permission.
 			init();
 		}
 	</script>
-	<div id="webmon" style="display:none">
-		<div id="webmon-domains">
-			<h3>Recently Visited Web Sites</h3>
-			<div class="section">
-				<table id="dom-grid" class="line-table"></table>
-				<div id="clear1">
-					<a class="btn btn-primary btn-small" href="javascript:clearLog(1)">Clear Log <i class="icon-cancel"></i></a> 
-					<a class="btn btn-small" href="webmon_recent_domains?_http_id=<% nv(http_id) %>">Download <i class="icon-download"></i></a>
+	<div class="row" id="webmon" style="display:none">
+		<div class="col-sm-6">
+			<div id="webmon-domains" class="box">
+				<div class="heading">Recently Visited Web Sites</div>
+				<div class="content">
+					<table id="dom-grid" class="line-table"></table>
+					<br /><div id="clear1">
+						<a class="btn btn-primary btn-small" href="javascript:clearLog(1)">Clear Log <i class="icon-cancel"></i></a>
+						<a class="btn btn-small" href="webmon_recent_domains?_http_id=<% nv(http_id) %>">Download <i class="icon-download"></i></a>
+					</div>
 				</div>
 			</div>
 		</div>
-		<br /><br />
-		<div id="webmon-searches">
-			<h3>Recent Web Searches</h3>
-			<div class="section">
-				<table id="srh-grid" class="line-table"></table>
-				<div id="clear2">
-					<a class="btn btn-primary btn-small" href="javascript:clearLog(2)">Clear Log <i class="icon-cancel"></i></a>
-					<a class="btn btn-small" href="webmon_recent_searches?_http_id=<% nv(http_id) %>">Download <i class="icon-download"></i></a>
+
+		<div class="col-sm-6">
+			<div id="webmon-searches" class="box">
+				<div class="heading">Recent Web Searches</div>
+				<div class="content">
+					<table id="srh-grid" class="line-table"></table>
+					<br /><div id="clear2">
+						<a class="btn btn-primary btn-small" href="javascript:clearLog(2)">Clear Log <i class="icon-cancel"></i></a>
+						<a class="btn btn-small" href="webmon_recent_searches?_http_id=<% nv(http_id) %>">Download <i class="icon-download"></i></a>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -384,8 +388,8 @@ No part of this file may be used without permission.
 	</div>
 
 	<div id="wm-disabled" class="alert alert-info">
-		<b>Web Monitoring disabled.</b><br />
-		<a class="ajaxload" href="admin-log.asp">Enable &raquo;</a>
+		<h5>Web Monitoring disabled</h5>
+		Please <a class="ajaxload" href="/#admin-log.asp">enable</a> web monitoring in order to view information on this page.
 	</div>
 
 	<script type="text/javascript">earlyInit();</script>

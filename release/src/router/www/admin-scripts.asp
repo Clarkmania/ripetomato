@@ -85,15 +85,17 @@ No part of this file may be used without permission.
 		s = 'height:' + ((y > 300) ? y : 300) + 'px;display:none';
 		for (i = 0; i < tabs.length; ++i) {
 			t = tabs[i][0];
-			$('.scriptsetc').append('<textarea class="as-script" name="script_' + t.replace('as-', '') + '" id="' + t + '-text" wrap=' + (wrap ? 'virtual' : 'off') + ' style="max-width: 95%; min-width: 95%; width: 95%; ' + s + '"></textarea>');
+			$('.scriptsetc').append('<textarea class="as-script" name="script_' + t.replace('as-', '') + '" id="' + t + '-text" wrap=' + (wrap ? 'virtual' : 'off') + ' style="max-width:100%; min-width: 100%; margin: 0; ' + s + '"></textarea>');
 		}
-		$('.scriptsetc').append('<br><input type="checkbox" id="as-wordwrap" onclick="wordWrap()" onchange="wordWrap()" ' +
-			(wrap ? 'checked' : '') + '> Word Wrap');
+		$('.scriptsetc').append('<br /><br /><div class="checkbox c-checkbox"><label><input type="checkbox" id="as-wordwrap" onclick="wordWrap()" onchange="wordWrap()" ' +
+			(wrap ? 'checked' : '') + '><span class="icon-check"></span> &nbsp; Word Wrap</label></div> ');
 	</script>
-	
-	<div class="scriptsetc" style="display: block;"></div>
 
-	<br /><br />
+	<div class="box">
+		<div class="heading">Event Scripts</div>
+		<div class="content scriptsetc" style="display: block;"></div>
+	</div>
+
 	<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
 	<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
 	&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
