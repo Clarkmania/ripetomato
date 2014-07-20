@@ -754,24 +754,22 @@ OPENSSL_CIPHERS:=no-dh no-idea no-rc2 no-rc5 no-engine no-aes192 no-cast
 endif
 
 openssl/stamp-h1:
-	cd openssl && \
-	./Configure linux-mipsel --openssldir=/etc --cross-compile-prefix=' ' \
-	-ffunction-sections -fdata-sections -Wl,--gc-sections \
-	shared $(OPENSSL_CIPHERS) \
-	no-sha0 no-smime no-camellia no-krb5 no-rmd160 no-ripemd \
-	no-seed no-capieng no-cms no-gms no-gmp no-rfc3779 \
-	no-ec no-ecdh no-ecdsa no-err no-hw no-jpake no-threads \
-	no-zlib no-engines no-sse2 \
-	no-dtls1 no-store no-psk no-md2 no-mdc2 no-ts
-	@$(MAKE) -C openssl depend
-	@touch openssl/stamp-h1
+	cd openssl && ./Configure linux-mipsel --prefix=/usr --openssldir=/etc --cross-compile-prefix=' ' \
+		-ffunction-sections -fdata-sections -Wl,--gc-sections \
+		shared $(OPENSSL_CIPHERS) \
+		no-sha0 no-smime no-camellia no-krb5 no-rmd160 no-ripemd \
+		no-seed no-capieng no-cms no-gms no-gmp no-rfc3779 \
+		no-ec no-ecdh no-ecdsa no-err no-hw no-jpake no-threads \
+		no-zlib no-engines no-sse2 \
+		no-dtls1 no-store no-psk no-md2 no-mdc2 no-ts
+	cd openssl && $(MAKE) depend
+	touch $@
 
 openssl: openssl/stamp-h1
-	@$(MAKE) -C openssl clean $(PARALLEL_BUILD)
-	@$(MAKE) -C openssl INSTALL_PREFIX=$(TOP)/openssl/staged install
+	cd openssl && $(MAKE) $(PARALLEL_BUILD)
+	cd openssl && $(MAKE) INSTALL_PREFIX=$(TOP)/openssl/staged install_sw
 
 openssl-clean:
-	-@rm -rf openssl/staged
 	-@rm -f openssl/stamp-h1
 	-@$(MAKE) -C openssl clean
 
