@@ -1,0 +1,13 @@
+*\.o
+*\.dep
+*\.depend
+*\.a
+*\.so
+*\.so\.*
+*\.lo
+*\.o\.cmd
+*\.ko\.cmd
+*\.ko
+
+\.deps/
+\.libs/
