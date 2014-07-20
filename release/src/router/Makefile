@@ -632,6 +632,7 @@ clean: clean-build $(obj-clean)
 clean-build: dummy
 	rm -rf $(TARGETDIR)
 	rm -rf $(STAGEDIR)
+	find . -maxdepth 2 -name .staged | xargs rm -f
 	rm -rf $(INSTALLDIR)
 	rm -f $(PLATFORMDIR)/linux.trx $(PLATFORMDIR)/vmlinuz $(PLATFORMDIR)/target.image
 	rm -rf $(PLATFORMDIR)/extras
