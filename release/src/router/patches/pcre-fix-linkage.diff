@@ -1,0 +1,22 @@
+diff --git a/release/src/router/pcre/libpcreposix.pc b/release/src/router/pcre/libpcreposix.pc
+index 8c93eed..4e88bc9 100644
+--- a/release/src/router/pcre/libpcreposix.pc
++++ b/release/src/router/pcre/libpcreposix.pc
+@@ -9,5 +9,5 @@ Name: libpcreposix
+ Description: PCREPosix - Posix compatible interface to libpcre
+ Version: 8.35
+ Libs: -L${libdir} -lpcreposix
++Libs.private: -lpcre
+ Cflags: -I${includedir} 
+-Requires.private: libpcre
+diff --git a/release/src/router/pcre/libpcreposix.pc.in b/release/src/router/pcre/libpcreposix.pc.in
+index c6c0b0c..54f9612 100644
+--- a/release/src/router/pcre/libpcreposix.pc.in
++++ b/release/src/router/pcre/libpcreposix.pc.in
+@@ -9,5 +9,5 @@ Name: libpcreposix
+ Description: PCREPosix - Posix compatible interface to libpcre
+ Version: @PACKAGE_VERSION@
+ Libs: -L${libdir} -lpcreposix
++Libs.private: -lpcre
+ Cflags: -I${includedir} @PCRE_STATIC_CFLAG@
+-Requires.private: libpcre

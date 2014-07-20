@@ -51,6 +51,7 @@ export LIBDIR := $(TOOLCHAIN)/lib
 export USRLIBDIR := $(TOOLCHAIN)/usr/lib
 
 export PLATFORMDIR := $(TOP)/$(PLATFORM)
+export STAGEDIR := $(TOP)/$(PLATFORM)/stage
 export INSTALLDIR := $(PLATFORMDIR)/install
 export TARGETDIR := $(PLATFORMDIR)/target
 

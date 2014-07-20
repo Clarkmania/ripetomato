@@ -193,8 +193,13 @@ sub fixDyn
 #php
 	fixDynDep("php-cgi", "libcurl.so.4.3.0");
 	fixDynDep("php-cgi", "libsqlite3.so.0");
+	fixDynDep("php-cgi", "libpcre.so.1.2.3");
+	fixDynDep("php-cgi", "libpcreposix.so.0.0.2");
+
 	fixDynDep("php-cli", "libcurl.so.4.3.0");
 	fixDynDep("php-cli", "libsqlite3.so.0");
+	fixDynDep("php-cli", "libpcre.so.1.2.3");
+	fixDynDep("php-cli", "libpcreposix.so.0.0.2");
 
 #ipset modules
 	fixDynDep("libipset_iphash.so", "ipset");
@@ -526,7 +531,7 @@ genSO("${root}/usr/lib/liblzo2.so.2", "${router}/lzo/src/.libs/liblzo2.a");
 genSO("${root}/usr/lib/libbcmcrypto.so", "${router}/libbcmcrypto/libbcmcrypto.a");
 
 #shibby
-genSO("${root}/usr/lib/libcurl.so.4.3.0", "${router}/libcurl/lib/.libs/libcurl.a", "", "-L${router}/zlib");
+genSO("${root}/usr/lib/libcurl.so.4.3.0", "${router}/curl/lib/.libs/libcurl.a", "${stripshared}", "-L${router}/zlib -L${router}/openssl");
 genSO("${root}/usr/lib/libevent-2.0.so.5", "${router}/libevent/.libs/libevent.a");
 genSO("${root}/usr/lib/libdaemon.so.0.5.0", "${router}/libdaemon/libdaemon/.libs/libdaemon.a");
 genSO("${root}/usr/lib/libiconv.so.2.4.0", "${router}/libiconv/lib/.libs/libiconv.a");

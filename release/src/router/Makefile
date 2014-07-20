@@ -20,7 +20,7 @@ export PARALLEL_BUILD := -j`grep -c '^processor' /proc/cpuinfo`
 #
 #
 #
-SEP=echo "\033[41;1m   $@   \033[0m"
+SEP=echo -e "\033[41;1m   $@   \033[0m"
 
 #
 # standard packages
@@ -631,6 +631,7 @@ clean: clean-build $(obj-clean)
 
 clean-build: dummy
 	rm -rf $(TARGETDIR)
+	rm -rf $(STAGEDIR)
 	rm -rf $(INSTALLDIR)
 	rm -f $(PLATFORMDIR)/linux.trx $(PLATFORMDIR)/vmlinuz $(PLATFORMDIR)/target.image
 	rm -rf $(PLATFORMDIR)/extras
@@ -765,12 +766,16 @@ openssl/stamp-h1:
 	cd openssl && $(MAKE) depend
 	touch $@
 
-openssl: openssl/stamp-h1
+openssl/.staged: openssl/stamp-h1
 	cd openssl && $(MAKE) $(PARALLEL_BUILD)
-	cd openssl && $(MAKE) INSTALL_PREFIX=$(TOP)/openssl/staged install_sw
+	cd openssl && $(MAKE) INSTALL_PREFIX=$(STAGEDIR) install_sw
+	touch $@
+
+openssl: openssl/.staged
+	@$(SEP)
 
 openssl-clean:
-	-@rm -f openssl/stamp-h1
+	-@rm -f openssl/stamp-h1 openssl/.staged
 	-@$(MAKE) -C openssl clean
 
 openssl-install: openssl
@@ -1310,21 +1315,25 @@ dropbear/config.h:
 # Media libraries
 
 sqlite/stamp-h1:
+	@$(SEP)
 	cd sqlite && \
-	CC=$(CC) CFLAGS="-Os $(EXTRACFLAGS) -ffunction-sections -fdata-sections" \
+		CC=$(CC) CFLAGS="-Os $(EXTRACFLAGS) -ffunction-sections -fdata-sections" \
 		LDFLAGS="-ffunction-sections -fdata-sections -Wl,--gc-sections" \
 		$(CONFIGURE) --prefix=/usr --enable-shared --enable-static \
 		--disable-readline --disable-dynamic-extensions --enable-threadsafe
-	touch sqlite/stamp-h1
+	touch $@
 
-sqlite: sqlite/stamp-h1
-	@$(MAKE) -C sqlite all $(PARALLEL_BUILD)
-	@$(MAKE) -C sqlite DESTDIR=$(TOP)/sqlite/staged install
+sqlite/.staged: sqlite/stamp-h1
+	@$(SEP)
+	cd sqlite && $(MAKE) $(PARALLEL_BUILD) DESTDIR=$(STAGEDIR) install
+	touch $@
+
+sqlite: sqlite/.staged
+	@$(SEP)
 
 sqlite-clean:
 	-@$(MAKE) -C sqlite clean
-	@rm -f sqlite/stamp-h1
-	@rm -rf sqlite/staged
+	@rm -f sqlite/stamp-h1 sqlite/.staged
 
 sqlite-install: sqlite
 	@$(SEP)
@@ -1477,18 +1486,19 @@ ifneq ($(MEDIA_SERVER_STATIC),y)
 endif
 
 zlib/stamp-h1:
-	cd zlib && \
-	./configure --shared --prefix=''
-	touch zlib/stamp-h1
+	cd zlib && ./configure --shared --prefix=/usr
+	touch $@
 
-zlib: zlib/stamp-h1
-	@$(MAKE) -C zlib all
-	@$(MAKE) -C zlib DESTDIR=$(TOP)/zlib/staged install
+zlib/.staged: zlib/stamp-h1
+	cd zlib && $(MAKE) DESTDIR=$(STAGEDIR) install
+	touch $@
+
+zlib: zlib/.staged
+	@$(SEP)
 
 zlib-clean:
 	-@$(MAKE) -C zlib clean
-	@rm -f zlib/stamp-h1 zlib/Makefile zlib/zconf.h zlib/zlib.pc
-	@rm -rf zlib/staged
+	@rm -f zlib/stamp-h1 zlib/Makefile zlib/zconf.h zlib/zlib.pc zlib/.staged
 
 zlib-install: zlib
 	@$(SEP)
@@ -1728,10 +1738,14 @@ pcre/stamp-h1:
 	cd pcre && \
 	CC=$(CC) CXX=$(HOST)-g++ AR=$(AR) RANLIB=$(RANLIB) LD=$(LD) CFLAGS="-Os -Wall $(EXTRACFLAGS)" \
 	$(CONFIGURE) --prefix=/usr --disable-dependency-tracking --enable-utf8 --enable-unicode-properties --disable-cpp
-	@touch pcre/stamp-h1
 	[ -d pcre/m4 ] || mkdir pcre/m4
+	@touch pcre/stamp-h1
 
-pcre: pcre/stamp-h1
+pcre/.staged: pcre/stamp-h1
+	cd pcre && make $(PARALLEL_BUILD) DESTDIR=$(STAGEDIR) install
+
+pcre: pcre/.staged
+	@$(SEP)
 
 pcre-install: pcre
 	@$(SEP)
@@ -1746,13 +1760,14 @@ pcre-install: pcre
 pcre-clean:
 	( if [ -f pcre/Makefile ]; then \
 		$(MAKE) -C pcre clean; \
-		rm -rf pcre/stamp-h1; \
+		rm -rf pcre/stamp-h1 pcre/.staged; \
 	fi )
 
 php/stamp-h1: pcre zlib curl sqlite
 	@$(SEP)
 	cd php && CC=$(CC) CXX=$(ARCH)-g++ AR=$(AR) RANLIB=$(RANLIB) LD=$(LD) \
-	CFLAGS="-Os -Wall -I $(TOP)/zlib -I $(TOP)/pcre -L $(TOP)/pcre/.libs/libpcre.so.1.2.3 -L $(TOP)/pcre/.libs/libpcreposix.so.0.0.2 $(EXTRACFLAGS)" \
+	CFLAGS="-Os -Wall -I$(STAGEDIR)/usr/include $(EXTRACFLAGS)" \
+	LDFLAGS="-Wl,-rpath -Wl,/usr/lib -Wl,-rpath-link -Wl,$(STAGEDIR)/usr/lib -L$(STAGEDIR)/usr/lib" \
 	$(CONFIGURE) --prefix=/usr \
 	--enable-shared \
 	--disable-static \
@@ -1762,14 +1777,14 @@ php/stamp-h1: pcre zlib curl sqlite
 	--with-config-file-path=/etc \
 	--with-config-file-scan-dir=/etc/php5 \
 	--disable-short-tags \
-	--with-zlib="$(TOP)/zlib/staged" \
-	--with-zlib-dir="$(TOP)/zlib/staged" \
+	--with-zlib="$(STAGEDIR)/usr" \
+	--with-zlib-dir="$(STAGEDIR)/usr" \
 	--disable-phar \
-	--enable-cli \
 	--enable-cgi \
 	--disable-calendar \
 	--disable-ctype \
-	--with-curl=$(TOP)/curl/staged/usr \
+	--with-curl="$(STAGEDIR)/usr" \
+	--with-pcre-regex="$(STAGEDIR)/usr" \
 	--disable-fileinfo \
 	--without-gettext \
 	--disable-dom \
@@ -1796,7 +1811,7 @@ php/stamp-h1: pcre zlib curl sqlite
 	--disable-soap \
 	--disable-sockets \
 	--without-sqlite \
-	--with-sqlite3="$(TOP)/sqlite/staged/usr" \
+	--with-sqlite3="$(STAGEDIR)/usr" \
 	--disable-sysvmsg \
 	--disable-sysvsem \
 	--disable-sysvshm \
@@ -1810,15 +1825,20 @@ php/stamp-h1: pcre zlib curl sqlite
 	ac_cv_c_bigendian_php="no" \
 	php_cv_cc_rpath="no" \
 	iconv_impl_name="gnu_libiconv"
-	@touch php/stamp-h1
+	@touch $@
 
-php: php/stamp-h1
+php/.staged: php/stamp-h1
 	@$(SEP)
-	@$(MAKE) -C php $(PARALLEL_BUILD)
+	cd php && $(MAKE) $(PARALLEL_BUILD)
+	touch $@
+
+php: php/.staged
+	@$(SEP)
 
 php-clean:
+	@$(SEP)
 	-@$(MAKE) -C php clean
-	-@rm php/stamp-h1
+	-@rm -f php/stamp-h1 php/.staged
 
 php-install: php
 	@$(SEP)
@@ -1831,34 +1851,39 @@ php-install: php
 
 nginx/stamp-h1: openssl zlib pcre
 	@$(SEP)
-	cd $(TOP)/nginx && ./configure --crossbuild=Linux::$(ARCH) \
+	cd nginx && ./configure --crossbuild=Linux::$(ARCH) \
 		--prefix=/usr \
 		--sbin-path=/usr/sbin \
 		--conf-path=/etc/nginx/nginx.conf \
-		--error-log-path=/tmp/var/log/nginx/error.log \
-		--http-log-path=/tmp/var/log/nginx/access.log \
-		--pid-path=/tmp/var/run/nginx.pid \
-		--lock-path=/tmp/var/run/nginx.lock.accept \
-		--http-client-body-temp-path=/tmp/var/lib/nginx/client \
-		--http-fastcgi-temp-path=/tmp/var/lib/nginx/fastcgi \
+		--error-log-path=/var/log/nginx/error.log \
+		--http-log-path=/var/log/nginx/access.log \
+		--pid-path=/var/run/nginx.pid \
+		--lock-path=/var/run/nginx.lock.accept \
+		--http-client-body-temp-path=/var/lib/nginx/client \
+		--http-fastcgi-temp-path=/var/lib/nginx/fastcgi \
 		--with-http_flv_module \
 		--with-http_ssl_module \
 		--with-http_gzip_static_module \
-		--http-uwsgi-temp-path=/tmp/var/lib/nginx/uwsgi \
-		--http-scgi-temp-path=/tmp/var/lib/nginx/scgi \
-		--http-proxy-temp-path=/tmp/var/lib/nginx/proxy \
+		--http-uwsgi-temp-path=/var/lib/nginx/uwsgi \
+		--http-scgi-temp-path=/var/lib/nginx/scgi \
+		--http-proxy-temp-path=/var/lib/nginx/proxy \
 		--with-cc="$(CC)" \
 		--with-ld-opt="$(LDFLAGS) -L $(TOP)/pcre/.libs -L $(TOP)/zlib -L $(TOP)/openssl" \
 		--with-cc-opt="$(EXTRACFLAGS) $(CPPFLAGS) $(CFLAGS) -I $(TOP)/openssl/include -I $(TOP)/openssl/include/openssl -I $(TOP)/pcre -I $(TOP)/zlib" \
 		$(ADDITIONAL_MODULES)
+	@touch $@
 
-nginx: nginx/stamp-h1
+nginx/.staged: nginx/stamp-h1
 	@$(SEP)
-	@$(MAKE) -C nginx $(PARALLEL_BUILD)
+	cd nginx && $(MAKE) $(PARALLEL_BUILD)
+	@touch $@
+
+nginx: nginx/.staged
+	@$(SEP)
 
 nginx-clean:
 	-@$(MAKE) -C nginx clean
-	-@rm -f nginx/stamp-h1
+	-@rm -f nginx/stamp-h1 nginx/.staged
 
 nginx-install: nginx
 	install -d $(INSTALLDIR)/nginx/usr/sbin
@@ -1911,33 +1936,39 @@ openvpn_plugin_auth_nvram:nvram
 
 #shibby
 curl/stamp-h1: zlib openssl
+	@$(SEP)
 	cd curl && CC=$(CC) STRIP='mipsel-uclibc-strip' \
 		./buildconf && \
-		CPPFLAGS="-Os -Wall $(EXTRACFLAGS) -ffunction-sections -fdata-sections -I$(TOP)/zlib" \
-		LDFLAGS="-L$(TOP)/zlib -ffunction-sections -fdata-sections -Wl,--gc-sections -fPIC" \
-		$(CONFIGURE) --prefix=/usr --disable-thread --enable-shared --enable-static \
+		CPPFLAGS="-Os -Wall $(EXTRACFLAGS) -ffunction-sections -fdata-sections -I$(STAGEDIR)/usr/include" \
+		LDFLAGS="-L$(STAGEDIR)/usr/lib -ffunction-sections -fdata-sections -Wl,--gc-sections -fPIC" \
+		LIBS="-Wl,-rpath -Wl,/usr/lib -Wl,-rpath-link -Wl,$(STAGEDIR)/usr/lib" \
+		$(CONFIGURE) --prefix=/usr --disable-thread --enable-shared --enable-static --disable-rpath \
 		--enable-cookies --enable-crypto-auth --enable-nonblocking \
 		--enable-file --enable-ftp --enable-http --enable-ipv6 --enable-tftp \
 		--disable-nls --disable-ares --disable-dict --disable-debug --disable-gopher \
 		--disable-ldap --disable-manual --disable-telnet --disable-verbose \
 		--enable-optimize --disable-curldebug --enable-silent-rules --disable-proxy \
-		--with-random="/dev/urandom" --with-ssl="$(TOP)/openssl" \
+		--with-random="/dev/urandom" --with-ssl \
 		--without-gnutls --without-krb4 --without-libidn \
-		--with-linux-headers=$(LINUXDIR)/include \
-		SSL_LDFLAGS="-L$(TOP)/openssl" \
-		SSL_CPPFLAGS="-I$(TOP)/openssl/include"
-	touch curl/stamp-h1
+		--with-linux-headers=$(LINUXDIR)/include
+	touch $@
 
-curl: curl/stamp-h1
-	@$(MAKE) -C curl $(PARALLEL_BUILD)
-	@$(MAKE) -C curl DESTDIR=$(TOP)/curl/staged install
+curl/.staged: curl/stamp-h1
+	@$(SEP)
+	cd curl && $(MAKE) $(PARALLEL_BUILD)
+	cd curl && $(MAKE) DESTDIR=$(STAGEDIR) install
+	touch $@
+
+curl: curl/.staged
+	@$(SEP)
 
 curl-clean:
+	@$(SEP)
 	-@$(MAKE) -C curl distclean
-	-@rm -f curl/stamp-h1
-	-@rm -f curl/staged
+	-@rm -f curl/stamp-h1 curl/.staged
 
 curl-install: curl
+	@$(SEP)
 	install -d $(INSTALLDIR)/curl/usr/lib
 	install -D curl/lib/.libs/libcurl.so.4.3.0 $(INSTALLDIR)/curl/usr/lib/libcurl.so.4.3.0
 	$(STRIP) -s $(INSTALLDIR)/curl/usr/lib/libcurl.so.4.3.0
@@ -2354,12 +2385,16 @@ tor/stamp-h1: openssl zlib libevent
 	CFLAGS="-Os -Wall $(EXTRACFLAGS) -ffunction-sections -fdata-sections" \
 	LDFLAGS="-ffunction-sections -fdata-sections -Wl,--gc-sections" \
 	$(CONFIGURE) --prefix=/usr --with-libevent-dir=$(TOP)/libevent/staged/usr/local \
-		--with-openssl-dir=$(TOP)/openssl --with-zlib-dir=$(TOP)/zlib \
+		--with-openssl-dir=$(STAGEDIR)/usr --with-zlib-dir=$(STAGEDIR)/usr \
 		--disable-asciidoc --disable-threads
 	touch tor/stamp-h1
 
-tor: tor/stamp-h1
-	$(MAKE) -C tor $(PARALLEL_BUILD)
+tor/.staged: tor/stamp-h1
+	@$(SEP)
+	cd tor && $(MAKE) $(PARALLEL_BUILD)
+
+tor: tor/.staged
+	@$(SEP)
 
 tor-install: tor
 	install -D tor/src/or/tor $(INSTALLDIR)/tor/usr/sbin/tor
@@ -2367,7 +2402,7 @@ tor-install: tor
 
 tor-clean:
 	-@$(MAKE) -C tor clean
-	@rm -rf tor/stamp-h1 tor/Makefile
+	@rm -rf tor/stamp-h1 tor/Makefile tor/.staged
 
 udpxy/stamp-h1:
 	cd udpxy \
