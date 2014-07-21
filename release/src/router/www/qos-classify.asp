@@ -102,9 +102,9 @@ No part of this file may be used without permission.
 			}
 
 			var buttons = '<div class="btn-group">' +
-			'<button class="moveup btn">Up <i class="icon-chevron-up"></i></button>' +
-			'<button class="movedown btn">Down <i class="icon-chevron-down"></i></button>' +
-			'<button class="delete btn btn-danger">Delete <i class="icon-cancel"></i></button></div>';
+			'<button class="moveup btn btn-small">Up <i class="icon-chevron-up"></i></button>' +
+			'<button class="movedown btn btn-small">Down <i class="icon-chevron-down"></i></button>' +
+			'<button class="delete btn btn-dange btn-smallr">Delete <i class="icon-cancel"></i></button></div>';
 
 			return [b.join('<br>'), class1[(data[10] * 1) + 1][1], escapeHTML(data[11]), (ruleCounter >= 0) ? ''+ ++ruleCounter : '', buttons];
 		}

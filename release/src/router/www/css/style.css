@@ -678,8 +678,8 @@ table.line-table tr td {
 
 /* Data Tables */
 table.data-table { margin: 0 0 15px; }
-table.data-table tr td { padding: 5px 0; }
-table.data-table.dataonly tr td:first-child { width: 40%; }
+table.data-table tr td { padding: 4px 0; }
+table.data-table.dataonly tr td:first-child { width: 40%; color: #999 }
 table.data-table.other { margin: 5px 10px; }
 
 /* Field Tables */
@@ -787,10 +787,10 @@ table tr.editor td textarea {
 
 /* Other btn styles */
 button.btn { text-transform: none; overflow: visible; color: inherit;  margin: 0px; line-height: 1.42857; padding: 6px 14px; vertical-align: middle; }
-.btn-small { font-size: 12px; padding: 4px 12px !important; }
+.btn-small { font-size: 75%; padding: 4px 12px !important; }
 
 .btn-group {
-	white-space: no-wrap;
+	white-space: nowrap;
 }
 
 .btn-group .btn {
