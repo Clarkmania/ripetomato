@@ -42,7 +42,7 @@ No part of this file may be used without permission.
 			var o = (E("_web_css").value == "online");
 			var p = nvram.ttb_css;
 
-			elem.display(PR("_ttb_css"), o);
+			//elem.display(PR("_ttb_css"), o);
 
 			try {
 				a = E("_web_css").value;
@@ -231,7 +231,7 @@ No part of this file may be used without permission.
 						{ title: 'Allow Wireless Access', name: 'f_http_wireless', type: 'checkbox', value:  nvram.web_wl_filter == 0 },
 						{ title: '<h5>Interface Settings</h5>' },
 						{ title: 'Interface Theme', name: 'web_css', type: 'select', 
-							options: [['tomato','Default'], ['ext/custom','Custom (ext/custom.css)'], value: nvram.web_css },
+							options: [['tomato','Default'], ['ext/custom','Custom (ext/custom.css)']], value: nvram.web_css },
 /*
 						{ title: 'ATTD ID#', indent: 2, name: 'ttb_css', type: 'text', maxlen: 25, size: 30, value: nvram.ttb_css, suffix: 'Theme ID# from <a href="http://at.prahec.com/themes/" target="_blank"><u><i>ATTD themes gallery</i></u></a>' },
 */
