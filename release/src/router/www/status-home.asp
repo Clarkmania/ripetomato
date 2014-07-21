@@ -249,14 +249,14 @@
 				</script>
 				<div id="b_dhcpc" style="display: none; margin-bottom: 8px;">
 					<div class="btn-group">
-						<button type="button" class="btn" onclick="dhcpc('renew')" value="Renew">Renew</button>
-						<button type="button" class="btn" onclick="dhcpc('release')" value="Release">Release</button>
+						<button type="button" class="btn" onclick="dhcpc('renew')" value="Renew">Renew</button><!--
+						--><button type="button" class="btn" onclick="dhcpc('release')" value="Release">Release</button>
 					</div>
 				</div>
 
 				<div class="btn-group">
-					<button type="button" class="btn" onclick="wan_connect()" value="Connect" id="b_connect" style="display:none"><i class="icon-check"></i> Connect</button>
-					<button type="button" class="btn" onclick="wan_disconnect()" value="Disconnect" id="b_disconnect" style="display:none"><i class="icon-cancel"></i> Disconnect</button>
+					<button type="button" class="btn" onclick="wan_connect()" value="Connect" id="b_connect" style="display:none"><i class="icon-check icon-green"></i> Connect</button><!--
+					--><button type="button" class="btn" onclick="wan_disconnect()" value="Disconnect" id="b_disconnect" style="display:none"><i class="icon-cancel icon-red"></i> Disconnect</button>
 				</div>
 			</div>
 		</div>
