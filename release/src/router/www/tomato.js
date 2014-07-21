@@ -1416,12 +1416,14 @@ TomatoGrid.prototype = {
 		}
 	},
 
-	insert: function(at, data, cells, escCells) {
+	insert: function(at, data, cells, escCells, className) {
 		var e, i;
 
 		if ((this.footer) && (at == -1)) at = this.footer.rowIndex;
 		e = this._insert(at, cells, escCells);
 		e.className = (e.rowIndex & 1) ? 'even' : 'odd';
+		if (className !== undefined)
+			e.className = e.className + ' ' + className;
 
 		for (i = 0; i < e.cells.length; ++i) {
 			e.cells[i].onclick = function() { return TGO(this).onClick(this); };
@@ -1442,8 +1444,8 @@ TomatoGrid.prototype = {
 
 	// ----
 
-	insertData: function(at, data) {
-		return this.insert(at, data, this.dataToView(data), false);
+	insertData: function(at, data, className) {
+		return this.insert(at, data, this.dataToView(data), false, className);
 	},
 
 	dataToView: function(data) {
