@@ -35,7 +35,7 @@ html { font-size: 62.5%; }
 body {
 	font-size: 12px;
 	font-family: 'Open Sans', "Helvetica Neue",Helvetica, sans-serif;
-	color: #919292;
+	color: #717272;
 	line-height: 1.42857;
 	background-color: #EEF0F4;
 	-webkit-font-smoothing: antialiased;
@@ -570,9 +570,9 @@ small { font-size: 80%; }
 	display: block;
 	font-size: 14px;
 	font-weight: 500;
-	color: #656565;
-	background-color: #FAFAFA;
-	border-color: #EEE;
+	color: #555555;
+	background-color: #DFDFDF;
+	border-color: #DDD;
 	padding: 12px 16px;
 	border-bottom: 1px solid transparent;
 	border-top-right-radius: 3px;
@@ -665,14 +665,14 @@ table.line-table tr:first-child {
 }
 
 table.line-table tr th {
-	padding: 8px;
+	padding: 6px;
 	font-weight: 700;
 	text-align: left;
 }
 
 table.line-table tr td {
 	width: inhert;
-	padding: 8px;
+	padding: 6px;
 	vertical-align: middle;
 }
 
@@ -689,7 +689,7 @@ table.fields-table {
 }
 
 table.fields-table tr td {
-	padding: 8px 0;
+	padding: 6px 0;
 	vertical-align: middle;
 }
 
@@ -705,7 +705,7 @@ table.td-large tr td { padding: 10px 0; }
 
 table .controls, table.line-table tr.controls { box-shadow: none; -webkit-box-shadow: none; border: 0; padding: 0; margin: 0; }
 table .controls:hover, table.line-table tr.controls:hover { background: transparent; }
-table .controls td, table.line-table tr.controls td { padding: 8px 4px; }
+table .controls td, table.line-table tr.controls td { padding: 6px 4px; }
 
 table tr.editor td { margin: 0;}
 table tr.editor td input:not([type='checkbox']),
