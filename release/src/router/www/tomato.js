@@ -794,6 +794,21 @@ function _v_ipv6_addr(e, ip, ipt, quiet)
 		return a + '-' + b;
 	}
 
+	// mask matches
+	if ((ipt) && ip.match(/^([A-Fa-f0-9:]+)\/([A-Fa-f0-9:]+)$/)) {
+		a = RegExp.$1;
+		b = RegExp.$2;
+		a = CompressIPv6Address(a);
+		b = CompressIPv6Address(b);
+		if ((a == null) || (b == null)) {
+			ferror.set(e, oip + ' - invalid IPv6 address with mask', quiet);
+			return null;
+		}
+		ferror.clear(e);
+
+		return ip;
+	}
+
 	if ((ipt) && ip.match(/^([A-Fa-f0-9:]+)\/(\d+)$/)) {
 		a = RegExp.$1;
 		b = parseInt(RegExp.$2, 10);
