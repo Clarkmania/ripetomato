@@ -20,7 +20,7 @@ export PARALLEL_BUILD := -j`grep -c '^processor' /proc/cpuinfo`
 #
 #
 #
-SEP=echo -e "\033[41;1m   $@   \033[0m"
+SEP=echo "\033[41;1m   $@   \033[0m"
 
 #
 # standard packages
@@ -632,7 +632,7 @@ clean: clean-build $(obj-clean)
 clean-build: dummy
 	rm -rf $(TARGETDIR)
 	rm -rf $(STAGEDIR)
-	find . -maxdepth 2 -name .staged | xargs rm -f
+	find . -maxdepth 2 -name .staged | xargs rm -rf
 	rm -rf $(INSTALLDIR)
 	rm -f $(PLATFORMDIR)/linux.trx $(PLATFORMDIR)/vmlinuz $(PLATFORMDIR)/target.image
 	rm -rf $(PLATFORMDIR)/extras
@@ -823,7 +823,7 @@ bridge-install:
 
 dnsmasq/stamp-h1: $(if $(TCONFIG_DNSSEC),nettle,)
 	@$(SEP)
-	cd dnsmasq && patch -p1 < ../dnsmasq.patch
+	cd dnsmasq && patch -N -p1 < ../dnsmasq.patch
 	@touch $@
 
 dnsmasq: dnsmasq/stamp-h1
@@ -1993,15 +1993,18 @@ libevent/stamp-h1:
 		$(CONFIGURE)
 		touch libevent/stamp-h1
 
-libevent: libevent/stamp-h1
+libevent/.staged: libevent/stamp-h1
 	@$(SEP)
 	$(MAKE) -C libevent $(PARALLEL_BUILD)
-	$(MAKE) -C libevent DESTDIR=$(TOP)/libevent/staged install
+	$(MAKE) -C libevent DESTDIR=$(TOP)/libevent/.staged install
+
+libevent: libevent/.staged
+	@$(SEP)
 
 libevent-clean:
 	-@$(MAKE) -C libevent clean
 	@rm -f libevent/stamp-h1 libevent/Makefile
-	@rm -rf libevent/staged
+	@rm -rf libevent/.staged
 
 libevent-install: libevent
 	install -d $(INSTALLDIR)/libevent/usr/lib
@@ -2127,6 +2130,7 @@ else
 endif
 
 aria2/stamp-h1: openssl zlib libexpat sqlite libiconv libcares
+	patch -d aria2 -N -p1 -r - < aria2.patch || true
 	cd aria2 && CC=$(CC) STRIP='mipsel-uclibc-strip' \
 		CFLAGS="-Os -Wall -fno-delete-null-pointer-checks -funit-at-a-time \
 			--param large-function-growth=800 --param max-inline-insns-single=3000 \
@@ -2191,25 +2195,31 @@ btgui-install: btgui
 	install -D transmission/btcheck $(INSTALLDIR)/btgui/usr/bin/btcheck
 
 libnfsidmap/stamp-h1:
+	@$(SEP)
 	cd libnfsidmap && \
 	CFLAGS="-Os -Wall $(EXTRACFLAGS)" \
 	ac_cv_func_malloc_0_nonnull=yes \
 	ac_cv_func_realloc_0_nonnull=yes \
 	$(CONFIGURE) --prefix=/usr --enable-shared --enable-static
-	touch libnfsidmap/stamp-h1
+	@touch $@
 
-libnfsidmap: libnfsidmap/stamp-h1
+libnfsidmap/.staged: libnfsidmap/stamp-h1
 	@$(SEP)
 	$(MAKE) -C libnfsidmap $(PARALLEL_BUILD)
+	install -d $(TOP)/libnfsidmap/.staged
+	cd libnfsidmap && $(MAKE) DESTDIR=$(TOP)/libnfsidmap/.staged install
+	@touch $@
+
+libnfsidmap: libnfsidmap/.staged
+	@$(SEP)
 
 libnfsidmap-clean:
 	-@$(MAKE) -C libnfsidmap clean
 	@rm -f libnfsidmap/stamp-h1
-	@rm -rf libnfsidmap/staged
+	@rm -rf libnfsidmap/.staged
 
 libnfsidmap-install: libnfsidmap
-	install -d $(TOP)/libnfsidmap/staged
-	$(MAKE) -C libnfsidmap DESTDIR=$(TOP)/libnfsidmap/staged install
+	@$(SEP)
 
 portmap/stamp-h1:
 	cd portmap \
@@ -2249,10 +2259,10 @@ e2fsprogs-clean:
 nfs-utils/stamp-h1: libevent-install e2fsprogs portmap libnfsidmap-install
 	cd nfs-utils && STRIP='mipsel-uclibc-strip' \
 	CFLAGS="-Os -Wall -fno-delete-null-pointer-checks -funit-at-a-time \
-	-I$(TOP)/libevent/staged/usr/local/include -I$(TOP)/e2fsprogs/lib \
-	-I$(TOP)/libnfsidmap/staged/usr/include -ffunction-sections -fdata-sections" \
-	LDFLAGS="-L$(TOP)/libevent/staged/usr/local/lib -L$(TOP)/e2fsprogs/lib \
-	-L$(TOP)/libnfsidmap/staged/usr/lib -ffunction-sections -fdata-sections -Wl,--gc-sections -fPIC" \
+	-I$(TOP)/libevent/.staged/usr/local/include -I$(TOP)/e2fsprogs/lib \
+	-I$(TOP)/libnfsidmap/.staged/usr/include -ffunction-sections -fdata-sections" \
+	LDFLAGS="-L$(TOP)/libevent/.staged/usr/local/lib -L$(TOP)/e2fsprogs/lib \
+	-L$(TOP)/libnfsidmap/.staged/usr/lib -ffunction-sections -fdata-sections -Wl,--gc-sections -fPIC" \
 	ac_cv_func_malloc_0_nonnull=yes \
 	ac_cv_func_realloc_0_nonnull=yes \
 	$(CONFIGURE) --disable-gss --without-tcp-wrappers --enable-static --enable-shared \
@@ -2391,17 +2401,19 @@ dnscrypt-clean:
 	@rm -rf dnscrypt/stamp-h1 dnscrypt/src/dnscrypt-proxy/.deps dnscrypt/Makefile
 
 tor/stamp-h1: openssl zlib libevent
+	@$(SEP)
 	cd $(TOP)/tor && CC=$(CC) STRIP='mipsel-uclibc-strip' \
 	CFLAGS="-Os -Wall $(EXTRACFLAGS) -ffunction-sections -fdata-sections" \
 	LDFLAGS="-ffunction-sections -fdata-sections -Wl,--gc-sections" \
-	$(CONFIGURE) --prefix=/usr --with-libevent-dir=$(TOP)/libevent/staged/usr/local \
+	$(CONFIGURE) --prefix=/usr --with-libevent-dir=$(TOP)/libevent/.staged/usr/local \
 		--with-openssl-dir=$(STAGEDIR)/usr --with-zlib-dir=$(STAGEDIR)/usr \
 		--disable-asciidoc --disable-threads
-	touch tor/stamp-h1
+	@touch $@
 
 tor/.staged: tor/stamp-h1
 	@$(SEP)
 	cd tor && $(MAKE) $(PARALLEL_BUILD)
+	@touch $@
 
 tor: tor/.staged
 	@$(SEP)
