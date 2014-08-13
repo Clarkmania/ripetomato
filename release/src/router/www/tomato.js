@@ -1888,7 +1888,8 @@ XmlHttp.prototype = {
 	get: function(url, vars) {
 		try {
 			vars = this.addId(vars);
-			url += '?' + vars;
+			if (url.indexOf('?') != -1) url += '&' + vars;
+			else url += '?' + vars;
 
 			this.xob.onreadystatechange = THIS(this, this.onReadyStateChange);
 			this.xob.open('GET', url, true);
