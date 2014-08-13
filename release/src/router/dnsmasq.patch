@@ -221,7 +221,7 @@ index 5d56b1b..e49fd41 100644
 +#endif // Thanks to Shibby :-)
 +		    inet_ntop(AF_INET, &lease->addr, buf, ADDRSTRLEN);
 +
-+		fprintf(f, "%lu %02X:%02X:%02X:%02X:%02X:%02X %s",
++		fprintf(f, "%lu %02X:%02X:%02X:%02X:%02X:%02X %s ",
 +			lease->expires - now,
 +			lease->hwaddr[0], lease->hwaddr[1], lease->hwaddr[2], lease->hwaddr[3], lease->hwaddr[4], lease->hwaddr[5],
 +			buf);
