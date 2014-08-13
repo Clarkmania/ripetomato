@@ -114,30 +114,45 @@ function AdvancedTomato () {
 
 	// Check for update
 	if (typeof nvram.at_update !== "undefined" && nvram.at_update != '') {
+
 		var n = cookie.get('latest-update');
 		var lastUpdate = nvram['at_update'].replace('.', '');
 
 		if (n < lastUpdate || n == null) {
-			$(".container").prepend('<div class="alert info"><a href="#" class="close" data-update="' + nvram.at_update.replace('.','') + '"><i class="icon-cancel"></i></a>\
-				RipeTomato <b>v' + nvram.at_update + '</b> is available. <a target="_blank" href="https://github.com/Clarkmania/ripetomato/releases">Click here to find out more</a>.</div>');
+			$updateNotification = $('<div class="alert info"><a href="#" class="close" data-update="' + nvram.at_update.replace('.','') + '"><i class="icon-cancel"></i></a>\
+				RipeTomato <b>v' + nvram.at_update + '</b> is available. <a target="_blank" href="http://github.com/Clarkmania/ripetomato/releases">Click here to find out more</a>.</div>');
+
+			$($updateNotification).find('.close').on('click', function() {
+				if ($(this).attr('data-update')) { cookie.set('latest-update', $(this).attr('data-update')); }
+				$(this).parent('.alert').slideUp();
+				return false;
+			});
+
+			$(".container").prepend($updateNotification);
 		}
 	}
 
 	// Check if tomatoanon is configured
 	if (typeof nvram.tomatoanon_answer !== "undefined") {
+
 		if (nvram.tomatoanon_answer != '1') {
+
 			$('.container').prepend('<div class="alert warning"><h5>Attention</h5> You did not configure <b>TomatoAnon project</b> setting.\
 				Please go to <a onclick="loadPage(\'admin-tomatoanon.asp\')" href="#">TomatoAnon configuration page</a> and make a choice.</div>');
 
 		}
+
 	}
 
 	if (typeof nvram.at_navi !== 'undefined') {
+
 		if (nvram.at_navi == 'collapsed') {
+
 			$('#wrapper').find('.container').css('margin-left', '60px');
 			$('#wrapper').find('.navigation').addClass('collapsed');
 			$('#wrapper').find('.logo').addClass('collapsed');
 			$('#wrapper').find('.nav-collapse-hide').hide();
+
 		}
 	}
 
@@ -209,9 +224,6 @@ function loadPage(page) {
 		// Loaded, clear state
 		window.ajaxLoadingState = false;
 
-		// Custom file inputs
-		$("input[type='file']").each(function() { $(this).customFileInput(); });
-
 		// Function that allows easy implementation of content hide/show on boxes
 		$('[data-box]').each(function() {
 
@@ -251,6 +263,9 @@ function loadPage(page) {
 
 		// Init Tooltips
 		$('[data-toggle="tooltip"]').tooltip({ placement: 'top auto' });
+
+		// Custom file inputs
+		$("input[type='file']").each(function() { $(this).customFileInput(); });
 
 		preloader('stop');
 	}

@@ -101,12 +101,12 @@ No part of this file may be used without permission.
 				b.push('Transferred: ' + data[7] + ((data[8] == '') ? '<small>KB+</small>' : (' - ' + data[8] + '<small>KB</small>')));
 			}
 
-			var buttons = '<div class="btn-group">' +
-			'<button class="moveup btn btn-small">Up <i class="icon-chevron-up"></i></button>' +
-			'<button class="movedown btn btn-small">Down <i class="icon-chevron-down"></i></button>' +
-			'<button class="delete btn btn-dange btn-smallr">Delete <i class="icon-cancel"></i></button></div>';
+			/* var buttons = '<div class="btn-group">' +
+			'<button class="moveup btn">Up <i class="icon-chevron-up"></i></button>' +
+			'<button class="movedown btn">Down <i class="icon-chevron-down"></i></button>' +
+			'<button class="delete btn btn-danger">Delete <i class="icon-cancel"></i></button></div>'; */
 
-			return [b.join('<br>'), class1[(data[10] * 1) + 1][1], escapeHTML(data[11]), (ruleCounter >= 0) ? ''+ ++ruleCounter : '', buttons];
+			return [b.join('<br>'), class1[(data[10] * 1) + 1][1], escapeHTML(data[11]), (ruleCounter >= 0) ? ''+ ++ruleCounter : ''];
 		}
 
 		qosg.fieldValuesToData = function(row) {
@@ -249,7 +249,7 @@ No part of this file may be used without permission.
 			}
 
 			// what a mess...
-			this.init('qg', '', 80, [
+			this.init('qg', 'move', 80, [
 				{ multi: [
 					{ type: 'select', options: [[0,'Any Address'],[1,'Dst IP'],[2,'Src IP'],[3,'Src MAC']] },
 					{ type: 'text', prefix: '<div class="x1b">', suffix: '</div>' },
@@ -272,7 +272,7 @@ No part of this file may be used without permission.
 				{ type: 'text', maxlen: 32, vtop: 1, class:'input-medium' }
 			]);
 
-			this.headerSet(['Match Rule', 'Class', 'Description', '#', 'Controls']);
+			this.headerSet(['Match Rule', 'Class', 'Description', '#']);
 
 			// addr_type < addr < proto < port_type < port < ipp2p < L7 < bcount < dscp < class < desc
 
@@ -332,28 +332,6 @@ No part of this file may be used without permission.
 
 		function init()	{
 			qosg.recolor();
-
-			$('button.moveup').bind('click', function(e){
-				var myRow = $(this).closest('tr');
-				$(myRow).prev().before(myRow);
-				return false;
-			})
-
-			$('button.movedown').bind('click', function(e){
-				e.preventDefault();
-				var myRow = $(this).closest('tr');
-				$(myRow).next().after(myRow);
-				return false;
-			})
-
-			$('button.delete').bind('click', function(e){
-				var r = confirm("Are you sure?");
-				if(r) {
-					var myRow = $(this).closest('tr');
-					$(myRow).remove();
-				}
-				return false;
-			});
 
 		}
 	</script>

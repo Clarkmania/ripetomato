@@ -75,8 +75,10 @@
 		{
 			var status, speed, code = '';
 
-			if (etherstates.port0 == "disable" || typeof (etherstates.port0) == 'undefined' || typeof (etherstates.port1) == 'undefined'
-				|| typeof (etherstates.port2) == 'undefined' || typeof (etherstates.port3) == 'undefined' || typeof (etherstates.port4) == 'undefined') { return false; }
+			if (etherstates.port0 == "disable" || typeof (etherstates.port0) == 'undefined' || typeof (etherstates.port1) == 'undefined' || typeof (etherstates.port2) == 'undefined' || typeof (etherstates.port3) == 'undefined' || typeof (etherstates.port4) == 'undefined') {
+				$('#ethernetPorts').remove();
+				return false;
+			}
 
 			// Above code checks if ETH ports are Disabled/Enabled
 			code += '<div id="ethPorts">';
@@ -247,16 +249,17 @@
 						{ title: 'Remaining Lease Time', rid: 'wanlease', text: stats.wanlease, ignore: !show_dhcpc }
 						], '.WANField', 'data-table dataonly');
 				</script>
+
 				<div id="b_dhcpc" style="display: none; margin-bottom: 8px;">
 					<div class="btn-group">
-						<button type="button" class="btn" onclick="dhcpc('renew')" value="Renew">Renew</button><!--
-						--><button type="button" class="btn" onclick="dhcpc('release')" value="Release">Release</button>
+						<button type="button" class="btn" onclick="dhcpc('renew')" value="Renew">Renew</button>
+						<button type="button" class="btn" onclick="dhcpc('release')" value="Release">Release</button>
 					</div>
 				</div>
 
 				<div class="btn-group">
-					<button type="button" class="btn" onclick="wan_connect()" value="Connect" id="b_connect" style="display:none"><i class="icon-check icon-green"></i> Connect</button><!--
-					--><button type="button" class="btn" onclick="wan_disconnect()" value="Disconnect" id="b_disconnect" style="display:none"><i class="icon-cancel icon-red"></i> Disconnect</button>
+					<button type="button" class="btn" onclick="wan_connect()" value="Connect" id="b_connect" style="display:none">Connect <i class="icon-check"></i></button>
+					<button type="button" class="btn" onclick="wan_disconnect()" value="Disconnect" id="b_disconnect" style="display:none">Disconnect <i class="icon-cancel"></i></button>
 				</div>
 			</div>
 		</div>
@@ -380,8 +383,8 @@
 					], null, 'data-table dataonly');
 
 				data += '<div class="btn-group">';
-				data += '<button type="button" class="btn" onclick="wlenable('+uidx+', 1)" id="b_wl'+uidx+'_enable" value="Enable" style="display:none"><i class="icon-check icon-green"></i> Enable</i></button>';
-				data += '<button type="button" class="btn" onclick="wlenable('+uidx+', 0)" id="b_wl'+uidx+'_disable" value="Disable" style="display:none"><i class="icon-disable icon-red"></i> Disable</i></button>';
+				data += '<button type="button" class="btn" onclick="wlenable('+uidx+', 1)" id="b_wl'+uidx+'_enable" value="Enable" style="display:none">Enable <i class="icon-check icon-green"></i></button>';
+				data += '<button type="button" class="btn" onclick="wlenable('+uidx+', 0)" id="b_wl'+uidx+'_disable" value="Disable" style="display:none">Disable <i class="icon-disable icon-red"></i></button>';
 				data += '</div></div></div>';
 				$('#LAN-settings').after(data);
 			}

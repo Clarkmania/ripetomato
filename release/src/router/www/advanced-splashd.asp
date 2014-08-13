@@ -150,7 +150,7 @@ No part of this file may be used without permission.
 					<fieldset><label class="col-sm-3 control-left-label" for="upload-name">Custom splash file</label>
 						<div class="col-sm-9">
 							<input class="uploadfile" type="file" size="40" id="upload-name" name="upload_name">
-							<button type="button" name="f_upload_button" id="upload-button" value="Upload" onclick="uploadButton()" class="btn btn-danger"><i class="icon-upload"></i> Upload</button>
+							<button type="button" name="f_upload_button" id="upload-button" value="Upload" onclick="uploadButton()" class="btn btn-danger">Upload <i class="icon-upload"></i></button>
 						</div>
 					</fieldset>
 				</form>
@@ -169,7 +169,7 @@ No part of this file may be used without permission.
 					<li><b> Login Timeout</b> - The client can use the internet until this time expires. Default=3600sec.<br>
 					<li><b> Idle Timeout</b> - How often the ARP cache will be checked (seconds). Default=0.<br>
 					<li><b> Max Missed ARP</b> - Number of lost ARP before considering the client has leaved the connection. Default = 5<br>
-					<li><b> Log Info Level</b> - Verbosity level for log messages from this module, Level 0=Silent, 10=Verbose, (Default=0).<br>
+					<li><b> Log Info Level</b> - Verbosity level for log messages from this module, Level 0=Silent, 10=Verbose, (Default=2).<br>
 
 					<li><b> Included ports</b> - TCP ports to allow access to after login, all others will be denied.<br>
 					<li><b> Excluded ports</b> - TCP ports to denied access to after login, all others will be allowed.<br>

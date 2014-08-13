@@ -79,7 +79,7 @@ No part of this file may be used without permission.
 				</p><br />
 
 				<h4>How does it work?</h4>
-				<p>AdvancedTomato retrieves your router's current Tomato version and creates a small link on the page which looks like this: <b><a target="_blank" href="http://at.prahec.com/update.php?v=1.06.08">http://at.prahec.com/update.php?v=1.06.08</a></b>.
+				<p>AdvancedTomato retrieves your router's current Tomato version and creates a small link on the page which looks like this: <b><a target="_blank" href="http://advancedtomato.com/update.php?v=1.06.08">http://advancedtomato.com/update.php?v=1.06.08</a></b>.
 					Your web browser will follow the link and the AdvancedTomato server sends a response indicating whether or not a newer version is available.<br>
 					That's it!
 				</p>
@@ -89,19 +89,18 @@ No part of this file may be used without permission.
 
 		<div class="box">
 			<div class="heading anonlink">TomatoAnon Settings</div>
-			<div class="content">
-				<div class="section settings"></div>
-				<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
-				<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
-				&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
-			</div>
+			<div class="content"></div>
 			<script type="text/javascript">
-				$('.section.settings').forms([
+				$('.box .content').forms([
 					{ title: 'Do you understand what TomatoAnon does?', name: 'tomatoanon_answer', type: 'select', options: [ ['0','No, I don\'t. I will need to read the above information and make an informed decision.'], ['1','Yes, I have and would like to make a decision.'] ], value: nvram.tomatoanon_answer, suffix: ' '},
 					{ title: 'Do you want to enable TomatoAnon?', name: 'tomatoanon_enable', type: 'select', options: [ ['-1','I`m not sure right now.'], ['1','Yes, I\'m sure I would like to enable it'], ['0','No, I would not like to enable it'] ], value: nvram.tomatoanon_enable, suffix: ' '}
 				]);
 			</script>
 		</div>
+
+		<button type="button" value="Save" id="save-button" onclick="save()" class="btn btn-primary">Save <i class="icon-check"></i></button>
+		<button type="button" value="Cancel" id="cancel-button" onclick="javascript:reloadPage();" class="btn">Cancel <i class="icon-cancel"></i></button>
+		&nbsp; <span id="footer-msg" class="alert warning" style="visibility: hidden;"></span>
 
 	</form>
 
