@@ -805,6 +805,7 @@ const defaults_t defaults[] = {
 // AdvancedTomato
     { "at_update",    ""    },
     { "at_width",    "fluid"    },
+    { "at_navi",     "0"		},
 
 #ifdef TCONFIG_USB
 // nas-usb - !!TB
