@@ -821,7 +821,12 @@ bridge-install:
 	install -D bridge/brctl/brctl $(INSTALLDIR)/bridge/usr/sbin/brctl
 	$(STRIP) $(INSTALLDIR)/bridge/usr/sbin/brctl
 
-dnsmasq: $(if $(TCONFIG_DNSSEC),nettle,)
+dnsmasq/stamp-h1: $(if $(TCONFIG_DNSSEC),nettle,)
+	@$(SEP)
+	cd dnsmasq && patch -p1 < ../dnsmasq.patch
+	@touch $@
+
+dnsmasq: dnsmasq/stamp-h1
 	@$(SEP)
 	@$(MAKE) -C dnsmasq $(PARALLEL_BUILD) \
 	COPTS="$(if $(TCONFIG_DNSSEC),-I$(TOP)/nettle/include -I$(TOP)/gmp -DHAVE_DNSSEC -DHAVE_DNSSEC_STATIC,) \
@@ -834,6 +839,10 @@ dnsmasq: $(if $(TCONFIG_DNSSEC),nettle,)
 dnsmasq-install:
 	install -D dnsmasq/src/dnsmasq $(INSTALLDIR)/dnsmasq/usr/sbin/dnsmasq
 	$(STRIP) $(INSTALLDIR)/dnsmasq/usr/sbin/dnsmasq
+
+dnsmasq-clean:
+	-@$(MAKE) -C dnsmasq clean
+	@rm -f dnsmasq/stamp-h1
 
 nettle/stamp-h1: gmp
 	@cd nettle && CC=$(CC) AR=$(AR) RANLIB=$(RANLIB) LD=$(LD) \

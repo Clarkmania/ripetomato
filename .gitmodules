@@ -4,3 +4,6 @@
 [submodule "release/src/router/curl"]
 	path = release/src/router/curl
 	url = https://github.com/bagder/curl.git
+[submodule "release/src/router/dnsmasq"]
+	path = release/src/router/dnsmasq
+	url = git://thekelleys.org.uk/dnsmasq.git
