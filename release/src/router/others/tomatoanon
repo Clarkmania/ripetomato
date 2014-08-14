@@ -39,7 +39,7 @@ if [ "$ANON_ANSWER" == "1" ]; then
                 VER=`nvram get os_version | awk '{ print $2" "$3 }' | cut -d "-" -f2`
                 BUILDTYPE=`nvram get os_version | awk '{ print $4 }'`
             else #if K26USB
-                VER=`nvram get os_version | awk '{ print $2" "$3" "$4 }' | cut -d "-" -f2`
+                VER=`nvram get os_version | sed -r -e 's/[^-]+-//' -e 's/-([^\ ]+) / /' -e 's/\ [^\ ]+$//'`
                 BUILDTYPE=`nvram get os_version | awk '{ print $5 }'`
             fi
         else #K2.4
@@ -81,6 +81,7 @@ if [ "$ANON_ANSWER" == "1" ]; then
 #                #checkver daily
 #                cru a checkver "$MINUTES $HOUR * * * /usr/sbin/tomatoanon checkver"
 #            fi
+		true
 
         else #just update anon database
             #Collect datas
