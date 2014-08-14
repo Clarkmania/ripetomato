@@ -228,9 +228,9 @@ No part of this file may be used without permission.
 							suffix: ' &nbsp; <b id="newmsg" style="visibility:hidden"><small>Enable if this is a new file</small></b>' },
 						{ title: 'Create Backups', indent: 2, name: 'f_bak', type: 'checkbox', value: nvram.cstats_bak == '1' },
 						{ title: 'First Day Of The Month', name: 'cstats_offset', type: 'text', value: nvram.cstats_offset, maxlen: 2, size: 4 },
-						{ title: 'Excluded IPs', help: 'Comma separated list', name: 'cstats_exclude', type: 'text', value: nvram.cstats_exclude, maxlen: 512, size: 50 },
-						{ title: 'Included IPs', help: 'Comma separated list', name: 'cstats_include', type: 'text', value: nvram.cstats_include, maxlen: 2048, size: 50 },
-						{ title: 'Enable Auto-Discovery', name: 'f_all', type: 'checkbox', value: nvram.cstats_all == '1', suffix: '&nbsp;<small>(automatically include new IPs in monitoring as soon as any traffic is detected)</small>' },
+						{ title: 'Excluded IPs', tip: 'Comma separated list', name: 'cstats_exclude', type: 'text', value: nvram.cstats_exclude, maxlen: 512, size: 50 },
+						{ title: 'Included IPs', tip: 'Comma separated list', name: 'cstats_include', type: 'text', value: nvram.cstats_include, maxlen: 2048, size: 50 },
+						{ title: 'Enable Auto-Discovery', name: 'f_all', type: 'checkbox', value: nvram.cstats_all == '1', tip: 'automatically include new IPs in monitoring as soon as any traffic is detected' },
 						{ title: 'Labels on graphics', name: 'cstats_labels', type: 'select', value: nvram.cstats_stime, options: [[0,'Show known hostnames and IPs'],[1,'Prefer to show only known hostnames, otherwise show IPs'],[2,'Show only IPs']], value: nvram.cstats_labels }
 						], { align: 'left' });
 				</script>

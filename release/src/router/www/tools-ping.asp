@@ -190,7 +190,7 @@ No part of this file may be used without permission.
 					{ title: 'Address', name: 'f_addr', type: 'text', maxlen: 64, size: 32, value: '',
 						suffix: ' <button type="submit" value="Ping" onclick="ping()" id="pingb" class="btn">Ping <i class="icon-ping"></i></button>' },
 					{ title: 'Ping Count', name: 'f_count', type: 'text', maxlen: 2, size: 7, value: '5' },
-					{ title: 'Packet Size', name: 'f_size', type: 'text', maxlen: 5, size: 7, value: '56', suffix: ' <small>(bytes)</small>' }
+					{ title: 'Packet Size', name: 'f_size', type: 'text', maxlen: 5, size: 7, value: '56', suffix: ' bytes' }
 				]);
 			</script>
 

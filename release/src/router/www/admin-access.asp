@@ -221,7 +221,7 @@ No part of this file may be used without permission.
 						{ title: 'HTTP Port', indent: 2, name: 'http_lanport', type: 'text', maxlen: 5, size: 7, value: fixPort(nvram.http_lanport, 80) },
 						{ title: 'HTTPS Port', indent: 2, name: 'https_lanport', type: 'text', maxlen: 5, size: 7, value: fixPort(nvram.https_lanport, 443) },
 						{ title: '<h5>SSL Certificate</h5>', rid: 'row_sslcert' },
-						{ title: 'Common Name (CN)', indent: 2, name: 'https_crt_cn', help: 'optional; space separated', type: 'text',
+						{ title: 'Common Name (CN)', indent: 2, name: 'https_crt_cn', tip: 'optional; space separated', type: 'text',
 							maxlen: 64, size: 64, value: nvram.https_crt_cn },
 						{ title: 'Regenerate', indent: 2, name: 'f_https_crt_gen', type: 'checkbox', value: 0 },
 						{ title: 'Save In NVRAM', indent: 2, name: 'f_https_crt_save', type: 'checkbox', value: nvram.https_crt_save == 1 },
@@ -232,12 +232,12 @@ No part of this file may be used without permission.
 						{ title: '<h5>Interface Settings</h5>' },
 						{ title: 'Interface Theme', name: 'web_css', type: 'select', 
 							options: [['tomato','Default'], ['ext/custom','Custom (ext/custom.css)']], value: nvram.web_css },
-						{ title: 'Default Navigation State', name: 'at_navi', type: 'select', help: 'You can always toggle navigation style by clicking an icon right to logo, but doing so won\'t change default state.',
+						{ title: 'Default Navigation State', name: 'at_navi', type: 'select', tip: 'You can always toggle navigation style by clicking an icon right to logo, but doing so won\'t change default state.',
 							options: [['default', 'Default'], ['collapsed', 'Collapsed']], value: nvram.at_navi },
 /*
 						{ title: 'ATTD ID#', indent: 2, name: 'ttb_css', type: 'text', maxlen: 25, size: 30, value: nvram.ttb_css, suffix: 'Theme ID# from <a href="http://at.prahec.com/themes/" target="_blank"><u><i>ATTD themes gallery</i></u></a>' },
 */
-						{ title: 'Interface Navigation', help: "This option allows you to add custom navigation links or rewrite existing ones. Only JSON format accepted!",
+						{ title: 'Interface Navigation', tip: "This option allows you to add custom navigation links or rewrite existing ones. Only JSON format accepted!",
 							name: 'web_nav', type: 'textarea', style: 'width: 100%; height: 100px;', value: nvram.web_nav }
 					];
 
@@ -288,14 +288,14 @@ No part of this file may be used without permission.
 				<script type="text/javascript">
 					$('#section-restrict .content').forms([
 						{ title: 'Allowed Remote IP Address', name: 'f_rmgt_sip', type: 'text', maxlen: 512, size: 64, value: nvram.rmgt_sip,
-							suffix: '<small>(optional; ex: "1.1.1.1", "1.1.1.0/24", "1.1.1.1 - 2.2.2.2" or "me.example.com")</small>' },
+							help: 'optional; ex: "1.1.1.1", "1.1.1.0/24", "1.1.1.1 - 2.2.2.2" or "me.example.com"' },
 						{ title: 'Limit Connection Attempts', multi: [
 							{ suffix: '&nbsp; SSH &nbsp; / &nbsp;', name: 'f_limit_ssh', type: 'checkbox', value: (shlimit[0] & 1) != 0 },
 							{ suffix: '&nbsp; Telnet &nbsp;', name: 'f_limit_telnet', type: 'checkbox', value: (shlimit[0] & 2) != 0 }
 						] },
 						{ title: '', indent: 2, multi: [
-							{ name: 'f_limit_hit', type: 'text', maxlen: 4, size: 6, suffix: 'every ', value: shlimit[1] },
-							{ name: 'f_limit_sec', type: 'text', maxlen: 4, size: 6, suffix: 'seconds', value: shlimit[2] }
+							{ name: 'f_limit_hit', type: 'text', maxlen: 4, size: 6, suffix: ' every ', value: shlimit[1] },
+							{ name: 'f_limit_sec', type: 'text', maxlen: 4, size: 6, suffix: ' seconds', value: shlimit[2] }
 						] },
 						{ title: "Password", name: "set_password_1", type: "password", value: "**********" },
 						{ title: "<i>(re-enter to confirm)</i>", indent: 2, name: "set_password_2", type: "password", value: "**********" }

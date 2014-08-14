@@ -214,12 +214,12 @@ No part of this file may be used without permission.
 							value: nvram.ftp_enable },
 						{ title: 'FTP Port', indent: 2, name: 'ftp_port', type: 'text', maxlen: 5, size: 7, value: fixPort(nvram.ftp_port, 21) },
 						{ title: 'Allowed Remote<br>Address(es)', indent: 2, name: 'f_ftp_sip', type: 'text', maxlen: 512, size: 64, value: nvram.ftp_sip,
-							suffix: '<br><small>(optional; ex: "1.1.1.1", "1.1.1.0/24", "1.1.1.1 - 2.2.2.2" or "me.example.com")</small>' },
+							help: 'optional', tip: 'ex: "1.1.1.1", "1.1.1.0/24", "1.1.1.1 - 2.2.2.2" or "me.example.com"' },
 						{ title: 'Anonymous Users Access', name: 'ftp_anonymous', type: 'select',
 							options: [['0', 'Disabled'],['1', 'Read/Write'],['2', 'Read Only'],['3', 'Write Only']],
 							value: nvram.ftp_anonymous },
 						{ title: 'Allow Admin Login*', name: 'f_ftp_super', type: 'checkbox',
-							suffix: ' <small>Allows users to connect with admin account.</small>',
+							help: 'Allows users to connect with admin account',
 							value: nvram.ftp_super == 1 },
 						{ title: 'Log FTP requests and responses', name: 'f_log_ftp', type: 'checkbox',
 							value: nvram.log_ftp == 1 }
@@ -241,17 +241,17 @@ No part of this file may be used without permission.
 				<script type="text/javascript">
 					$('#ftpdirs').forms([
 						{ title: 'Anonymous Root Directory*', name: 'ftp_anonroot', type: 'text', maxlen: 256, size: 32,
-							suffix: ' <small>(for anonymous connections)</small>',
+							help: 'for anonymous connections',
 							value: nvram.ftp_anonroot },
 						{ title: 'Public Root Directory*', name: 'ftp_pubroot', type: 'text', maxlen: 256, size: 32,
-							suffix: ' <small>(for authenticated users access, if not specified for the user)</small>',
+							help: 'for authenticated users access, if not specified for the user',
 							value: nvram.ftp_pubroot },
 						{ title: 'Private Root Directory**', name: 'ftp_pvtroot', type: 'text', maxlen: 256, size: 32,
-							suffix: ' <small>(for authenticated users access in private mode)</small>',
+							help: 'for authenticated users access in private mode',
 							value: nvram.ftp_pvtroot },
 						{ title: 'Directory Listings', name: 'ftp_dirlist', type: 'select',
 							options: [['0', 'Enabled'],['1', 'Disabled'],['2', 'Disabled for Anonymous']],
-							suffix: ' <small>(always enabled for Admin)</small>',
+							tip: 'always enabled for Admin',
 							value: nvram.ftp_dirlist }
 					]);
 				</script>
@@ -264,25 +264,25 @@ No part of this file may be used without permission.
 			<script type="text/javascript">
 				$('#ftp-limits').forms([
 					{ title: 'Maximum Users Allowed to Log in', name: 'ftp_max', type: 'text', maxlen: 5, size: 7,
-						suffix: ' <small>(0 - unlimited)</small>',
+						help: '0 - unlimited',
 						value: nvram.ftp_max },
 					{ title: 'Maximum Connections from the same IP', name: 'ftp_ipmax', type: 'text', maxlen: 5, size: 7,
-						suffix: ' <small>(0 - unlimited)</small>',
+						help: '0 - unlimited',
 						value: nvram.ftp_ipmax },
 					{ title: 'Maximum Bandwidth for Anonymous Users', name: 'ftp_anonrate', type: 'text', maxlen: 5, size: 7,
-						suffix: ' <small>KBytes/sec (0 - unlimited)</small>',
+						suffix: ' KBytes/sec', help: '0 - unlimited',
 						value: nvram.ftp_anonrate },
 					{ title: 'Maximum Bandwidth for Authenticated Users', name: 'ftp_rate', type: 'text', maxlen: 5, size: 7,
-						suffix: ' <small>KBytes/sec (0 - unlimited)</small>',
+						suffix: ' KBytes/sec', help: '0 - unlimited',
 						value: nvram.ftp_rate },
 					{ title: 'Idle Timeout', name: 'ftp_staytimeout', type: 'text', maxlen: 5, size: 7,
-						suffix: ' <small>seconds (0 - no timeout)</small>',
+						suffix: ' seconds', help: '0 - no timeout',
 						value: nvram.ftp_staytimeout },
 					{ title: 'Limit Connection Attempts', name: 'f_limit', type: 'checkbox',
 						value: ftplimit[0] != 0 },
 					{ title: '', indent: 2, multi: [
-						{ name: 'f_limit_hit', type: 'text', maxlen: 4, size: 6, suffix: '&nbsp; <small>every</small> &nbsp;', value: ftplimit[1] },
-						{ name: 'f_limit_sec', type: 'text', maxlen: 4, size: 6, suffix: '&nbsp; <small>seconds</small>', value: ftplimit[2] }
+						{ name: 'f_limit_hit', type: 'text', maxlen: 4, size: 6, suffix: '&nbsp; every &nbsp;', value: ftplimit[1] },
+						{ name: 'f_limit_sec', type: 'text', maxlen: 4, size: 6, suffix: '&nbsp; seconds', value: ftplimit[2] }
 					] }
 				]);
 			</script>

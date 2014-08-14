@@ -116,7 +116,7 @@ No part of this file may be used without permission.
 
 			<script type="text/javascript">
 				$('#command-form').forms([
-					{ title: 'Command', help:'Use the command &quot;nvram export --set&quot; or &quot;nvram export --set | grep qos&quot; to cut and paste configuration',
+					{ title: 'Command', tip: 'Use the command &quot;nvram export --set&quot; or &quot;nvram export --set | grep qos&quot; to cut and paste configuration',
 						name: 'f_cmd', type: 'textarea', wrap: 'off', value: '', style: 'width: 100%; height: 80px;' }
 					], { grid: ['col-sm-2', 'col-sm-10'] });
 			</script>

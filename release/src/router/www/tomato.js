@@ -2722,7 +2722,7 @@ function createFormFields (data, settings) {
 
 		form += '<fieldset' + ((v.rid) ? ' id="' + v.rid + '"' : '') + ((v.hidden) ? ' style="display: none;"' : '') + '>';
 
-		if (v.help) { v.title += ' (<i data-toggle="tooltip" class="icon-info icon-normal" title="' + v.help + '"></i>)'; }
+		if (v.tip) { v.title += ' (<i data-toggle="tooltip" class="icon-info icon-normal" title="' + v.tip + '"></i>)'; }
 		if (v.text) {
 			if (v.title) {
 				form += '<label class="' + s.grid[0] + ' ' + ((s.align == 'center') ? 'control-label' : 'control-left-label') + '">' + v.title + '</label><div class="' + s.grid[1] + ' text-block">' + v.text + '</div></fieldset>';
@@ -2806,7 +2806,8 @@ function createFormFields (data, settings) {
 					break;
 			}
 
-			if (f.suffix && (f.type != 'checkbox' && f.type != 'radio')) output += '<span class="help-block">' + f.suffix + '</span>';
+			if (f.suffix && (f.type != 'checkbox' && f.type != 'radio')) output += f.suffix;
+			if (f.help) output += '<span class="help-block">' + f.help + '</span>';
 
 		});
 

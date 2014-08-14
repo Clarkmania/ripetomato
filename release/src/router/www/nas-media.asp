@@ -248,7 +248,7 @@ No part of this file may be used without permission.
 
 				$('.content.mediadlna').forms([
 					{ title: 'Enable', name: 'f_ms_enable', type: 'checkbox', value: nvram.ms_enable == '1' },
-					{ title: 'Port', name: 'ms_port', type: 'text', maxlen: 5, size: 6, value: nvram.ms_port, suffix: '<small>(range: 0 - 65535; default (random) set 0)</small>' },
+					{ title: 'Port', name: 'ms_port', type: 'text', maxlen: 5, size: 6, value: nvram.ms_port, help: 'range: 0 - 65535; default (random) set 0' },
 					{ title: 'Database Location', multi: [
 						{ name: 'f_loc', type: 'select', options: [['','RAM (Temporary)'],
 							/* JFFS2-BEGIN */
@@ -264,7 +264,7 @@ No part of this file may be used without permission.
 					] },
 					{ title: 'Scan Media at Startup*', indent: 2, name: 'f_ms_sas', type: 'checkbox', value: nvram.ms_sas == '1', hidden: 1 },
 					{ title: 'Rescan on the next run*', indent: 2, name: 'f_ms_rescan', type: 'checkbox', value: 0,
-						suffix: '&nbsp; <small>(Media scan may take considerable time to complete.)</small>' },
+						tip: 'Media scan may take considerable time to complete' },
 					{ title: 'TiVo Support', name: 'f_ms_tivo', type: 'checkbox', value: nvram.ms_tivo == '1' },
 					{ title: 'Strictly adhere to DLNA standards', name: 'f_ms_stdlna', type: 'checkbox', value: nvram.ms_stdlna == '1' }
 				]);

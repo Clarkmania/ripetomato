@@ -882,7 +882,7 @@ No part of this file may be used without permission.
 					$('.section.vidoffset').forms([
 						{ title: 'First 802.1Q VLAN tag', name: 'vlan0tag', type: 'text', maxlen:4, size:6,
 							value: fixInt(nvram.vlan0tag, 0, 4080, 0),
-							suffix: ' <small><i>(range: 0 - 4080; must be a multiple of 16; set to 0 to disable)</i></small>' }
+							help: 'range: 0 - 4080', tip: 'must be a multiple of 16; set to 0 to disable' }
 					]);
 				</script>
 

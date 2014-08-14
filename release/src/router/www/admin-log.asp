@@ -149,11 +149,11 @@ No part of this file may be used without permission.
 
 				$('#router-log').forms([
 					{ title: 'Log Internally', name: 'f_log_file', type: 'checkbox', value: nvram.log_file == 1 },
-					{ title: 'Max size before rotate', name: 'log_file_size', type: 'text', maxlen: 5, size: 6, value: nvram.log_file_size || 50, suffix: ' <small>KB</small>' },
+					{ title: 'Max size before rotate', name: 'log_file_size', type: 'text', maxlen: 5, size: 6, value: nvram.log_file_size || 50, suffix: ' KB' },
 					{ title: 'Number of rotated logs to keep', name: 'log_file_keep', type: 'text', maxlen: 2, size: 3, value: nvram.log_file_keep || 1 },
 					{ title: 'Custom Log File Path', multi: [
 						{ name: 'f_log_file_custom', type: 'checkbox', value: nvram.log_file_custom == 1, suffix: '  ' },
-						{ name: 'log_file_path', type: 'text', maxlen: 50, size: 30, value: nvram.log_file_path, suffix: ' <small>(make sure the directory exists and is writable)</small>' }
+						{ name: 'log_file_path', type: 'text', maxlen: 50, size: 30, value: nvram.log_file_path, tip: 'make sure the directory exists and is writable' }
 					] },
 					{ title: 'Log To Remote System', name: 'f_log_remote', type: 'checkbox', value: nvram.log_remote == 1 },
 					{ title: 'Host or IP Address / Port', indent: 2, multi: [
@@ -169,7 +169,7 @@ No part of this file may be used without permission.
 					{ title: 'Connection Logging' },
 					{ title: 'Inbound', indent: 2, name: 'log_in', type: 'select', options: [[0,'Disabled (recommended)'],[1,'If Blocked By Firewall'],[2,'If Allowed By Firewall'],[3,'Both']], value: nvram.log_in },
 					{ title: 'Outbound', indent: 2, name: 'log_out', type: 'select', options: [[0,'Disabled (recommended)'],[1,'If Blocked By Firewall'],[2,'If Allowed By Firewall'],[3,'Both']], value: nvram.log_out },
-					{ title: 'Limit', indent: 2, name: 'log_limit', type: 'text', maxlen: 4, size: 5, value: nvram.log_limit, suffix: ' <small>(messages per minute / 0 for unlimited)</small>' }
+					{ title: 'Limit', indent: 2, name: 'log_limit', type: 'text', maxlen: 4, size: 5, value: nvram.log_limit, help: 'messages per minute; 0 for unlimited' }
 				]);
 			</script>
 		</div>
@@ -182,13 +182,13 @@ No part of this file may be used without permission.
 					{ title: 'Monitor Web Usage', name: 'f_log_wm', type: 'checkbox', value: nvram.log_wm == 1 },
 					{ title: 'Monitor', name: 'log_wmtype', type: 'select', options: [[0,'All Computers / Devices'],[1,'The Following...'],[2,'All Except...']], value: nvram.log_wmtype },
 					{ title: 'IP Address(es)', indent: 2,  name: 'f_log_wmip', type: 'text', maxlen: 512, size: 64, value: nvram.log_wmip,
-						suffix: '<small>(ex: "1.1.1.1", "1.1.1.0/24" or "1.1.1.1 - 2.2.2.2")</small>' },
+						help: 'ex: "1.1.1.1", "1.1.1.0/24" or "1.1.1.1 - 2.2.2.2"' },
 					{ title: 'Number of Entries to remember' },
-					{ title: 'Domains', indent: 2,  name: 'log_wmdmax', type: 'text', maxlen: 4, size: 6, value: nvram.log_wmdmax, suffix: ' <small>(0 to disable)</small>' },
-					{ title: 'Searches', indent: 2, name: 'log_wmsmax', type: 'text', maxlen: 4, size: 6, value: nvram.log_wmsmax, suffix: ' <small>(0 to disable)</small>' },
-					{ title: 'Daily Backup', name: 'f_webmon_bkp', type: 'checkbox', value: nvram.webmon_bkp == 1, suffix: ' <small>(every day at midnight)</small>' },
+					{ title: 'Domains', indent: 2,  name: 'log_wmdmax', type: 'text', maxlen: 4, size: 6, value: nvram.log_wmdmax, help: '0 to disable' },
+					{ title: 'Searches', indent: 2, name: 'log_wmsmax', type: 'text', maxlen: 4, size: 6, value: nvram.log_wmsmax, help: '0 to disable' },
+					{ title: 'Daily Backup', name: 'f_webmon_bkp', type: 'checkbox', value: nvram.webmon_bkp == 1, help: 'every day at midnight' },
 					{ title: 'Clear Data After Backup', indent: 2, name: 'f_webmon_shrink', type: 'checkbox', value: nvram.webmon_shrink == 1 },
-					{ title: 'Backup Directory', indent: 2,  name: 'webmon_dir', type: 'text', maxlen: 128, size: 30, value: nvram.webmon_dir, suffix: ' <small>(make sure the directory exists and is writable)</small>' }
+					{ title: 'Backup Directory', indent: 2,  name: 'webmon_dir', type: 'text', maxlen: 128, size: 30, value: nvram.webmon_dir, tip: 'make sure the directory exists and is writable' }
 				]);
 			</script>
 		</div>

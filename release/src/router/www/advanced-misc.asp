@@ -71,7 +71,7 @@ No part of this file may be used without permission.
 
 						{ title: 'Enable Jumbo Frames *', name: 'f_jumbo_frame_enable', type: 'checkbox', value: nvram.jumbo_frame_enable != '0', hidden: !et1000 },
 						{ title: 'Jumbo Frame Size *', name: 'jumbo_frame_size', type: 'text', maxlen: 4, size: 6, value: fixInt(nvram.jumbo_frame_size, 1, 9720, 2000),
-							suffix: ' <small>Bytes (range: 1 - 9720; default: 2000)</small>', hidden: !et1000 }
+							suffix: ' Bytes', help: 'range: 1 - 9720; default: 2000', hidden: !et1000 }
 
 					]);
 				</script>

@@ -130,7 +130,7 @@ No part of this file may be used without permission.
 					{ title: 'Static lease time', multi: [
 						{ name: 'f_dhcpd_sltsel', type: 'select', options: [[0,'Same as normal lease time'],[-1,'"Infinite"'],[1,'Custom']],
 							value: (nvram.dhcpd_slt < 1) ? nvram.dhcpd_slt : 1 },
-						{ name: 'f_dhcpd_slt', type: 'text', maxlen: 5, size: 8, prefix: '<span id="_dhcpd_sltman"> ', suffix: 'minutes</span>',
+						{ name: 'f_dhcpd_slt', type: 'text', maxlen: 5, size: 8, prefix: '<span id="_dhcpd_sltman"> ', suffix: ' minutes</span>',
 							value: (nvram.dhcpd_slt >= 1) ? nvram.dhcpd_slt : 3600 } ] },
 					{ title: 'Announce IPv6 on LAN (SLAAC)', name: 'f_ipv6_radvd', type: 'checkbox', value: nvram.ipv6_radvd == '1' },
 					{ title: 'Announce IPv6 on LAN (DHCP)', name: 'f_ipv6_dhcpd', type: 'checkbox', value: nvram.ipv6_dhcpd == '1' },

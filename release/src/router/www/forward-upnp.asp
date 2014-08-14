@@ -240,11 +240,11 @@ No part of this file may be used without permission.
 					REMOVE-END */
 					{ title: 'Inactive Rules Cleaning', name: 'f_upnp_clean', type: 'checkbox', value: (nvram.upnp_clean == '1') },
 					{ title: 'Cleaning Interval', indent: 2, name: 'upnp_clean_interval', type: 'text', maxlen: 5, size: 7,
-						suffix: ' <small>seconds</small>', value: nvram.upnp_clean_interval },
+						suffix: ' seconds ', value: nvram.upnp_clean_interval },
 					{ title: 'Cleaning Threshold', indent: 2, name: 'upnp_clean_threshold', type: 'text', maxlen: 4, size: 7,
-						suffix: ' <small>redirections</small>', value: nvram.upnp_clean_threshold },
+						suffix: ' redirections', value: nvram.upnp_clean_threshold },
 					{ title: 'Secure Mode', name: 'f_upnp_secure', type: 'checkbox',
-						suffix: ' &nbsp; <small>(when enabled, UPnP clients are allowed to add mappings only to their IP)</small>',
+						tip: 'when enabled, UPnP clients are allowed to add mappings only to their IP',
 						value: (nvram.upnp_secure == '1') },
 				];
 					/* VLAN-BEGIN */

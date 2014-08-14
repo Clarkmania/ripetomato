@@ -29,7 +29,7 @@ No part of this file may be used without permission.
 
 			var s = comma(MAX(Math.floor((bandwidth * rate) / 100), 1));
 			if (ceil > 0) s += ' - ' + MAX(Math.round((bandwidth * ceil) / 100), 1);
-			return s + ' <small>kbit/s</small>';
+			return s + ' kbit/s';
 		}
 
 		function toggleFiltersVisibility(){
@@ -229,7 +229,7 @@ No part of this file may be used without permission.
 			<script type="text/javascript">
 				cc = nvram.qos_orates.split(/[,-]/);
 				f = [];
-				f.push({ title: 'Max Bandwidth Limit', name: 'qos_obw', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s   (Set to measured bandwidth less 15-30%)</small>', value: nvram.qos_obw });
+				f.push({ title: 'Max Bandwidth Limit', name: 'qos_obw', type: 'text', maxlen: 6, size: 8, suffix: ' kbit/s', tip: 'Set to measured bandwidth less 15-30%', value: nvram.qos_obw });
 				j = 0;
 				for (i = 0; i < 10; ++i) {
 					x = cc[j++] || 1;
@@ -250,7 +250,7 @@ No part of this file may be used without permission.
 			<script type="text/javascript">
 				allRates = nvram.qos_irates.split(',');
 				f = [];
-				f.push({ title: 'Max Bandwidth Limit', name: 'qos_ibw', type: 'text', maxlen: 6, size: 8, suffix: ' <small>kbit/s   (Set to measured bandwidth less 15-30%)</small>', value: nvram.qos_ibw });
+				f.push({ title: 'Max Bandwidth Limit', name: 'qos_ibw', type: 'text', maxlen: 6, size: 8, suffix: ' kbit/s', tip: 'Set to measured bandwidth less 15-30%', value: nvram.qos_ibw });
 
 				for (i = 0; i < 10; ++i)
 				{

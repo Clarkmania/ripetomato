@@ -315,19 +315,19 @@ No part of this file may be used without permission.
 						/* MICROSD-END */
 						/* LINUX26-END */
 						{ title: 'Automount', indent: 2, name: 'f_automount', type: 'checkbox',
-							suffix: ' <small>Automatically mount all partitions to sub-directories in <i>/mnt</i>.</small>', value: nvram.usb_automount == 1 },
+							help: 'Automatically mount all partitions to sub-directories in <i>/mnt</i>', value: nvram.usb_automount == 1 },
 						{ title: 'Run after mounting', indent: 2, name: 'script_usbmount', type: 'textarea', value: nvram.script_usbmount },
 						{ title: 'Run before unmounting', indent: 2, name: 'script_usbumount', type: 'textarea', value: nvram.script_usbumount },
 						null,
 						/* LINUX26-BEGIN */
 						{ title: 'HDD Spindown', name: 'f_idle_enable', type: 'checkbox',
-							suffix: ' <small>Spin down each HDD when idle. No need to use with flashdrive.</small>', value: nvram.idle_enable == 1 },
+							help: 'Spin down each HDD when idle', tip: 'No need to use with flashdrive', value: nvram.idle_enable == 1 },
 						null,
 						{ title: 'USB 3G Modem support', name: 'f_usb_3g', type: 'checkbox',
-							suffix: ' <small>Before disconnecting 3G Modem from USB port, remember to uncheck box. If modem used usbserial module, you have to reboot router before unplug modem.</small>', value: nvram.usb_3g == 1 },
+							tip: 'Before disconnecting 3G Modem from USB port, remember to uncheck box. If modem used usbserial module, you have to reboot router before unplug modem.', value: nvram.usb_3g == 1 },
 						null,
 						/* LINUX26-END */
-						{ title: 'Hotplug script<br><small>(called when any USB device is attached or removed)</small>', name: 'script_usbhotplug', type: 'textarea', value: nvram.script_usbhotplug },
+						{ title: 'Hotplug script', tip: 'called when any USB device is attached or removed', name: 'script_usbhotplug', type: 'textarea', value: nvram.script_usbhotplug },
 						{ text: '<small>Some of the changes will take effect only after a restart.</small>' }
 					]);
 				</script>

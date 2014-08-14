@@ -369,7 +369,7 @@ No part of this file may be used without permission.
 							value: a ? 'custom' : nvram.ddnsx_ip },
 						{ title: 'Custom IP address', indent: 2, name: 'f_custom_ip', type: 'text', maxlen: 15, size: 20,
 							value: a ? nvram.ddnsx_ip : '', hidden: !a },
-						{ title: 'Auto refresh every', name: 'ddnsx_refresh', type: 'text', maxlen: 8, size: 8, suffix: ' days <small>(0 = disable)</small>', value: fixInt(nvram.ddnsx_refresh, 0, 90, 28) }
+						{ title: 'Auto refresh every', name: 'ddnsx_refresh', type: 'text', maxlen: 8, size: 8, suffix: ' days', help: '0 = disable', value: fixInt(nvram.ddnsx_refresh, 0, 90, 28) }
 					]);
 
 					a = nvram.wan_dns.split(/\s+/);
@@ -422,7 +422,7 @@ No part of this file may be used without permission.
 							{ title: 'MX', name: 'f_mx' + i, type: 'text', maxlen: 32, size: 35, value: v[4], hidden: 1 },
 							{ title: 'Backup MX', indent: 2, name: 'f_bmx' + i, type: 'checkbox', value: v[5] != '0', hidden: 1 },
 							{ title: 'Use as DNS', name: 'f_opendns' + i, type: 'checkbox', value: (opendnsInUse == opendns.length),
-								suffix: '<br><small>(Current DNS: ' + dns  + ')</small>', hidden: 1 },
+								help: 'Current DNS: ' + dns, hidden: 1 },
 							{ title: 'Token / URL', name: 'f_afraid' + i, type: 'text', maxlen: 255, size: 60, value: v[6], hidden: 1 },
 							{ title: 'Save state when IP changes (nvram commit)', name: 'f_ddnsx_save' + i, type: 'checkbox', value: nvram.ddnsx_save == '1', hidden: 1 },
 							{ title: 'Force next update', name: 'f_force' + i, type: 'checkbox', value: 0, hidden: 1 },

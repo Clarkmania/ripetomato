@@ -106,7 +106,7 @@ No part of this file may be used without permission.
 						options: lans, value: nvram.dmz_ifname },
 					/* VLAN-END */
 					{ title: 'Source Address Restriction', indent: 2, name: 'f_dmz_sip', type: 'text', maxlen: 512, size: 64,
-						value: nvram.dmz_sip, suffix: '<br><small>(optional; ex: "1.1.1.1", "1.1.1.0/24", "1.1.1.1 - 2.2.2.2" or "me.example.com")</small>' }
+						value: nvram.dmz_sip, help: 'ex: "1.1.1.1", "1.1.1.0/24", "1.1.1.1 - 2.2.2.2" or "me.example.com"' }
 					]);
 			</script>
 		</div>

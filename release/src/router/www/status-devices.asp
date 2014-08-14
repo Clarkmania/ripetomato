@@ -319,7 +319,7 @@
 							f.push( { title: '<b>Noise Floor (' + wl_ifaces[uidx][0] + ')&nbsp;:</b>',
 								prefix: '<span id="noise'+uidx+'">',
 								custom: wlnoise[uidx],
-								suffix: '</span>&nbsp;<small>dBm</small>' + a } );
+								suffix: '</span> dBm' + a } );
 						}
 					}
 				}

@@ -153,10 +153,10 @@ No part of this file may be used without permission.
 			{ title: 'Enable Server on Start', name: 'f_nginx_enable', type: 'checkbox', value: nvram.nginx_enable == '1'},
 			{ title: 'Enable PHP support', name: 'f_nginx_php', type: 'checkbox', value: (nvram.nginx_php != '0') },
 			{ title: 'Keep Config Files', name: 'f_nginx_keepconf', type: 'checkbox', value: (nvram.nginx_keepconf != '0') },
-			{ title: 'Web Server Port', name: 'f_nginx_port', type: 'text', maxlen: 5, size: 7, value: fixPort(nvram.nginx_port, 85), suffix: '<small> default: 85</small>' },
+			{ title: 'Web Server Port', name: 'f_nginx_port', type: 'text', maxlen: 5, size: 7, value: fixPort(nvram.nginx_port, 85), help: 'default: 85' },
 			{ title: 'Web Server Name', name: 'f_nginx_fqdn', type: 'text', maxlen: 255, size: 20, value: nvram.nginx_fqdn },
-			{ title: 'Server Root Path', name: 'f_nginx_docroot', type: 'text', maxlen: 255, size: 40, value: nvram.nginx_docroot, suffix: '<span>&nbsp;/index.html / index.htm / index.php</span>' },
-			{ title: 'Server Priority', name: 'f_nginx_priority', type: 'text', maxlen: 8, size:3, value: nvram.nginx_priority, suffix:'<small> Max. Perfor: -20, Min.Perfor: 19, default: 10</small>' },
+			{ title: 'Server Root Path', name: 'f_nginx_docroot', type: 'text', maxlen: 255, size: 40, value: nvram.nginx_docroot, help: 'index.html | index.htm | index.php' },
+			{ title: 'Server Priority', name: 'f_nginx_priority', type: 'text', maxlen: 8, size:3, value: nvram.nginx_priority, help: 'Max. Perf: -20, Min. Perf: 19, default: 10' },
 			{ title: '<a href="http://wiki.nginx.org/Configuration" target="_new">NGINX</a><br>Custom configuration', name: 'f_nginx_custom', type: 'textarea', value: nvram.nginx_custom, style: 'width: 100%; height: 100px;' }
 		]);
 	</script>

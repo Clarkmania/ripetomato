@@ -335,8 +335,8 @@ No part of this file may be used without permission.
 			<div id="settings"></div>
 			<script type="text/javascript">
 				$('#settings').forms([
-					{ title: 'IPs currently on graphic', name: 'f_ipt_addr_shown', type: 'select', options: [[0,'Select']], suffix: '&nbsp; <small>(Click/select a device from this list to hide it)</small>' },
-					{ title: 'Hidden addresses', name: 'f_ipt_addr_hidden', type: 'select', options: [[0,'Select']], suffix: '&nbsp; <small>(Click/select to show it again)</small>' }
+					{ title: 'IPs currently on graphic', name: 'f_ipt_addr_shown', type: 'select', options: [[0,'Select']], tip: 'Click/select a device from this list to hide it' },
+					{ title: 'Hidden addresses', name: 'f_ipt_addr_hidden', type: 'select', options: [[0,'Select']], tip: 'Click/select to show it again' }
 				]);
 			</script>
 

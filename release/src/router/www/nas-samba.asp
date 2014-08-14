@@ -190,7 +190,7 @@ No part of this file may be used without permission.
 							,['932', '932 (Japanese)'],['936', '936 (Simplified Chinese)'],['949', '949 (Korean)'],['950', '950 (Traditional Chinese / Big5)']
 							/* LINUX26-END */
 						],
-						suffix: ' <small> (start cmd.exe and type chcp to see the current code page)</small>',
+						tip: 'start cmd.exe and type chcp to see the current code page',
 						value: nvram.smbd_cpage },
 					{ title: 'Samba Custom Configuration', name: 'smbd_custom', type: 'textarea', value: nvram.smbd_custom, style: 'width: 100%; height: 80px;' },
 					{ title: 'Auto-share all USB Partitions', name: 'smbd_autoshare', type: 'select',

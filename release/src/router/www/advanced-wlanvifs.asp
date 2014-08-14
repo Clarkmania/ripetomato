@@ -1453,7 +1453,7 @@ LAN Access admin module by Augusto Bott
 						{ title: 'Wireless Mode', name: 'f_wl'+u+'_mode', type: 'select',
 							options: wl_modes_available,
 							value: ((eval('nvram["wl'+u+'_mode"]') == 'ap') && (eval('nvram["wl'+u+'_wds_enable"]') == '1')) ? 'apwds' : eval('nvram["wl'+u+'_mode"]'),
-							suffix: ' &nbsp; <b id="wl'+u+'_mode_msg" style="visibility:hidden"><small>(note: you might wish to cross-check settings later on <a href=basic-network.asp>Basic/Network</a>)</small></b>' }
+							help: ' <b id="wl'+u+'_mode_msg" style="visibility:hidden"><small>note: you might wish to cross-check settings later on <a href=basic-network.asp>Basic/Network</a></small></b>' }
 					);
 
 					// only if primary VIF
@@ -1478,7 +1478,7 @@ LAN Access admin module by Augusto Bott
 					// only if primary VIF
 					if (u.toString().indexOf('.') < 0) {
 						f.push (
-							{ title: 'Channel', name: 'wl'+u+'_channel', type: 'select', options: ghz[uidx], prefix: '<span id="__wl'+u+'_channel">', suffix: '</span> <input type="button" id="_f_wl'+u+'_scan" value="Scan" onclick="scanButton('+u+')"> <img src="spin.gif" id="spin'+u+'">',
+							{ title: 'Channel', name: 'wl'+u+'_channel', type: 'select', options: ghz[uidx], prefix: '<div class="pull-left" id="__wl'+u+'_channel">', suffix: '</div> &nbsp; <button class="btn btn-primary" type="button" id="_f_wl'+u+'_scan" value="Scan" onclick="scanButton('+u+')">Scan <i class="icon-search"></i></button> &nbsp; <div class="spinner" style="visibility: hidden;" id="spin'+u+'"></div>',
 								value: eval('nvram["wl'+u+'_channel"]') },
 							{ title: 'Channel Width', name: 'wl'+u+'_nbw_cap', type: 'select', options: [['0','20 MHz'],['1','40 MHz']],
 								value: eval('nvram["wl'+u+'_nbw_cap"]') },
@@ -1503,7 +1503,7 @@ LAN Access admin module by Augusto Bott
 						{ title: 'Shared Key', indent: 2, name: 'wl'+u+'_radius_key', type: 'password', maxlen: 80, size: 32, peekaboo: 1,
 							suffix: ' <button class="btn" type="button" id="_f_wl'+u+'_psk_random2" value="Random" onclick="random_psk(\'_wl'+u+'_radius_key\')">Random</button>',
 							value: eval('nvram["wl'+u+'_radius_key"]') },
-						{ title: 'Group Key Renewal', indent: 2, name: 'wl'+u+'_wpa_gtk_rekey', type: 'text', maxlen: 4, size: 6, suffix: ' <i>(seconds)</i>',
+						{ title: 'Group Key Renewal', indent: 2, name: 'wl'+u+'_wpa_gtk_rekey', type: 'text', maxlen: 4, size: 6, help: ' seconds',
 							value: eval('nvram["wl'+u+'_wpa_gtk_rekey"]') || '3600' },
 						{ title: 'Radius Server', indent: 2, multi: [
 							{ name: 'wl'+u+'_radius_ipaddr', type: 'text', maxlen: 15, size: 17, value: eval('nvram["wl'+u+'_radius_ipaddr"]') },

@@ -218,7 +218,7 @@ No part of this file may be used without permission.
 							suffix: ' &nbsp;<small id="newmsg" style="visibility:hidden">Enable if this is a new file</small>' },
 						{ title: 'Create Backups', indent: 2, name: 'f_bak', type: 'checkbox', value: nvram.rstats_bak == '1' },
 						{ title: 'First Day Of The Month', name: 'rstats_offset', type: 'text', value: nvram.rstats_offset, maxlen: 2, size: 4 },
-						{ title: 'Excluded Interfaces', name: 'rstats_exclude', type: 'text', value: nvram.rstats_exclude, maxlen: 64, size: 50, suffix: '<small>(comma separated list)</small>' }
+						{ title: 'Excluded Interfaces', name: 'rstats_exclude', type: 'text', value: nvram.rstats_exclude, maxlen: 64, size: 50, help: 'comma separated list' }
 						], { align: 'left' });
 				</script>
 			</form><hr><br />

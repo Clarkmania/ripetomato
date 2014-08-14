@@ -333,7 +333,7 @@
 			<script type="text/javascript">
 				refresh_usb_disk();
 				$('#basicsettings').forms([
-					{ title: 'Enable aria2 client', name: 'f_aria2_enable_all', type: 'checkbox', value: nvram.aria2_enable == 1, suffix: ' <small>*</small>', help: "CAUTION: your router will swap with less 32mb of RAM or less" },
+					{ title: 'Enable aria2 client', name: 'f_aria2_enable_all', type: 'checkbox', value: nvram.aria2_enable == 1, suffix: ' <small>*</small>', tip: "CAUTION: your router will swap with less 32mb of RAM or less" },
 					{ title: 'Aria2c binary path', multi: [
 						{ name: 'aria2_binary', type: 'select', options: [
 							['internal','Internal (/usr/bin)'],
@@ -341,18 +341,18 @@
 							['custom','Custom'] ], value: nvram.aria2_binary, suffix: ' <small>*</small> ' },
 						{ name: 'aria2_binary_custom', type: 'text', maxlen: 40, size: 40, value: nvram.aria2_binary_custom , help: "Path to the directory containing aria2c etc. Not include program name '/aria2c'" }
 					] },
-					{ title: 'Keep alive', name: 'f_aria2_check', type: 'checkbox', value: nvram.aria2_check == 1, help: "If enabled, aria2c will be checked at the specified interval and will re-launch after a crash." },
-					{ title: 'Check alive every', indent: 2, name: 'aria2_check_time', type: 'text', maxlen: 5, size: 7, value: nvram.aria2_check_time, suffix: ' <small>minutes (range: 1 - 55; default: 15)</small>' },
-					{ title: 'Delay at startup', name: 'aria2_sleep', type: 'text', maxlen: 5, size: 7, value: nvram.aria2_sleep, suffix: ' <small>seconds (range: 1 - 60; default: 10)</small>' },
+					{ title: 'Keep alive', name: 'f_aria2_check', type: 'checkbox', value: nvram.aria2_check == 1, tip: "If enabled, aria2c will be checked at the specified interval and will re-launch after a crash." },
+					{ title: 'Check alive every', indent: 2, name: 'aria2_check_time', type: 'text', maxlen: 5, size: 7, value: nvram.aria2_check_time, suffix: ' minutes', help: 'range: 1 - 55; default: 15' },
+					{ title: 'Delay at startup', name: 'aria2_sleep', type: 'text', maxlen: 5, size: 7, value: nvram.aria2_sleep, suffix: ' seconds', help: 'range: 1 - 60; default: 10' },
 					{ title: 'Enable USB Partition', multi: [
 						{ name: 'f_aria2_usb_enable', type: 'checkbox', value: nvram.aria2_usb_enable == 1, suffix: '  ' },
 						{ name: 'aria2_dlroot', type: 'select', options: usb_disk_list, value: nvram.aria2_dlroot, suffix: ' '} ] },
-					{ title: 'Download saved dir.', indent: 2, name: 'aria2_dir', type: 'text', maxlen: 50, size: 40, value: nvram.aria2_dir, suffix: ' <small>Directory name under mounted partition.</small>' },
+					{ title: 'Download saved dir.', indent: 2, name: 'aria2_dir', type: 'text', maxlen: 50, size: 40, value: nvram.aria2_dir, help: 'Directory name under mounted partition' },
 					{ title: 'Continue download', name: 'f_aria2_continue', type: 'checkbox', value: nvram.aria2_continue == 1, suffix: ' <small>*</small>' },
-					{ title: 'Max Tries', name: 'aria2_max_tries', type: 'text', maxlen: 16, size: 7, value: nvram.aria2_max_tries, suffix: ' <small>(range: 0 - 9999; default: 0 - unlimited)</small>' },
-					{ title: 'Retry Wait Time', name: 'aria2_retry_wait', type: 'text', maxlen: 16, size: 7, value: nvram.aria2_retry_wait, suffix: ' <small>seconds (range: 0 - 3600; default: 10)</small>' },
+					{ title: 'Max Tries', name: 'aria2_max_tries', type: 'text', maxlen: 16, size: 7, value: nvram.aria2_max_tries, help: 'range: 0 - 9999; default: 0 - unlimited' },
+					{ title: 'Retry Wait Time', name: 'aria2_retry_wait', type: 'text', maxlen: 16, size: 7, value: nvram.aria2_retry_wait, suffix: ' seconds', help: 'range: 0 - 3600; default: 10' },
 					{ title: 'Referer (for v1.16+)', name: 'aria2_referer', type: 'text', maxlen: 1024, size: 15, value: nvram.aria2_referer },
-					{ title: 'Disk cache size (for v1.16+)', name: 'aria2_disk_cache', type: 'text', maxlen: 16, size: 7, value: nvram.aria2_disk_cache, suffix: ' <small>( e.g. 10K, 5M, 1024K etc.; default: 0 - No disk cache)</small>' },
+					{ title: 'Disk cache size (for v1.16+)', name: 'aria2_disk_cache', type: 'text', maxlen: 16, size: 7, value: nvram.aria2_disk_cache, help: 'e.g. 10K, 5M, 1024K; default: 0 - No disk cache' },
 					{ title: 'Enable MMAP', name: 'f_aria2_enable_mmap', type: 'checkbox', value: nvram.aria2_enable_mmap == 1, suffix: ' <small>*</small>' },
 					{ title: 'File allocation method', name: 'aria2_file_allocation', type: 'select', options: [ ['prealloc','Prealloc'], ['trunc','Trunc'], ['falloc','Falloc'], ['none','None*'] ], value: nvram.aria2_file_allocation, suffix: ' ' },
 					{ title: 'Aria2 custom configuration', name: 'aria2_custom', type: 'textarea', value: nvram.aria2_custom }
@@ -381,15 +381,15 @@
 			<div class="content" id="limits"></div><hr>
 			<script type='text/javascript'>
 				$('#limits').forms([
-				{ title: 'Max concurrent downloads', name: 'aria2_max_concurrent_downloads', type: 'text', maxlen: 10, size: 7, value: nvram.aria2_max_concurrent_downloads, suffix: ' <small>(range: 1 - 100; default: 5)</small>' },
-				{ title: 'Max connections per server', name: 'aria2_max_connection_per_server', type: 'text', maxlen: 10, size: 7, value: nvram.aria2_max_connection_per_server, suffix: ' <small>(range: 1 - 16; default: 5)</small>' },
-				{ title: 'Minimum split size', name: 'aria2_min_split_size', type: 'text', maxlen: 20, size: 10, value: nvram.aria2_min_split_size, suffix: ' <small>(range: 1M - 1024M; default: 10M)</small>' },
-				{ title: 'No of connections per file', name: 'aria2_split', type: 'text', maxlen: 10, size: 10, value: nvram.aria2_split, suffix: ' <small>(range: 1 - 100; default: 5)</small>' },
-				{ title: 'Max overall download limit', name: 'aria2_max_overall_download_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_max_overall_download_limit, suffix: ' <small>( e.g. 10K, 5M, 1024K etc.; default: 0 - No limit)</small>' },
-				{ title: 'Max speed per download', name: 'aria2_max_download_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_max_download_limit, suffix: ' <small>( e.g. 10K, 5M, 1024K etc.; default: 0 - No limit)</small>' },
-				{ title: 'Max overall upload limit', name: 'aria2_max_overall_upload_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_max_overall_upload_limit, suffix: ' <small>( e.g. 10K, 5M, 1024K etc.; default: 0 - No limit)</small>' },
-				{ title: 'Max speed per upload', name: 'aria2_max_upload_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_max_upload_limit, suffix: ' <small>( e.g. 10K, 5M, 1024K etc.; default: 0 - No limit)</small>' },
-				{ title: 'Lowest speed limit', name: 'aria2_lowest_speed_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_lowest_speed_limit, suffix: ' <small>( e.g. 10K, 5M, 1024K etc.; default: 0 - No limit)</small>' }
+				{ title: 'Max concurrent downloads', name: 'aria2_max_concurrent_downloads', type: 'text', maxlen: 10, size: 7, value: nvram.aria2_max_concurrent_downloads, help: 'range: 1 - 100; default: 5' },
+				{ title: 'Max connections per server', name: 'aria2_max_connection_per_server', type: 'text', maxlen: 10, size: 7, value: nvram.aria2_max_connection_per_server, help: 'range: 1 - 16; default: 5' },
+				{ title: 'Minimum split size', name: 'aria2_min_split_size', type: 'text', maxlen: 20, size: 10, value: nvram.aria2_min_split_size, help: 'range: 1M - 1024M; default: 10M' },
+				{ title: 'No of connections per file', name: 'aria2_split', type: 'text', maxlen: 10, size: 10, value: nvram.aria2_split, help: 'range: 1 - 100; default: 5' },
+				{ title: 'Max overall download limit', name: 'aria2_max_overall_download_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_max_overall_download_limit, help: 'e.g. 10K, 5M, 1024K; default: 0 - No limit' },
+				{ title: 'Max speed per download', name: 'aria2_max_download_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_max_download_limit, help: 'e.g. 10K, 5M, 1024K; default: 0 - No limit' },
+				{ title: 'Max overall upload limit', name: 'aria2_max_overall_upload_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_max_overall_upload_limit, help: 'e.g. 10K, 5M, 1024K; default: 0 - No limit' },
+				{ title: 'Max speed per upload', name: 'aria2_max_upload_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_max_upload_limit, help: 'e.g. 10K, 5M, 1024K; default: 0 - No limit' },
+				{ title: 'Lowest speed limit', name: 'aria2_lowest_speed_limit', type: 'text', maxlen: 16, size: 10, value: nvram.aria2_lowest_speed_limit, help: 'e.g. 10K, 5M, 1024K; default: 0 - No limit' }
 				]);
 			</script>
 		</div>
@@ -401,18 +401,18 @@
 				$('#btsettings').forms([
 				{ title: 'BitTorrent Enable LPD', name: 'f_aria2_bt_enable_lpd', type: 'checkbox', value: nvram.aria2_bt_enable_lpd == 1, suffix: ' <small>*</small>' },
 				{ title: 'BT enable DHT', name: 'f_aria2_enable_dht', type: 'checkbox', value: nvram.aria2_enable_dht == 1, suffix: ' <small>*</small>' },
-				{ title: 'DHT listening port', name: 'aria2_dht_listen_port', type: 'text', maxlen: 50, size: 50, value: nvram.aria2_dht_listen_port, suffix: ' <small>default: 6881-6999</small>' },
+				{ title: 'DHT listening port', name: 'aria2_dht_listen_port', type: 'text', maxlen: 50, size: 50, value: nvram.aria2_dht_listen_port, help: 'default: 6881-6999' },
 				{ title: 'BT tracker announce', name: 'aria2_bt_tracker', type: 'text', maxlen: 256, size: 64, value: nvram.aria2_bt_tracker },
-				{ title: 'Max peers per torrent', name: 'aria2_bt_max_peers', type: 'text', maxlen: 10, size: 7, value: nvram.aria2_bt_max_peers, suffix: ' <small>(range: 1 - 9999; default: 55)</small>' },
+				{ title: 'Max peers per torrent', name: 'aria2_bt_max_peers', type: 'text', maxlen: 10, size: 7, value: nvram.aria2_bt_max_peers, help: 'range: 1 - 9999; default: 55' },
 				{ title: 'BT Require Crypto', name: 'f_aria2_bt_require_crypto', type: 'checkbox', value: nvram.aria2_bt_require_crypto == 1, suffix: ' <small>*</small>' },
 				{ title: 'Follow torrent', name: 'f_aria2_follow_torrent', type: 'checkbox', value: nvram.aria2_follow_torrent == 1, suffix: ' <small>*</small>' },
-				{ title: 'BT listening port', name: 'aria2_listen_port', type: 'text', maxlen: 50, size: 50, value: nvram.aria2_listen_port, suffix: ' <small>*</small>', help: "Port used for BitTorrent. Make sure it is not in use." },
+				{ title: 'BT listening port', name: 'aria2_listen_port', type: 'text', maxlen: 50, size: 50, value: nvram.aria2_listen_port, suffix: ' <small>*</small>', tip: "Port used for BitTorrent. Make sure it is not in use." },
 				{ title: 'BT enable peer exchange', name: 'f_aria2_enable_peer_exchange', type: 'checkbox', value: nvram.aria2_enable_peer_exchange == 1, suffix: ' <small>*</small>' },
 				{ title: 'User agent', name: 'aria2_user_agent', type: 'text', maxlen: 64, size: 50, value: nvram.aria2_user_agent },
 				{ title: 'Prefix of peer id', name: 'aria2_peer_id_prefix', type: 'text', maxlen: 64, size: 15, value: nvram.aria2_peer_id_prefix },
-				{ title: 'Shared ratio', name: 'aria2_seed_ratio', type: 'text', maxlen: 64, size: 15, value: nvram.aria2_seed_ratio, suffix: ' <small>(range: 0.0 - 9999; default: 1.0)</small>' },
+				{ title: 'Shared ratio', name: 'aria2_seed_ratio', type: 'text', maxlen: 64, size: 15, value: nvram.aria2_seed_ratio, help: 'range: 0.0 - 9999; default: 1.0' },
 				{ title: 'Enable force save session', name: 'f_aria2_force_save', type: 'checkbox', value: nvram.aria2_force_save == 1, suffix: ' <small>*</small>' },
-				{ title: 'Save session interval', indent: 2, name: 'aria2_save_session_interval', type: 'text', maxlen: 20, size: 7, value: nvram.aria2_save_session_interval, suffix: ' <small>seconds (range: 0 - 3600; default: 60)</small>' },
+				{ title: 'Save session interval', indent: 2, name: 'aria2_save_session_interval', type: 'text', maxlen: 20, size: 7, value: nvram.aria2_save_session_interval, suffix: ' seconds', help: 'range: 0 - 3600; default: 60' },
 				{ title: 'Input URIs file', indent:2, name: 'aria2_input_file', type: 'text', maxlen: 50, size: 50, value: nvram.aria2_input_file, help: "Full path for downloading URIs saved file. If left blank, /mounted_sd_part/download_dir/aria2.session will be used." },
 				{ title: 'Session saved file', indent:2, name: 'aria2_save_session', type: 'text', maxlen: 50, size: 50, value: nvram.aria2_save_session, help: "Full path for saving session. If left blank, SDCARD/download_dir/aria2.session will be used." },
 				{ title: 'Enable BT hash check to seed', name: 'f_aria2_bt_hash_check_seed', type: 'checkbox', value: nvram.aria2_bt_hash_check_seed == 1, suffix: ' <small>*</small>' },
