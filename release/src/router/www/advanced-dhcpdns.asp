@@ -132,13 +132,17 @@ No part of this file may be used without permission.
 							value: (nvram.dhcpd_slt < 1) ? nvram.dhcpd_slt : 1 },
 						{ name: 'f_dhcpd_slt', type: 'text', maxlen: 5, size: 8, prefix: '<span id="_dhcpd_sltman"> ', suffix: ' minutes</span>',
 							value: (nvram.dhcpd_slt >= 1) ? nvram.dhcpd_slt : 3600 } ] },
-					{ title: 'Announce IPv6 on LAN (SLAAC)', name: 'f_ipv6_radvd', type: 'checkbox', value: nvram.ipv6_radvd == '1' },
-					{ title: 'Announce IPv6 on LAN (DHCP)', name: 'f_ipv6_dhcpd', type: 'checkbox', value: nvram.ipv6_dhcpd == '1' },
-					{ title: 'Mute dhcpv4 logging', name: 'f_dnsmasq_q4', type: 'checkbox', value: (nvram.dnsmasq_q & 1) },
-					{ title: 'Mute dhcpv6 logging', name: 'f_dnsmasq_q6', type: 'checkbox', value: (nvram.dnsmasq_q & 2) },
-					{ title: 'Mute RA logging', name: 'f_dnsmasq_qr', type: 'checkbox', value: (nvram.dnsmasq_q & 4) },
+					{ title: 'Announce IPv6 on LAN', multi: [
+						{ suffix: 'SLAAC', name: 'f_ipv6_radvd', type: 'checkbox', value: nvram.ipv6_radvd == '1' },
+						{ suffix: 'DHCP', name: 'f_ipv6_dhcpd', type: 'checkbox', value: nvram.ipv6_dhcpd == '1' },
+					]},
+					{ title: 'Mute log messages', multi: [
+						{ suffix: 'DHCPv4', name: 'f_dnsmasq_q4', type: 'checkbox', value: (nvram.dnsmasq_q & 1) },
+						{ suffix: 'DHCPv6', name: 'f_dnsmasq_q6', type: 'checkbox', value: (nvram.dnsmasq_q & 2) },
+						{ suffix: 'RA', name: 'f_dnsmasq_qr', type: 'checkbox', value: (nvram.dnsmasq_q & 4) },
+					]},
 					{ title: '<a href="http://www.thekelleys.org.uk/" target="_new">Dnsmasq</a><br>Custom configuration', name: 'dnsmasq_custom', type: 'textarea', value: nvram.dnsmasq_custom,
-						style: 'width: 100%; height:100px;' }
+						style: 'width: 100%; height:200px;' }
 				]);
 			</script>
 		</div>
